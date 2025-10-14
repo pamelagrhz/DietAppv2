@@ -1,16 +1,55 @@
-# React + Vite
+# DietApp - React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta aplicación de dieta está construida con React y Vite, proporcionando una configuración mínima para trabajar con React, HMR (Hot Module Replacement) y reglas de ESLint.
 
-Currently, two official plugins are available:
+## Comandos disponibles
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Desarrollo
+```bash
+npm run dev
+```
+Inicia el servidor de desarrollo con Vite en `http://localhost:5173/`
+- Incluye Hot Module Replacement (HMR) para cambios en tiempo real
+- Recarga automática del navegador cuando guardas cambios
+
+### Compilación para producción
+```bash
+npm run build
+```
+Compila y optimiza la aplicación para producción:
+- Genera archivos estáticos en la carpeta `dist/`
+- Minifica el código
+- Optimiza imágenes y otros assets
+
+### Previsualización de producción
+```bash
+npm run preview
+```
+Sirve los archivos compilados localmente para probar la versión de producción antes del despliegue.
+
+### Linting
+```bash
+npm run lint
+```
+Ejecuta ESLint para verificar la calidad del código.
+
+## Instalación
+
+Si es la primera vez que ejecutas el proyecto:
+
+```bash
+npm install
+```
+
+## Plugins disponibles
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) usa [Babel](https://babeljs.io/) para Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) usa [SWC](https://swc.rs/) para Fast Refresh
 
 ## React Compiler
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+El React Compiler no está habilitado en esta plantilla. Para agregarlo, consulta [esta documentación](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+## Configuración de ESLint
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Si estás desarrollando una aplicación de producción, recomendamos usar TypeScript con reglas de linting conscientes de tipos. Consulta la [plantilla TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) para información sobre cómo integrar TypeScript y [`typescript-eslint`](https://typescript-eslint.io) en tu proyecto.
