@@ -31,8 +31,8 @@ export default function RecipeCard({ recipe }) {
 
     <AccordionDetails>
       <h6>Details</h6>
-        {/* <IngredientsList ingredients={recipe.ingredientes} /> */}
-         {/* <InstructionsList instructions={recipe.preparacion} /> */}
+        <IngredientsList ingredients={recipe.ingredientes} />
+         <InstructionsList instructions={recipe.preparacion} />
      </AccordionDetails>
     </Accordion>
   );
