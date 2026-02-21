@@ -1,17 +1,17 @@
 import IngredientsList from "./IngredientsTable";
 import InstructionsList from "./InstructionsList";
+import Button from '@mui/material/Button';
+import Rating from '@mui/material/Rating';
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+
 
 export default function RecipeCard({ recipe }) {
 
-  // TODO: Add state to show/hide recipe information
   // TODO: Add image to recipe card
 
-  const recipeCard = {
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    marginBottom: '16px',
-    backgroundColor: '#f9f9f9',
-  }
+
   const cardContent = {}
   const cardTitle = {
     margin: '18px',
@@ -22,13 +22,17 @@ export default function RecipeCard({ recipe }) {
 
   if (!recipe) return null;
   return (
-    <div style={recipeCard}>
-      <div style={cardContent}>
+    <Accordion>
+    <AccordionSummary>
         {/* TODO: Insert image */}
-        <h2 style={cardTitle}>{recipe.nombre}</h2>
-        {/* <IngredientsList ingredients={recipe.ingredientes} /> */}
-         {/* <InstructionsList instructions={recipe.preparacion} /> */}
-      </div>
-    </div>
+        <h2 style={cardTitle}>{recipe.nombre} </h2>
+    </AccordionSummary>
+
+    <AccordionDetails>
+      <h2>Details:</h2>
+        <IngredientsList ingredients={recipe.ingredientes} />
+         <InstructionsList instructions={recipe.preparacion} />
+     </AccordionDetails>
+    </Accordion>
   );
 }
