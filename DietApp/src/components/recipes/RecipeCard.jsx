@@ -9,7 +9,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 
 export default function RecipeCard({ recipe }) {
 
-  // TODO: Add state to show/hide recipe information
   // TODO: Add image to recipe card
 
 
@@ -26,11 +25,11 @@ export default function RecipeCard({ recipe }) {
     <Accordion>
     <AccordionSummary>
         {/* TODO: Insert image */}
-        <h2 style={cardTitle}>{recipe.nombre}  <Rating name="half-rating" defaultValue={2.5} precision={0.5} /></h2>
+        <h2 style={cardTitle}>{recipe.nombre} </h2>
     </AccordionSummary>
 
     <AccordionDetails>
-      <h6>Details</h6>
+      <h2>Details:</h2>
         <IngredientsList ingredients={recipe.ingredientes} />
          <InstructionsList instructions={recipe.preparacion} />
      </AccordionDetails>
