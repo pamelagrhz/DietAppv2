@@ -5,7 +5,7 @@ const app = express();
 
 //Almacenar las configuraciones de CORS en una variable
 const corsOptions = {
-    origin: 'http://localhost:3000', // Permitir solo solicitudes desde este origen
+  origin: 'http://localhost:5173', // Permitir solicitudes desde el frontend
 }
 
 // Usar CORS con las opciones configuradas
@@ -18,5 +18,5 @@ app.get('/', (req, res) => {
 });
 //Configuración de express para escuchar en el puerto 3000
 app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+  console.log(`Server is running on port 3000 (BE)`);
 });
