@@ -4,10 +4,12 @@ import cors from 'cors';
 const app = express();
 
 //Almacenar las configuraciones de CORS en una variable
-// const corsOptions = {
-//     origin: 'http://localhost:3000', // Permitir solo solicitudes desde este origen
-// }
+const corsOptions = {
+    origin: 'http://localhost:3000', // Permitir solo solicitudes desde este origen
+}
 
+// Usar CORS con las opciones configuradas
+app.use(cors(corsOptions));
 
 // Obtener con express el origen de la solicitud y regresar un json 
 // Endpoint que responde con un JSON
