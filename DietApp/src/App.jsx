@@ -7,11 +7,13 @@ import { api } from './assets/api';
 
 function App() {
   const [count, setCount] = useState(0)
+  //Crear un useState para guardar los datos de la API
+  const [apiData, setApiData] = useState('');
 
   //hook use effect para hacer la petición a la API y guardar los datos en el estado
   useEffect(() => {
     api().then(data => {
-      console.log(data);
+      setApiData(data.message);
     })
   }, []);
 
@@ -21,6 +23,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           useState for a counter {count}
         </button>
+        <h2>{apiData}</h2>
         <RecipeList  recipes={recipe}/>
       </div>
     </>
