@@ -13,7 +13,7 @@ function App() {
   //hook use effect para hacer la petición a la API y guardar los datos en el estado
   useEffect(() => {
     api().then(data => {
-      setApiData(data.message);
+      setApiData(data.recetas);
     })
   }, []);
 
@@ -23,8 +23,8 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           useState for a counter {count}
         </button>
-        <h2>{apiData}</h2>
-        <RecipeList  recipes={recipe}/>
+        <h2>Recetas para {recipe.personas} persona(s) de: {recipe.porcion_base_KG} kg</h2>
+       <RecipeList  recipes={recipe}/>{/* Cambiar a apiData */}
       </div>
     </>
   )
