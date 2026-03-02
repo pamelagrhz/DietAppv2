@@ -1,13 +1,25 @@
-export default function Recipes({ recipes }) {
-    return(
+import { useEffect, useState } from 'react';
+import { api } from '../../assets/api';
+import RecipeList from './RecipeList';
 
-        <>
-        <h2>
-          {recipes.personas && recipes.porcion_base_KG
-            ? `Recetas para ${recipes.personas} persona(s) de: ${recipes.porcion_base_KG} kg`
-            : 'Cargando datos...'}
-        </h2>
-       <RecipeList  recipes={recipes}/>{/* Cambiar a apiData */}
-       </>
-    )
+export default function Recipes() {
+  const [recipesData, setRecipesData] = useState({});
+
+  useEffect(() => {
+    api().then(data => {
+      console.log('Respuesta de la API en Recipes.jsx:', data);
+      setRecipesData(data);
+    });
+  }, []);
+
+  return (
+    <>
+      <h2>
+        {recipesData.personas !== undefined && recipesData.porcion_base_KG !== undefined
+          ? `Recetas para ${recipesData.personas} persona(s) de: ${recipesData.porcion_base_KG} kg`
+          : 'Cargando datos...'}
+      </h2>
+      <RecipeList recipes={recipesData.recetas || []} />
+    </>
+  );
 }
