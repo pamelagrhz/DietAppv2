@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Recipes from './features/recipes/pages/Recipes';
+import AppHeader from './components/appHeader';
 
 
 function App() {
@@ -8,9 +9,10 @@ function App() {
   return (
     <>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        {/* <button onClick={() => setCount((count) => count + 1)}>
           useState for a counter {count}
-        </button>
+        </button> */}
+        <AppHeader/>
         <Recipes/> 
       </div>
     </>
