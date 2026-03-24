@@ -1,5 +1,6 @@
 import { Button, Modal, Box } from '@mui/material';
 import { useState } from 'react';
+import CreateRecipe from '../features/recipes/components/CreateRecipe';
 export default function AppHeader() {
     let buttonText = "Crear receta"
     //Use state to control the open/close of the modal
@@ -28,9 +29,7 @@ export default function AppHeader() {
             >
                 <Box sx={{ ...style, width: 400 }}>
                     <h2 id="parent-modal-title">Crear una nueva receta</h2>
-                    <p id="parent-modal-description">
-                        Insertar aquí el formulario para crear una nueva receta
-                    </p>
+                    <CreateRecipe/>
                 </Box>
             </Modal>        </>
     )
