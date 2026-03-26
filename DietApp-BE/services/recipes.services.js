@@ -4,6 +4,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+const DATA_PATH = './data/recipes.json';
+
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -16,3 +18,12 @@ export const getAllRecipes = async () => {
     const json = JSON.parse(data);
     return json.recetas;
 };
+
+export async function addRecipe(nuevaReceta) {
+  const data = JSON.parse(await fs.readFile(DATA_PATH, 'utf-8'));
+  // Add the new recipe to the existing recipes array (in json case)
+  data.recetas.push(nuevaReceta);
+  //DATA_PATH es la ruta del archivo JSON donde se almacenan las recetas, y se escribe el nuevo contenido con la receta agregada
+  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
+  return nuevaReceta;
+}
