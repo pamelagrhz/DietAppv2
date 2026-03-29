@@ -38,6 +38,21 @@ export default function CreateRecipe() {
     const [medidaInput, setMedidaInput] = useState("");
     const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza", "cda", "cdita", "rebanada", "lata"];
 
+    // steps (instructions) states
+    const [steps, setSteps] = useState([]); // array de pasos
+    const [stepInput, setStepInput] = useState("");
+
+    const handleAddStep = () => {
+        if (stepInput.trim()) {
+            setSteps([...steps, stepInput.trim()]);
+            setStepInput("");
+        }
+    };
+
+    const handleDeleteStep = (idx) => {
+        setSteps(steps.filter((_, i) => i !== idx));
+    };
+
     //Add handlers for the chip component, to handle the click and delete events
     const handleAddIngredient = () => {
         if (ingredientInput.trim() && cantidadInput.trim() && medidaInput.trim()) {
@@ -63,11 +78,13 @@ export default function CreateRecipe() {
     };
     return (
         < div style={createRecipe}>
-            <TextField label="Cantidad de porciones" size="small" type="number" />
-            <TextField id="recipe-name" label="Nombre de la receta" variant="outlined" />
-            <h4>Ingredientes:</h4>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+                <TextField defaultValue={1} label="Cantidad de porciones" size="small" type="number" />
+                <TextField id="recipe-name" label="Nombre de la receta"  size='small'/>
+            </div>
+            Ingredientes:
             {/* Added ingredients */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
+            <div style={{ display: ingredients.length > 0 ? "flex" : "none", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
                 {ingredients.map((ing, idx) => (
                     <Chip
                         key={idx}
@@ -87,7 +104,7 @@ export default function CreateRecipe() {
                     label="Ingrediente"
                     value={ingredientInput}
                     onChange={e => setIngredientInput(e.target.value)}
-                    size="large"
+                    size="small"
                     style={{ width: 180 }}
                 />
               </div>
@@ -109,35 +126,36 @@ export default function CreateRecipe() {
                     renderInput={(params) => <TextField {...params} label="Medida" size="small" />}
                 /></div>
                
-                <br />
                 <Button sx={{ width: 150 }} variant="outlined" onClick={handleAddIngredient}>Agregar</Button>
             </div>
                 
-            <h4>Instrucciones:</h4>
-            {/* TODO: add instructions state and handlers */}
-            <List sx={stepsStyle}>
-                <ListItem>
-                    <ListItemText primary="Full width variant below" />
-                </ListItem>
-                <Divider component="li" />
-                <ListItem>
-                    <ListItemText primary="Inset variant below" />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem>
-                    <ListItemText primary="Middle variant below" />
-                </ListItem>
-                <Divider variant="middle" component="li" />
-                <ListItem>
-                    <ListItemText primary="List item" />
-                </ListItem>
+            Instrucciones:
+            <List sx={stepsStyle} subheader={
+                <li style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 1, width: '100%'
+                }}>
+                </li>
+            }>
+                {steps.map((step, idx) => (
+                    <ListItem key={idx} secondaryAction={
+                        <Button color="error" size="small" onClick={() => handleDeleteStep(idx)}>Eliminar</Button>
+                    }>
+                        <ListItemText primary={`${idx + 1}.- ${step}`} />
+                    </ListItem>
+                ))}
             </List>
             <div style={createRecipe}>
-                {/* TODO: add instructions */}
-                <TextField id="recipe-instructions" label="Paso: " variant="outlined" />
-                <Button sx={{ width: 150 }} variant="outlined" >Agregar</Button>
+                <TextField
+                    id="recipe-instructions"
+                    label="Paso: "
+                    variant="outlined"
+                    size='small'
+                    value={stepInput}
+                    onChange={e => setStepInput(e.target.value)}
+                />
+                <Button sx={{ width: 150 }} variant="outlined" onClick={handleAddStep}>Agregar</Button>
             </div>
-            <h4>Imágen:</h4>
+            {/* TODO: implement picture */}
+            {/* <h4>Imágen:</h4> */}
         </div>
     )
 }
