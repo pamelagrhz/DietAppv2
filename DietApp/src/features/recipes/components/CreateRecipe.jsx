@@ -130,6 +130,7 @@ export default function CreateRecipe() {
                 
             Instrucciones:
             <List sx={stepsStyle} subheader={
+                // TODO: Fix styles
                 <li style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 1, width: '100%'
                 }}>
                 </li>
