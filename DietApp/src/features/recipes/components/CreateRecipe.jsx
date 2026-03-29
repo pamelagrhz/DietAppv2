@@ -19,12 +19,14 @@ export default function CreateRecipe() {
     const stepsStyle = {
         py: 0,
         width: '100%',
-        maxWidth: 360,
         borderRadius: 2,
         border: '1px solid',
         borderColor: 'divider',
         backgroundColor: 'background.paper',
-    }; 
+        fontSize: '0.92rem',
+        maxHeight: 150, // 
+        overflowY: 'auto',
+    };
     const addIngredient = {
         display: "flex",
         flexDirection: "row",
@@ -35,8 +37,9 @@ export default function CreateRecipe() {
     const [ingredients, setIngredients] = useState([]); // array de ingredientes
     const [ingredientInput, setIngredientInput] = useState(""); // input controlado
     const [cantidadInput, setCantidadInput] = useState("");
+    const [porcionesInput, setPorcionesInput] = useState(1);
     const [medidaInput, setMedidaInput] = useState("");
-    const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza", "cda", "cdita", "rebanada", "lata"];
+    const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza(s)", "cda(s)", "cdita(s)", "rebanada(s)", "lata(s)"];
 
     // steps (instructions) states
     const [steps, setSteps] = useState([]); // array de pasos
@@ -55,17 +58,20 @@ export default function CreateRecipe() {
 
     //Add handlers for the chip component, to handle the click and delete events
     const handleAddIngredient = () => {
-        if (ingredientInput.trim() && cantidadInput.trim() && medidaInput.trim()) {
+        if (
+            ingredientInput.trim() &&
+            cantidadInput.trim() &&
+            medidaInput.trim() &&
+            Number(cantidadInput) >= 0
+        ) {
             setIngredients([
                 ...ingredients,
-                //Create the ingredient object 
                 {
                     cantidad: cantidadInput.trim(),
                     medida: medidaInput.trim(),
                     ingrediente: ingredientInput.trim()
                 }
             ]);
-            //Clear inputs
             setIngredientInput("");
             setCantidadInput("");
             setMedidaInput("");
@@ -79,7 +85,18 @@ export default function CreateRecipe() {
     return (
         < div style={createRecipe}>
             <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                <TextField defaultValue={1} style={{ width: 80 }} label="Porciones" size="small" type="number" />
+                <TextField
+                    value={porcionesInput}
+                    onChange={e => {
+                        const val = Number(e.target.value);
+                        setPorcionesInput(val < 0 ? 0 : val);
+                    }}
+                    style={{ width: 80 }}
+                    label="Porciones"
+                    size="small"
+                    type="number"
+                    min={0}
+                />
                 <TextField id="recipe-name" style={{ width: '100%' }} label="Nombre de la receta"  size='small'/>
             </div>
             Ingredientes:
@@ -97,7 +114,6 @@ export default function CreateRecipe() {
             {/* Inputs to add ingredients*/}
             {/* TODO: add conditions and errors*/}
 
-
             <div style={addIngredient}>
                  <TextField
                     label="Ingrediente"
@@ -109,11 +125,16 @@ export default function CreateRecipe() {
                 <TextField
                     label="Cantidad"
                     value={cantidadInput}
-                    onChange={e => setCantidadInput(e.target.value)}
+                    onChange={e => {
+                        const val = e.target.value;
+                        // Permitir solo números >= 0
+                        setCantidadInput(val === "" ? "" : Math.max(0, Number(val)));
+                    }}
                     type="number"
                     size="small"
                     style={{width: 80}}
-                                    />
+                    min={0}
+                />
                 <Autocomplete
                     disablePortal
                     options={medidaOptions}
@@ -127,17 +148,31 @@ export default function CreateRecipe() {
                 <Button size='small' sx={{ width: 100}} variant="outlined" onClick={handleAddIngredient}>Agregar</Button>
                 
             Instrucciones:
-            <List sx={stepsStyle} subheader={
+            <List style={{display: steps.length > 0 ? "flex" : "none"}} sx={stepsStyle} subheader={
                 // TODO: Fix styles
                 <li style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 1, width: '100%'
                 }}>
                 </li>
             }>
                 {steps.map((step, idx) => (
-                    <ListItem key={idx} secondaryAction={
-                        <Button color="error" size="small" onClick={() => handleDeleteStep(idx)}>Eliminar</Button>
-                    }>
-                        <ListItemText primary={`${idx + 1}.- ${step}`} />
+                    <ListItem 
+                        key={idx} 
+                        secondaryAction={
+                            <Button 
+                                color="error"
+                                size="small"
+                                onClick={() => handleDeleteStep(idx)}
+                                sx={{ minWidth: 0, width: 24, height: 24, p: 0, borderRadius: '50%', fontSize: '1rem' }}
+                            >
+                                ×
+                            </Button>
+                        }
+                        sx={{ py: 0.2, minHeight: 32 }}
+                    >
+                        <ListItemText 
+                            primary={`${idx + 1}.- ${step}`}
+                            primaryTypographyProps={{ fontSize: '0.92rem' }}
+                        />
                     </ListItem>
                 ))}
             </List>
@@ -150,8 +185,10 @@ export default function CreateRecipe() {
                     value={stepInput}
                     onChange={e => setStepInput(e.target.value)}
                 />
-                <Button sx={{ width: 150 }} variant="outlined" onClick={handleAddStep}>Agregar</Button>
+                <Button size='small' sx={{ width: 100 }} variant="outlined" onClick={handleAddStep}>Agregar</Button>
             </div>
+             <Button size='medium'  variant="contained" onClick={handleAddStep}>Crear Receta</Button>
+
             {/* TODO: implement picture */}
             {/* <h4>Imágen:</h4> */}
         </div>
