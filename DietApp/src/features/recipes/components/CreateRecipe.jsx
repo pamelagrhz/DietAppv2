@@ -187,6 +187,7 @@ export default function CreateRecipe() {
                 />
                 <Button size='small' sx={{ width: 100 }} variant="outlined" onClick={handleAddStep}>Agregar</Button>
             </div>
+            {/* TODO: add function to add recipe to the database, with all the states as parameters */}
              <Button size='medium'  variant="contained" onClick={handleAddStep}>Crear Receta</Button>
 
             {/* TODO: implement picture */}
