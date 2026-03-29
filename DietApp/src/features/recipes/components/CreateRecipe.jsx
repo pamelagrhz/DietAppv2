@@ -108,7 +108,6 @@ export default function CreateRecipe() {
                     style={{ width: 180 }}
                 />
               </div>
-              <br />
               <div  style={{display:'flex', flexDirection:'row'}}> <TextField
                     label="Cantidad"
                     value={cantidadInput}
