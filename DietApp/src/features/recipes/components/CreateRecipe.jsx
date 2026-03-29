@@ -27,7 +27,7 @@ export default function CreateRecipe() {
     }; 
     const addIngredient = {
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
     }
 
 
@@ -79,8 +79,8 @@ export default function CreateRecipe() {
     return (
         < div style={createRecipe}>
             <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                <TextField defaultValue={1} label="Cantidad de porciones" size="small" type="number" />
-                <TextField id="recipe-name" label="Nombre de la receta"  size='small'/>
+                <TextField defaultValue={1} style={{ width: 80 }} label="Porciones" size="small" type="number" />
+                <TextField id="recipe-name" style={{ width: '100%' }} label="Nombre de la receta"  size='small'/>
             </div>
             Ingredientes:
             {/* Added ingredients */}
@@ -99,34 +99,32 @@ export default function CreateRecipe() {
 
 
             <div style={addIngredient}>
-              <div>
                  <TextField
                     label="Ingrediente"
                     value={ingredientInput}
+                    style={{width: '50% '}}
                     onChange={e => setIngredientInput(e.target.value)}
                     size="small"
-                    style={{ width: 180 }}
                 />
-              </div>
-              <div  style={{display:'flex', flexDirection:'row'}}> <TextField
+                <TextField
                     label="Cantidad"
                     value={cantidadInput}
                     onChange={e => setCantidadInput(e.target.value)}
                     type="number"
                     size="small"
-                    style={{ width: 100 }}
-                />
+                    style={{width: 80}}
+                                    />
                 <Autocomplete
                     disablePortal
                     options={medidaOptions}
                     value={medidaInput}
+                     style={{width: 100}}
                     onChange={(_, newValue) => setMedidaInput(newValue || "")}
                     sx={{ width: 120 }}
                     renderInput={(params) => <TextField {...params} label="Medida" size="small" />}
-                /></div>
-               
-                <Button sx={{ width: 150 }} variant="outlined" onClick={handleAddIngredient}>Agregar</Button>
-            </div>
+                />
+              </div>
+                <Button size='small' sx={{ width: 100}} variant="outlined" onClick={handleAddIngredient}>Agregar</Button>
                 
             Instrucciones:
             <List sx={stepsStyle} subheader={
