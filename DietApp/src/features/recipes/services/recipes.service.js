@@ -7,3 +7,21 @@ export const getRecipes = async () => {
     const data = await response.json();
     return data;
 }
+
+export const getIngredients = async (query = '') => {
+    const searchParams = new URLSearchParams();
+    if (query.trim()) {
+        searchParams.set('q', query.trim());
+    }
+
+    const endpoint = searchParams.toString()
+        ? `/api/ingredients?${searchParams.toString()}`
+        : '/api/ingredients';
+
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+        throw new Error('No se pudieron obtener los ingredientes');
+    }
+
+    return response.json();
+};

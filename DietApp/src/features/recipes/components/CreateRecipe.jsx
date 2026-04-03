@@ -6,7 +6,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getIngredients } from '../services/recipes.service';
 
 
 export default function CreateRecipe() {
@@ -36,6 +37,7 @@ export default function CreateRecipe() {
     // ingredients states
     const [ingredients, setIngredients] = useState([]); // array de ingredientes
     const [ingredientInput, setIngredientInput] = useState(""); // input controlado
+    const [ingredientOptions, setIngredientOptions] = useState([]);
     const [cantidadInput, setCantidadInput] = useState("");
     const [porcionesInput, setPorcionesInput] = useState(1);
     const [medidaInput, setMedidaInput] = useState("");
@@ -58,18 +60,23 @@ export default function CreateRecipe() {
 
     //Add handlers for the chip component, to handle the click and delete events
     const handleAddIngredient = () => {
+        const normalizedIngredient = ingredientInput.trim();
+        const normalizedMedida = medidaInput.trim();
+        const numericCantidad = Number(cantidadInput);
+
         if (
-            ingredientInput.trim() &&
-            cantidadInput.trim() &&
-            medidaInput.trim() &&
-            Number(cantidadInput) >= 0
+            normalizedIngredient &&
+            cantidadInput !== "" &&
+            normalizedMedida &&
+            !Number.isNaN(numericCantidad) &&
+            numericCantidad >= 0
         ) {
             setIngredients([
                 ...ingredients,
                 {
-                    cantidad: cantidadInput.trim(),
-                    medida: medidaInput.trim(),
-                    ingrediente: ingredientInput.trim()
+                    cantidad: numericCantidad,
+                    medida: normalizedMedida,
+                    ingrediente: normalizedIngredient
                 }
             ]);
             setIngredientInput("");
@@ -82,6 +89,31 @@ export default function CreateRecipe() {
     const handleDeleteIngredient = (idx) => {
         setIngredients(ingredients.filter((_, i) => i !== idx));
     };
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadIngredients = async () => {
+            try {
+                const result = await getIngredients(ingredientInput);
+                if (isMounted) {
+                    const unique = Array.from(new Set(result));
+                    setIngredientOptions(unique);
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setIngredientOptions([]);
+                }
+            }
+        };
+
+        loadIngredients();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [ingredientInput]);
+
     return (
         < div style={createRecipe}>
             <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
@@ -115,20 +147,39 @@ export default function CreateRecipe() {
             {/* TODO: add conditions and errors*/}
 
             <div style={addIngredient}>
-                 <TextField
-                    label="Ingrediente"
-                    value={ingredientInput}
-                    style={{width: '50% '}}
-                    onChange={e => setIngredientInput(e.target.value)}
-                    size="small"
+                <Autocomplete
+                    freeSolo
+                    options={ingredientOptions}
+                    inputValue={ingredientInput}
+                    onChange={(_, newValue) => setIngredientInput(typeof newValue === 'string' ? newValue : "")}
+                    onInputChange={(_, newInputValue, reason) => {
+                        if (reason === 'reset') return;
+                        setIngredientInput(newInputValue || "");
+                    }}
+                    clearOnBlur={false}
+                    sx={{ width: '50%' }}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Ingrediente"
+                            size="small"
+                        />
+                    )}
                 />
                 <TextField
                     label="Cantidad"
                     value={cantidadInput}
                     onChange={e => {
                         const val = e.target.value;
-                        // Permitir solo números >= 0
-                        setCantidadInput(val === "" ? "" : Math.max(0, Number(val)));
+                        if (val === "") {
+                            setCantidadInput("");
+                            return;
+                        }
+
+                        const numericValue = Number(val);
+                        if (!Number.isNaN(numericValue) && numericValue >= 0) {
+                            setCantidadInput(val);
+                        }
                     }}
                     type="number"
                     size="small"
@@ -148,9 +199,9 @@ export default function CreateRecipe() {
                 <Button size='small' sx={{ width: 100}} variant="outlined" onClick={handleAddIngredient}>Agregar</Button>
                 
             Instrucciones:
-            <List style={{display: steps.length > 0 ? "flex" : "none"}} sx={stepsStyle} subheader={
+            <List style={{display: steps.length > 0 ? "block" : "none"}} sx={stepsStyle} subheader={
                 // TODO: Fix styles
-                <li style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 1, width: '100%'
+                <li style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 1
                 }}>
                 </li>
             }>
@@ -170,6 +221,7 @@ export default function CreateRecipe() {
                         sx={{ py: 0.2, minHeight: 32 }}
                     >
                         <ListItemText 
+                        sx={{ width: '100%'}}
                             primary={`${idx + 1}.- ${step}`}
                             primaryTypographyProps={{ fontSize: '0.92rem' }}
                         />
