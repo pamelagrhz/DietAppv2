@@ -39,19 +39,34 @@ export default function CreateRecipe() {
     const [ingredientInput, setIngredientInput] = useState(""); // input controlado
     const [ingredientOptions, setIngredientOptions] = useState([]);
     const [cantidadInput, setCantidadInput] = useState("");
-    const [porcionesInput, setPorcionesInput] = useState(1);
+    const [porcionesInput, setPorcionesInput] = useState("1");
     const [medidaInput, setMedidaInput] = useState("");
+    // recipe, submit and ingredient state
+    const [recipeName, setRecipeName] = useState("");
+    const [submitAttempted, setSubmitAttempted] = useState(false);
+    const [ingredientAttempted, setIngredientAttempted] = useState(false);
     const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza(s)", "cda(s)", "cdita(s)", "rebanada(s)", "lata(s)"];
 
     // steps (instructions) states
     const [steps, setSteps] = useState([]); // array de pasos
     const [stepInput, setStepInput] = useState("");
+    // field errors for validation
+    const fieldErrors = {
+        porciones: submitAttempted && `${porcionesInput}`.trim() === "",
+        recipeName: submitAttempted && !recipeName.trim(),
+        ingredients: submitAttempted && ingredients.length < 1,
+        cantidad: ingredientAttempted && cantidadInput === "",
+        medida: ingredientAttempted && !medidaInput.trim(),
+        steps: submitAttempted && steps.length < 1,
+    };
 
     const handleAddStep = () => {
-        if (stepInput.trim()) {
-            setSteps([...steps, stepInput.trim()]);
-            setStepInput("");
+        if (!stepInput.trim()) {
+            return;
         }
+        // Add the new step to the steps array and clear the input
+        setSteps([...steps, stepInput.trim()]);
+        setStepInput("");
     };
 
     const handleDeleteStep = (idx) => {
@@ -60,34 +75,56 @@ export default function CreateRecipe() {
 
     //Add handlers for the chip component, to handle the click and delete events
     const handleAddIngredient = () => {
+        // Validate inputs
+        setIngredientAttempted(true);
         const normalizedIngredient = ingredientInput.trim();
         const normalizedMedida = medidaInput.trim();
         const numericCantidad = Number(cantidadInput);
-
+        // If any validation fails, do not add the ingredient and show errors
         if (
-            normalizedIngredient &&
-            cantidadInput !== "" &&
-            normalizedMedida &&
-            !Number.isNaN(numericCantidad) &&
-            numericCantidad >= 0
+            !normalizedIngredient ||
+            cantidadInput === "" ||
+            !normalizedMedida ||
+            Number.isNaN(numericCantidad) ||
+            numericCantidad < 0
         ) {
-            setIngredients([
-                ...ingredients,
-                {
-                    cantidad: numericCantidad,
-                    medida: normalizedMedida,
-                    ingrediente: normalizedIngredient
-                }
-            ]);
-            setIngredientInput("");
-            setCantidadInput("");
-            setMedidaInput("");
+            return;
         }
+
+        setIngredients([
+            ...ingredients,
+            {
+                cantidad: numericCantidad,
+                medida: normalizedMedida,
+                ingrediente: normalizedIngredient
+            }
+        ]);
+        setIngredientInput("");
+        setCantidadInput("");
+        setMedidaInput("");
+        // Reset attempted state after successful addition
+        setIngredientAttempted(false);
     };
 
     //Delete handler for the chip component, to remove the ingredient from the list
     const handleDeleteIngredient = (idx) => {
         setIngredients(ingredients.filter((_, i) => i !== idx));
+    };
+
+    const handleCreateRecipe = () => {
+        setSubmitAttempted(true);
+        console.log('Creating recipe')
+        if (
+            `${porcionesInput}`.trim() === "" ||
+            !recipeName.trim() ||
+            ingredients.length < 1 ||
+            steps.length < 1
+        ) {
+            // If any validation fails, do not proceed with recipe creation
+            return;
+        }
+
+        // TODO: add function to add recipe to the database, with all the states as parameters
     };
 
     useEffect(() => {
@@ -120,16 +157,36 @@ export default function CreateRecipe() {
                 <TextField
                     value={porcionesInput}
                     onChange={e => {
-                        const val = Number(e.target.value);
-                        setPorcionesInput(val < 0 ? 0 : val);
+                        const val = e.target.value;
+                        // Allow empty input to let users clear the field
+                        if (val === "") {
+                            setPorcionesInput("");
+                            return;
+                        }
+                        // Validate that the input is a non-negative number
+                        const numericValue = Number(val);
+                        if (!Number.isNaN(numericValue) && numericValue >= 0) {
+                            setPorcionesInput(val);
+                        }
                     }}
                     style={{ width: 80 }}
                     label="Porciones"
                     size="small"
                     type="number"
-                    min={0}
+                    error={fieldErrors.porciones}
+                    helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
+                    inputProps={{ min: 1 }}
                 />
-                <TextField id="recipe-name" style={{ width: '100%' }} label="Nombre de la receta"  size='small'/>
+                <TextField
+                    id="recipe-name"
+                    style={{ width: '100%' }}
+                    label="Nombre de la receta"
+                    size='small'
+                    value={recipeName}
+                    onChange={e => setRecipeName(e.target.value)}
+                    error={fieldErrors.recipeName}
+                    helperText={fieldErrors.recipeName ? "Falta el nombre de la receta" : ""}
+                />
             </div>
             Ingredientes:
             {/* Added ingredients */}
@@ -163,6 +220,8 @@ export default function CreateRecipe() {
                             {...params}
                             label="Ingrediente"
                             size="small"
+                            error={fieldErrors.ingredients}
+                            helperText={fieldErrors.ingredients ? "Agrega al menos un ingrediente" : ""}
                         />
                     )}
                 />
@@ -183,19 +242,29 @@ export default function CreateRecipe() {
                     }}
                     type="number"
                     size="small"
-                    style={{width: 80}}
-                    min={0}
+                    style={{ width: 80 }}
+                    error={fieldErrors.cantidad}
+                    helperText={fieldErrors.cantidad ? "Agrega cantidad" : ""}
+                    inputProps={{ min: 1 }}
                 />
                 <Autocomplete
                     disablePortal
                     options={medidaOptions}
                     value={medidaInput}
-                     style={{width: 100}}
+                    style={{ width: 100 }}
                     onChange={(_, newValue) => setMedidaInput(newValue || "")}
                     sx={{ width: 120 }}
-                    renderInput={(params) => <TextField {...params} label="Medida" size="small" />}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Medida"
+                            size="small"
+                            error={fieldErrors.medida}
+                            helperText={fieldErrors.medida ? "Agrega medida" : ""}
+                        />
+                    )}
                 />
-              </div>
+            </div>
                 <Button size='small' sx={{ width: 100}} variant="outlined" onClick={handleAddIngredient}>Agregar</Button>
                 
             Instrucciones:
@@ -236,11 +305,12 @@ export default function CreateRecipe() {
                     size='small'
                     value={stepInput}
                     onChange={e => setStepInput(e.target.value)}
+                    error={fieldErrors.steps}
+                    helperText={fieldErrors.steps ? "Agrega al menos un paso" : ""}
                 />
                 <Button size='small' sx={{ width: 100 }} variant="outlined" onClick={handleAddStep}>Agregar</Button>
             </div>
-            {/* TODO: add function to add recipe to the database, with all the states as parameters */}
-             <Button size='medium'  variant="contained" onClick={handleAddStep}>Crear Receta</Button>
+             <Button size='medium' variant="contained" onClick={handleCreateRecipe}>Crear Receta</Button>
 
             {/* TODO: implement picture */}
             {/* <h4>Imágen:</h4> */}
