@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import Recipes from './features/recipes/pages/Recipes';
-import AppHeader from './components/appHeader';
+import Recipes from './features/showRecipes/pages/Recipes.jsx';
+import AppHeader from './components/appHeader.jsx';
 
 
 function App() {

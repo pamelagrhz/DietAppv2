@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getRecipes } from '../services/recipes.service';
-import RecipeList from '../components/RecipeList';
+import RecipeList from '../components/RecipeList.jsx';
 
 export default function Recipes() {
   //Crear un useState para guardar los datos de la API

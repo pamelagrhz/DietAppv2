@@ -1,6 +1,6 @@
 import { Button, Modal, Box } from '@mui/material';
 import { useState } from 'react';
-import CreateRecipe from '../features/recipes/components/CreateRecipe';
+import CreateRecipe from '../features/addRecipes/CreateRecipe.jsx';
 export default function AppHeader() {
     let buttonText = "Crear receta"
     //Use state to control the open/close of the modal
