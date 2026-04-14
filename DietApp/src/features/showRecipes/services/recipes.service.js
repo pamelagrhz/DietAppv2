@@ -25,3 +25,20 @@ export const getIngredients = async (query = '') => {
 
     return response.json();
 };
+
+export const createRecipe = async (recipeData) => {
+    const response = await fetch('/api/recipes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(recipeData),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'No se pudo crear la receta');
+    }
+
+    return response.json();
+};
