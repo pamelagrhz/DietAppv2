@@ -1,14 +1,14 @@
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getIngredients } from '../showRecipes/services/recipes.service';
+import { createRecipe as createRecipeRequest, getIngredients } from '../showRecipes/services/recipes.service';
 import IngredientsSection from './components/IngredientsSection.jsx';
 import StepsSection from './components/StepsSection.jsx';
 
 
 export default function CreateRecipe() {
     // Estilos
-    const createRecipe = {
+    const createRecipeStyle = {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
@@ -25,6 +25,9 @@ export default function CreateRecipe() {
     const [recipeName, setRecipeName] = useState("");
     const [submitAttempted, setSubmitAttempted] = useState(false);
     const [ingredientAttempted, setIngredientAttempted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitMessage, setSubmitMessage] = useState("");
+    const [submitError, setSubmitError] = useState("");
     const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza(s)", "cda(s)", "cdita(s)", "rebanada(s)", "lata(s)"];
 
     // steps (instructions) states
@@ -91,20 +94,46 @@ export default function CreateRecipe() {
         setIngredients(ingredients.filter((_, i) => i !== idx));
     };
 
-    const handleCreateRecipe = () => {
+    const handleCreateRecipe = async () => {
         setSubmitAttempted(true);
-        console.log('Creating recipe')
+        setSubmitMessage("");
+        setSubmitError("");
+
         if (
             `${porcionesInput}`.trim() === "" ||
             !recipeName.trim() ||
             ingredients.length < 1 ||
             steps.length < 1
         ) {
-            // If any validation fails, do not proceed with recipe creation
             return;
         }
 
-        // TODO: add function to add recipe to the database, with all the states as parameters
+        const recipePayload = {
+            nombre: recipeName.trim(),
+            porciones: Number(porcionesInput),
+            ingredientes: ingredients,
+            preparacion: steps,
+        };
+
+        try {
+            setIsSubmitting(true);
+            await createRecipeRequest(recipePayload);
+            setSubmitMessage('Receta creada correctamente');
+            setRecipeName("");
+            setPorcionesInput("1");
+            setIngredients([]);
+            setIngredientInput("");
+            setCantidadInput("");
+            setMedidaInput("");
+            setSteps([]);
+            setStepInput("");
+            setSubmitAttempted(false);
+            setIngredientAttempted(false);
+        } catch (error) {
+            setSubmitError(error.message || 'No se pudo guardar la receta');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     useEffect(() => {
@@ -132,7 +161,7 @@ export default function CreateRecipe() {
     }, [ingredientInput]);
 
     return (
-        < div style={createRecipe}>
+        <div style={createRecipeStyle}>
             <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
                 <TextField
                     value={porcionesInput}
@@ -191,7 +220,17 @@ export default function CreateRecipe() {
                 onAddStep={handleAddStep}
                 onDeleteStep={handleDeleteStep}
             />
-             <Button size='medium' variant="contained" onClick={handleCreateRecipe}>Crear Receta</Button>
+            {submitMessage && <p style={{ color: 'green', margin: 0 }}>{submitMessage}</p>}
+            {submitError && <p style={{ color: 'crimson', margin: 0 }}>{submitError}</p>}
+
+            <Button
+                size='medium'
+                variant="contained"
+                onClick={handleCreateRecipe}
+                disabled={isSubmitting}
+            >
+                {isSubmitting ? 'Guardando...' : 'Crear Receta'}
+            </Button>
 
             {/* TODO: implement picture */}
             {/* <h4>Imágen:</h4> */}
