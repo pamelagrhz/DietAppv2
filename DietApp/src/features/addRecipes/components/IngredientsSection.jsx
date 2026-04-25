@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
@@ -17,20 +18,64 @@ export default function IngredientsSection({
     onAddIngredient,
     onDeleteIngredient,
 }) {
+    const ingredientsContainerRef = useRef(null);
+    const [showOverflowChip, setShowOverflowChip] = useState(false);
+
     const addIngredientStyle = {
         display: 'flex',
         flexDirection: 'row',
     };
+    const showOtherIngredients = () => {
+        console.log('Other ingredients');
+        console.log(ingredients.map(ing => `${ing.cantidad} ${ing.medida} ${ing.ingrediente}`).join(', '));
+        //TODO: feat - show all ingredients in a modal
+        //TODO: fix - chip view is cutting ingredient names, maybe show them in a tooltip on hover or something like that
+
+    }
+
+    useEffect(() => {
+        const container = ingredientsContainerRef.current;
+
+        if (!container) {
+            setShowOverflowChip(false);
+            return;
+        }
+
+        const checkOverflow = () => {
+            const hasOverflow = container.scrollHeight > container.clientHeight;
+            setShowOverflowChip(hasOverflow);
+        };
+
+        checkOverflow();
+
+        let observer;
+        if (typeof ResizeObserver !== 'undefined') {
+            observer = new ResizeObserver(checkOverflow);
+            observer.observe(container);
+        }
+
+        window.addEventListener('resize', checkOverflow);
+
+        return () => {
+            window.removeEventListener('resize', checkOverflow);
+            if (observer) {
+                observer.disconnect();
+            }
+        };
+    }, [ingredients]);
 
     return (
         <>
             Ingredientes:
-            <div
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div
+                ref={ingredientsContainerRef}
                 style={{
                     display: ingredients.length > 0 ? 'flex' : 'none',
-                    flexWrap: 'wrap',
-                    gap: '8px',
-                    marginBottom: '8px',
+                    maxHeight: '38px',
+                    maxWidth: '90%',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
                 }}
             >
                 {ingredients.map((ing, idx) => (
@@ -39,9 +84,17 @@ export default function IngredientsSection({
                         label={`${ing.cantidad} ${ing.medida} ${ing.ingrediente}`}
                         onDelete={() => onDeleteIngredient(idx)}
                         style={{ margin: 4 }}
+                       
                     />
                 ))}
             </div>
+            {showOverflowChip && ingredients.length > 0 ? (
+                <span style={{ display: 'flex', alignItems: 'center', paddingLeft: 8 }}>
+                    <Chip label={`${ingredients.length} +`} style={{ margin: 4 }}  onClick={() => showOtherIngredients()}/>
+                </span>
+            ) : null}
+            </div>
+            
 
             <div style={addIngredientStyle}>
                 <Autocomplete
