@@ -1,10 +1,10 @@
 export default function InstructionsList({ instructions }) {
-    //TODO: change to a numbered list format
+    //TODO: make a functionality to move the steps up and down to reorder.
     return(
-        <ul>
+        <ol>
           {instructions.map((ins, j) => (
-            <li key={j}>{ins}</li>
+            <li style={{ display: 'flex' }} key={j}>{j + 1}.-{ins}</li >
           ))}
-        </ul>
+        </ol>
     )
 }

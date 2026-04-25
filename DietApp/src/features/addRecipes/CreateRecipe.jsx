@@ -231,9 +231,6 @@ export default function CreateRecipe() {
             >
                 {isSubmitting ? 'Guardando...' : 'Crear Receta'}
             </Button>
-
-            {/* TODO: implement picture */}
-            {/* <h4>Imágen:</h4> */}
         </div>
     )
 }
