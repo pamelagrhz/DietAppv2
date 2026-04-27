@@ -8,31 +8,44 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
-export default function TemporaryDrawer() {
+export default function TemporaryDrawer({ onMenuOptionClick }) {
   const [open, setOpen] = React.useState(false);
 
-  const userOptions = ['Profile', 'My account', 'Logout']
-  const helloKitchenOptions = ['New recipe','Recipes', 'Meal Plans', 'Grocery Lists']
+  const userOptions = ['Profile', 'My account', 'Logout'];
+  const helloKitchenOptions = [
+    { label: 'New recipe', action: 'newRecipe' },
+    { label: 'Recipes', action: 'recipes' },
+    { label: 'Meal Plans', action: 'mealPlans' },
+    { label: 'Grocery Lists', action: 'groceryLists' },
+  ];
+
+  const handleOptionClick = (action) => () => {
+    if (onMenuOptionClick) {
+      onMenuOptionClick(action);
+    }
+    setOpen(false);
+  };
+
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: 250 }} role="presentation">
       <List>
-        {helloKitchenOptions.map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text} />
+        {helloKitchenOptions.map((option) => (
+          <ListItem key={option.label} disablePadding>
+            <ListItemButton onClick={handleOptionClick(option.action)}>
+              <ListItemText primary={option.label} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {userOptions.map((text, index) => (
+        {userOptions.map((text) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={toggleDrawer(false)}>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>

@@ -1,12 +1,6 @@
 import { Button, Modal, Box } from '@mui/material';
-import { useState } from 'react';
 import CreateRecipe from '../features/addRecipes/CreateRecipe.jsx';
-export default function AppHeader() {
-    let buttonText = "Crear receta"
-    //Use state to control the open/close of the modal
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+export default function AppHeader({ open, onOpen, onClose }) {
     const style = {
         position: 'absolute',
         top: '50%',
@@ -20,10 +14,9 @@ export default function AppHeader() {
     };
     return (
         <>
-            <Button variant="contained" onClick={handleOpen}>{buttonText}</Button>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={onClose}
                 aria-labelledby="parent-modal-title"
                 aria-describedby="parent-modal-description"
             >
