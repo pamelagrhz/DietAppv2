@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Recipes from './features/showRecipes/pages/Recipes.jsx';
 import AppHeader from './features/addRecipes/createRecipeModal.jsx';
-import AnchorTemporaryDrawer from './components/anchorTemporaryDrawer.jsx';
+import HeaderMenu from './components/headerMenu.jsx';
 
 
 function App() {
@@ -16,13 +16,14 @@ function App() {
 
   return (
     <>
+            <HeaderMenu onMenuOptionClick={handleMenuOptionClick} />
+
       <div className="card">
         <AppHeader
           open={isCreateRecipeOpen}
           onOpen={() => setCreateRecipeOpen(true)}
           onClose={() => setCreateRecipeOpen(false)}
         />
-        <AnchorTemporaryDrawer onMenuOptionClick={handleMenuOptionClick} />
         <Recipes/> 
       </div>
     </>

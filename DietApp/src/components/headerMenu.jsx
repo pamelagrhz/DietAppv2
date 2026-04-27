@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
-export default function TemporaryDrawer({ onMenuOptionClick }) {
+export default function HeaderMenu({ onMenuOptionClick }) {
   const [open, setOpen] = React.useState(false);
 
   const userOptions = ['Profile', 'My account', 'Logout'];
@@ -29,6 +29,13 @@ export default function TemporaryDrawer({ onMenuOptionClick }) {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+
+  //Styles
+  const headerStyle = {
+    backgroundColor: 'var(--ligth-200-color)',
+    display: 'flex',
+    padding: '10px',
+  }
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation">
@@ -55,7 +62,7 @@ export default function TemporaryDrawer({ onMenuOptionClick }) {
   );
 
   return (
-    <div>
+    <div style={headerStyle}>
       {/* TODO: Add icons to the menu options
       TODO: Change text to an hamburguer icon */}
       <Button onClick={toggleDrawer(true)}>Open menú</Button>
