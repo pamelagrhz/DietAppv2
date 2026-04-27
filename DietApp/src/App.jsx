@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Recipes from './features/showRecipes/pages/Recipes.jsx';
 import AppHeader from './components/appHeader.jsx';
+import AnchorTemporaryDrawer from './components/anchorTemporaryDrawer.jsx';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           useState for a counter {count}
         </button> */}
         <AppHeader/>
+        <AnchorTemporaryDrawer/>
         <Recipes/> 
       </div>
     </>
