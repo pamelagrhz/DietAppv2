@@ -7,6 +7,7 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
 
 export default function HeaderMenu({ onMenuOptionClick }) {
   const [open, setOpen] = React.useState(false);
@@ -65,7 +66,10 @@ export default function HeaderMenu({ onMenuOptionClick }) {
     <div style={headerStyle}>
       {/* TODO: Add icons to the menu options
       TODO: Change text to an hamburguer icon */}
-      <Button onClick={toggleDrawer(true)}>Open menú</Button>
+      <Button onClick={toggleDrawer(true)}>
+        {/* TODO: Remove focus style from this icon */}
+        <MenuIcon />
+      </Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
