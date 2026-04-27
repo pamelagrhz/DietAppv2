@@ -1,5 +1,5 @@
 import { Button, Modal, Box } from '@mui/material';
-import CreateRecipe from '../features/addRecipes/CreateRecipe.jsx';
+import CreateRecipe from './CreateRecipe.jsx';
 export default function AppHeader({ open, onOpen, onClose }) {
     const style = {
         position: 'absolute',
