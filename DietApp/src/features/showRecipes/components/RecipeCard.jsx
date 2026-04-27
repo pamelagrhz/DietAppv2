@@ -9,9 +9,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 
 export default function RecipeCard({ recipe }) {
 
-  // TODO: Add image to recipe card
-
-
   const cardContent = {}
   const cardTitle = {
     margin: '18px',
@@ -29,7 +26,6 @@ export default function RecipeCard({ recipe }) {
     </AccordionSummary>
 
     <AccordionDetails>
-      <h2>Details:</h2>
         <IngredientsList ingredients={recipe.ingredientes} />
          <InstructionsList instructions={recipe.preparacion} />
      </AccordionDetails>

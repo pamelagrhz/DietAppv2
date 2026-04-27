@@ -33,23 +33,40 @@ npm run lint
 ```
 Ejecuta ESLint para verificar la calidad del código.
 
+## Tecnologías y dependencias principales
+
+- **Frontend:**
+  - React (^19.1.1)
+  - Vite (^7.1.7)
+  - Material UI (@mui/material ^7.3.7)
+  - @emotion/react (^11.14.0) y @emotion/styled (^11.14.1)
+  - Node.js v22.20.0
+
+- **Backend:**
+  - Express (^5.2.1)
+  - CORS (^2.8.6)
+  - Node.js v22.20.0
+
+## Estructura del proyecto
+
+- El frontend utiliza React, Vite y Material UI para la interfaz.
+- El backend está construido con Express y sirve los datos desde un archivo JSON.
+
 ## Instalación
 
-Si es la primera vez que ejecutas el proyecto:
+Asegúrate de tener Node.js v22.20.0 o superior.
+
+Instala dependencias en cada carpeta (DietApp y DietApp-BE):
 
 ```bash
+cd DietApp
+npm install
+cd ../DietApp-BE
 npm install
 ```
 
-## Plugins disponibles
+## Notas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) usa [Babel](https://babeljs.io/) para Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) usa [SWC](https://swc.rs/) para Fast Refresh
-
-## React Compiler
-
-El React Compiler no está habilitado en esta plantilla. Para agregarlo, consulta [esta documentación](https://react.dev/learn/react-compiler/installation).
-
-## Configuración de ESLint
-
-Si estás desarrollando una aplicación de producción, recomendamos usar TypeScript con reglas de linting conscientes de tipos. Consulta la [plantilla TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) para información sobre cómo integrar TypeScript y [`typescript-eslint`](https://typescript-eslint.io) en tu proyecto.
+- Material UI se usa para los componentes visuales.
+- Express se usa para el backend y la API.
+- Consulta package.json en cada carpeta para ver todas las dependencias y versiones.

@@ -1,5 +1,6 @@
 {
-  "porcion_base": "1 persona (50 kg)",
+  "personas": 1,
+  "porcion_base_KG": 50,
   "recetas": [
     {
       "nombre": "Ensalada de pechuga, huevo duro y aguacate",
