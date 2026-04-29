@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createRecipe as createRecipeRequest, getIngredients } from '../showRecipes/services/recipes.service';
 import IngredientsSection from './components/IngredientsSection.jsx';
 import AddStepsSection from './components/AddStepsSection.jsx';
+import NumberSpinner from './components/NumberSpinner.jsx';
 //TODO: fix the styles of component 
 
 export default function CreateRecipe() {
@@ -12,7 +13,15 @@ export default function CreateRecipe() {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
-    }
+        height: "85vh"
+    };
+
+    const actionsAreaStyle = {
+        marginTop: "auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.5rem"
+    };
 
     // ingredients states
     const [ingredients, setIngredients] = useState([]); // array de ingredientes
@@ -163,9 +172,8 @@ export default function CreateRecipe() {
     return (
         <div style={createRecipeStyle}>
             <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                <TextField
-                    value={porcionesInput}
-                    onChange={e => {
+                <NumberSpinner
+                 onChange={e => {
                         const val = e.target.value;
                         // Allow empty input to let users clear the field
                         if (val === "") {
@@ -177,18 +185,21 @@ export default function CreateRecipe() {
                         if (!Number.isNaN(numericValue) && numericValue >= 0) {
                             setPorcionesInput(val);
                         }
-                    }}
-                    style={{ width: 80 }}
-                    label="Porciones"
-                    size="small"
-                    type="number"
-                    error={fieldErrors.porciones}
-                    helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
-                    inputProps={{ min: 1 }}
-                />
+                                }}
+                        value={porcionesInput}    
+                        label="Porciones"
+                        size="small"
+                        type="number"
+                        error={fieldErrors.porciones}
+                        helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
+                        inputProps={{ min: 1 }}
+                        min={1}
+                        max={40}
+                        />  
+               
                 <TextField
                     id="recipe-name"
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', marginTop: 28 }}
                     label="Nombre de la receta"
                     size='small'
                     value={recipeName}
@@ -220,17 +231,19 @@ export default function CreateRecipe() {
                 onAddStep={handleAddStep}
                 onDeleteStep={handleDeleteStep}
             />
-            {submitMessage && <p style={{ color: 'green', margin: 0 }}>{submitMessage}</p>}
-            {submitError && <p style={{ color: 'crimson', margin: 0 }}>{submitError}</p>}
+            <div style={actionsAreaStyle}>
+                {submitMessage && <p style={{ color: 'green', margin: 0 }}>{submitMessage}</p>}
+                {submitError && <p style={{ color: 'crimson', margin: 0 }}>{submitError}</p>}
 
-            <Button
-                size='medium'
-                variant="contained"
-                onClick={handleCreateRecipe}
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? 'Guardando...' : 'Crear Receta'}
-            </Button>
+                <Button
+                    size='medium'
+                    variant="contained"
+                    onClick={handleCreateRecipe}
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? 'Guardando...' : 'Crear Receta'}
+                </Button>
+            </div>
         </div>
     )
 }
