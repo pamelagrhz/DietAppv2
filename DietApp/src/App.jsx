@@ -2,17 +2,16 @@ import { useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css'
 import Recipes from './features/showRecipes/pages/Recipes.jsx';
-import AppHeader from './features/addRecipes/createRecipeModal.jsx';
 import HeaderMenu from './components/headerMenu.jsx';
+import CreateRecipe from './features/addRecipes/CreateRecipe.jsx';
 
 
 function App() {
-  const [isCreateRecipeOpen, setCreateRecipeOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleMenuOptionClick = (action) => {
     if (action === 'newRecipe') {
-      setCreateRecipeOpen(true);
+      navigate('/new-recipe');
     }
     if (action === 'recipes') {
       navigate('/recipes');
@@ -24,14 +23,12 @@ function App() {
             <HeaderMenu onMenuOptionClick={handleMenuOptionClick} />
 
       <div className="card">
-        <AppHeader
-          open={isCreateRecipeOpen}
-          onOpen={() => setCreateRecipeOpen(true)}
-          onClose={() => setCreateRecipeOpen(false)}
-        />
+        
         <Routes>
           <Route path="/" element={<Navigate to="/recipes" replace />} />
           <Route path="/recipes" element={<Recipes />} />
+          //TODO: add route for create recipe page
+          <Route path="/new-recipe" element={<CreateRecipe />} />
         </Routes>
       </div>
     </>
