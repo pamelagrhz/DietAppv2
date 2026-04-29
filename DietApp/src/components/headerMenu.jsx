@@ -8,11 +8,21 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
+import Avatar from '@mui/material/Avatar';
+import { red } from '@mui/material/colors';
+
 
 export default function HeaderMenu({ onMenuOptionClick }) {
   const [open, setOpen] = React.useState(false);
 
-  const userOptions = ['Profile', 'My account', 'Logout', 'Settings', 'Help'];
+  // Menu options
+  const userOptions = [
+    {  label: 'Profile' },
+    {  label: 'My account' },
+    {  label: 'Logout' },
+    {  label: 'Settings' },
+    {  label: 'Help' }
+  ];
   const helloKitchenOptions = [
     { label: 'New recipe', action: 'newRecipe' },
     { label: 'Recipes', action: 'recipes' },
@@ -20,6 +30,7 @@ export default function HeaderMenu({ onMenuOptionClick }) {
     { label: 'Grocery Lists', action: 'groceryLists' },
   ];
 
+  // Actions
   const handleOptionClick = (action) => () => {
     if (onMenuOptionClick) {
       onMenuOptionClick(action);
@@ -30,12 +41,16 @@ export default function HeaderMenu({ onMenuOptionClick }) {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+  const openProfile = (newOpen) => () => {
+    console.log('open profile section')
+  }
 
   //Styles
   const headerStyle = {
     backgroundColor: 'var(--ligth-200-color)',
     display: 'flex',
     padding: '10px',
+    justifyContent: 'space-between',
   }
 
   const DrawerList = (
@@ -52,9 +67,9 @@ export default function HeaderMenu({ onMenuOptionClick }) {
       <Divider />
       <List>
         {userOptions.map((text) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key={text.label} disablePadding>
             <ListItemButton onClick={toggleDrawer(false)}>
-              <ListItemText primary={text} />
+              <ListItemText primary={text.label} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -69,6 +84,12 @@ export default function HeaderMenu({ onMenuOptionClick }) {
       <Button onClick={toggleDrawer(true)}>
         {/* TODO: Remove focus style from this icon */}
         <MenuIcon />
+      </Button>
+      <Button onClick={openProfile(true)}>
+
+                <Avatar sx={{ bgcolor: red[500], marginRight: '8px' }} aria-label="recipe">
+                R
+              </Avatar>
       </Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
