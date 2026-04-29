@@ -7,12 +7,10 @@ import TableRow from '@mui/material/TableRow';
 export default function IngredientsList({ ingredients }) {
 
     return(
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 300 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Ingrediente</TableCell>
-            <TableCell >Cantidad</TableCell>
-            <TableCell >Medida</TableCell>
+            <TableCell>Ingredientes</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -22,9 +20,7 @@ export default function IngredientsList({ ingredients }) {
               key={i}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell >{ing.ingrediente}</TableCell>
-              <TableCell >{ing.cantidad}</TableCell>
-              <TableCell >{ing.medida}</TableCell>
+              <TableCell >{i + 1}. {ing.cantidad} {ing.medida} de {ing.ingrediente}</TableCell>
             </TableRow>
           ))}
         </TableBody>
