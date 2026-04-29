@@ -6,8 +6,8 @@
       "nombre": "Ensalada de pechuga, huevo duro y aguacate",
       "ingredientes": [
         { "cantidad": 100, "medida": "g", "ingrediente": "pechuga de pollo cocida" },
-        { "cantidad": 1, "medida": "pieza", "ingrediente": "huevo" },
-        { "cantidad": 0.25, "medida": "pieza", "ingrediente": "aguacate" },
+        { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "huevo" },
+        { "cantidad": 0.25, "medida": "pieza(s)", "ingrediente": "aguacate" },
         { "cantidad": 1, "medida": "taza", "ingrediente": "lechuga" }
       ],
       "preparacion": [
@@ -46,7 +46,7 @@
     {
       "nombre": "Caldo de pollo",
       "ingredientes": [
-        { "cantidad": 1, "medida": "pieza", "ingrediente": "pierna o muslo de pollo" },
+        { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "pierna o muslo de pollo" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
       ],
       "preparacion": [
@@ -125,7 +125,7 @@
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "pollo deshebrado" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "jitomate" },
-        { "cantidad": 0.25, "medida": "pieza", "ingrediente": "cebolla" }
+        { "cantidad": 0.25, "medida": "pieza(s)", "ingrediente": "cebolla" }
       ],
       "preparacion": [
         "Licuar jitomate",
@@ -137,7 +137,7 @@
       "nombre": "Milanesa de pollo empanizada",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
-        { "cantidad": 1, "medida": "pieza", "ingrediente": "huevo" },
+        { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "huevo" },
         { "cantidad": 0.25, "medida": "taza", "ingrediente": "pan molido" }
       ],
       "preparacion": [
