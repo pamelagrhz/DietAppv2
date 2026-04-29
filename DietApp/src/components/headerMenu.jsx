@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 export default function HeaderMenu({ onMenuOptionClick }) {
   const [open, setOpen] = React.useState(false);
 
-  const userOptions = ['Profile', 'My account', 'Logout'];
+  const userOptions = ['Profile', 'My account', 'Logout', 'Settings', 'Help'];
   const helloKitchenOptions = [
     { label: 'New recipe', action: 'newRecipe' },
     { label: 'Recipes', action: 'recipes' },
