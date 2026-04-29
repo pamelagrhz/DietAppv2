@@ -1,10 +1,10 @@
-import RecipeCard from './RecipeCard.jsx';
+import RecipeAcordion from './RecipeAcordion.jsx';
 
 export default function RecipeList({ recipes }) {
   return (
     <>
       {Array.isArray(recipes) && recipes.map((recipe, idx) => (
-      <RecipeCard key={idx} recipe={recipe} />
+      <RecipeAcordion key={idx} recipe={recipe} />
 ))}
     </>
   );
