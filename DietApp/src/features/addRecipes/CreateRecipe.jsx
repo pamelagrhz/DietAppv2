@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { createRecipe as createRecipeRequest, getIngredients } from '../showRecipes/services/recipes.service';
 import IngredientsSection from './components/IngredientsSection.jsx';
-import StepsSection from './components/StepsSection.jsx';
+import AddStepsSection from './components/AddStepsSection.jsx';
 
 
 export default function CreateRecipe() {
@@ -212,7 +212,7 @@ export default function CreateRecipe() {
                 onDeleteIngredient={handleDeleteIngredient}
             />
 
-            <StepsSection
+            <AddStepsSection
                 steps={steps}
                 stepInput={stepInput}
                 setStepInput={setStepInput}

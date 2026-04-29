@@ -15,7 +15,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IngredientsList from "./IngredientsTable";
-import InstructionsList from "./InstructionsList";
+import ShowStepsList from "./ShowStepsList";
 import pizzaImage from '../../../assets/images/pizza.jpg';
 
 const ExpandMore = styled((props) => {
@@ -87,7 +87,7 @@ export default function RecipeReviewCard({ recipe }) {
         <CardContent>
           {/* TODO: fix sizes */}
  <IngredientsList ingredients={recipe.ingredientes} />
-         <InstructionsList instructions={recipe.preparacion} />
+         <ShowStepsList instructions={recipe.preparacion} />
                  </CardContent>
       </Collapse>
     </Card>
