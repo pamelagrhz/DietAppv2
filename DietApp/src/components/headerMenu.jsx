@@ -83,8 +83,6 @@ export default function HeaderMenu({ onMenuOptionClick }) {
 
   return (
     <div style={headerStyle}>
-      {/* TODO: Add icons to the menu options
-      TODO: Change text to an hamburguer icon */}
       <Button onClick={toggleDrawer(true)}>
         {/* TODO: Remove focus style from this icon */}
         <MenuIcon />

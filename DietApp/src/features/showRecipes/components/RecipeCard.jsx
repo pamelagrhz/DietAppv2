@@ -40,7 +40,6 @@ export default function RecipeReviewCard({ recipe }) {
   };
 
   return (
-    //TODO: fix sizes and cards order
     <Card sx={{ maxWidth: 345 }} style={cardsStyles}>
       <CardHeader
         avatar={
@@ -85,7 +84,6 @@ export default function RecipeReviewCard({ recipe }) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {/* TODO: fix sizes */}
  <IngredientsList ingredients={recipe.ingredientes} />
          <ShowStepsList instructions={recipe.preparacion} />
                  </CardContent>

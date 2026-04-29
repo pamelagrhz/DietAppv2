@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { createRecipe as createRecipeRequest, getIngredients } from '../showRecipes/services/recipes.service';
 import IngredientsSection from './components/IngredientsSection.jsx';
 import AddStepsSection from './components/AddStepsSection.jsx';
-
+//TODO: fix the styles of component 
 
 export default function CreateRecipe() {
     // Estilos

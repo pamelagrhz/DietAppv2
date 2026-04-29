@@ -27,7 +27,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/recipes" replace />} />
           <Route path="/recipes" element={<Recipes />} />
-          //TODO: add route for create recipe page
           <Route path="/new-recipe" element={<CreateRecipe />} />
         </Routes>
       </div>
