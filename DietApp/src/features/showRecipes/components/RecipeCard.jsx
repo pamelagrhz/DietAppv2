@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IngredientsList from "./IngredientsTable";
 import InstructionsList from "./InstructionsList";
+import pizzaImage from '../../../assets/images/pizza.jpg';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,10 +35,13 @@ export default function RecipeReviewCard({ recipe }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const cardsStyles = {
+   minWidth: '345px',
+  };
 
   return (
     //TODO: fix sizes and cards order
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} style={cardsStyles}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -55,7 +59,7 @@ export default function RecipeReviewCard({ recipe }) {
       <CardMedia
         component="img"
         height="194"
-        image="../../../assets/image/pizza.jpg" // TODO: change to recipe image
+        image={pizzaImage}
         alt={recipe.nombre}
       />
       <CardContent>
