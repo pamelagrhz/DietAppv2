@@ -51,7 +51,11 @@ export default function HeaderMenu({ onMenuOptionClick }) {
     display: 'flex',
     padding: '10px',
     justifyContent: 'space-between',
-  }
+    position: 'sticky',
+    top: 0,
+    zIndex: 1100,
+    width: '100%',
+  };
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation">
