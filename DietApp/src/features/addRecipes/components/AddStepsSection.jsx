@@ -32,7 +32,7 @@ export default function AddStepsSection({
 
     return (
         <>
-            Instrucciones:
+            <h3>Instrucciones:</h3>
             <List
                 style={{ display: steps.length > 0 ? 'block' : 'none' }}
                 sx={stepsStyle}

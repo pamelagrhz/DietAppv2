@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { Button } from '@mui/material';
+import { Button, getAppBarUtilityClass } from '@mui/material';
 
 export default function IngredientsSection({
     ingredients,
@@ -24,6 +24,9 @@ export default function IngredientsSection({
     const addIngredientStyle = {
         display: 'flex',
         flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: '8px',
+        marginBottom: '8px',
     };
     const showOtherIngredients = () => {
         console.log('Other ingredients');
@@ -66,14 +69,14 @@ export default function IngredientsSection({
 
     return (
         <>
-            Ingredientes:
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <h3>Ingredientes:</h3>
+            <div style={{ display: 'flex', flexDirection: 'row'  }}>
                 <div
                 ref={ingredientsContainerRef}
                 style={{
                     display: ingredients.length > 0 ? 'flex' : 'none',
                     maxHeight: '38px',
-                    maxWidth: '90%',
+                    maxWidth: '90vw',
                     textOverflow: 'ellipsis',
                     overflow: 'hidden',
                 }}
@@ -107,12 +110,13 @@ export default function IngredientsSection({
                         setIngredientInput(newInputValue || '');
                     }}
                     clearOnBlur={false}
-                    sx={{ width: '50%' }}
+                    sx={{ width: '50%', minWidth: 200 }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             label="Ingrediente"
                             size="small"
+                            type="text"
                             error={fieldErrors.ingredients}
                             helperText={fieldErrors.ingredients ? 'Agrega al menos un ingrediente' : ''}
                         />
@@ -135,7 +139,7 @@ export default function IngredientsSection({
                     }}
                     type="number"
                     size="small"
-                    style={{ width: 80 }}
+                    style={{ width: 100,  }}
                     error={fieldErrors.cantidad}
                     helperText={fieldErrors.cantidad ? 'Agrega cantidad' : ''}
                     inputProps={{ min: 1 }}
@@ -146,7 +150,7 @@ export default function IngredientsSection({
                     value={medidaInput}
                     style={{ width: 100 }}
                     onChange={(_, newValue) => setMedidaInput(newValue || '')}
-                    sx={{ width: 120 }}
+                    sx={{ width: 220 }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
