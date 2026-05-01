@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { Button, getAppBarUtilityClass } from '@mui/material';
+import { Button } from '@mui/material';
+import BasicModal from '../../../components/modal.jsx';
 
 export default function IngredientsSection({
     ingredients,
@@ -20,7 +21,7 @@ export default function IngredientsSection({
 }) {
     const ingredientsContainerRef = useRef(null);
     const [showOverflowChip, setShowOverflowChip] = useState(false);
-
+    const [openModal, setOpenModal] = useState(false);
     const addIngredientStyle = {
         display: 'flex',
         flexDirection: 'row',
@@ -28,12 +29,26 @@ export default function IngredientsSection({
         gap: '8px',
         marginBottom: '8px',
     };
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        };
+    const modalContent = {
+        title: 'Ingredientes',
+        body: 'ingredientes list'
+    };
+
     const showOtherIngredients = () => {
-        console.log('Other ingredients');
-        console.log(ingredients.map(ing => `${ing.cantidad} ${ing.medida} ${ing.ingrediente}`).join(', '));
+        setOpenModal(true);
         //TODO: feat - show all ingredients in a modal
         //TODO: fix - chip view is cutting ingredient names, maybe show them in a tooltip on hover or something like that
-
     }
 
     useEffect(() => {
@@ -69,6 +84,13 @@ export default function IngredientsSection({
 
     return (
         <>
+
+        <BasicModal
+            isOpen={openModal}
+            onClose={() => setOpenModal(false)}
+            modalStyle={modalStyle}
+            content={modalContent}
+        ></BasicModal>
             <h3>Ingredientes:</h3>
             <div style={{ display: 'flex', flexDirection: 'row'  }}>
                 <div
