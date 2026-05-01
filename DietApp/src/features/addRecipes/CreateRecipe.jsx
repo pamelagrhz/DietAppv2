@@ -173,26 +173,21 @@ export default function CreateRecipe() {
         <div style={createRecipeStyle}>
             <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
                 <NumberSpinner
-                 onChange={e => {
-                        const val = e.target.value;
-                        // Allow empty input to let users clear the field
-                        if (val === "") {
-                            setPorcionesInput("");
-                            return;
-                        }
-                        // Validate that the input is a non-negative number
-                        const numericValue = Number(val);
-                        if (!Number.isNaN(numericValue) && numericValue >= 0) {
-                            setPorcionesInput(val);
-                        }
-                                }}
-                        value={porcionesInput}    
+                        onValueChange={(value) => {
+                            if (value === null) {
+                                setPorcionesInput("");
+                                return;
+                            }
+
+                            if (value >= 0) {
+                                setPorcionesInput(String(value));
+                            }
+                        }}
+                        value={porcionesInput === "" ? null : Number(porcionesInput)}
                         label="Porciones"
                         size="small"
-                        type="number"
                         error={fieldErrors.porciones}
                         helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
-                        inputProps={{ min: 1 }}
                         min={1}
                         max={40}
                         />  
