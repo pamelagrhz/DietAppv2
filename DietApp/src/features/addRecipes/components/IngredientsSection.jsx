@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import { Button } from '@mui/material';
 import BasicModal from '../../../components/modal.jsx';
+import EditIngredient from '../../editRecipe/editIngredient.jsx';
 
 export default function IngredientsSection({
     ingredients,
@@ -42,7 +43,7 @@ export default function IngredientsSection({
         };
     const modalContent = {
         title: 'Ingredientes',
-        body: 'ingredientes list'
+        body: ( <EditIngredient ingredients={ingredients} onDeleteIngredient={onDeleteIngredient} /> )
     };
 
     const showOtherIngredients = () => {
