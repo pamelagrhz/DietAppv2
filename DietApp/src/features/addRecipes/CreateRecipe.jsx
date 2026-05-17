@@ -7,6 +7,7 @@ import AddStepsSection from './components/AddStepsSection.jsx';
 import NumberSpinner from './components/NumberSpinner.jsx';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
+//TODO: create a notification component to replace the Alert component used for showing the submit messages
 
 
 //TODO: fix the styles of component 
