@@ -10,8 +10,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
 
-//TODO: Review the increment and decrement logic.
-//TODO: Validate only numbers are allowed in the input.
 export default function NumberSpinner({
   id: idProp,
   label,

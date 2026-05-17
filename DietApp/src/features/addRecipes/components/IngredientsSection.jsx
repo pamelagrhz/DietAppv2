@@ -48,7 +48,6 @@ export default function IngredientsSection({
 
     const showOtherIngredients = () => {
         setOpenModal(true);
-        //TODO: feat - show all ingredients in a modal
         //TODO: fix - chip view is cutting ingredient names, maybe show them in a tooltip on hover or something like that
     }
 
