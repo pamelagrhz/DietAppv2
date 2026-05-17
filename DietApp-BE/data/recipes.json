@@ -4,6 +4,9 @@
   "recetas": [
     {
       "nombre": "Ensalada de pechuga, huevo duro y aguacate",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 100, "medida": "g", "ingrediente": "pechuga de pollo cocida" },
         { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "huevo" },
@@ -19,6 +22,9 @@
     },
     {
       "nombre": "Bistec con ensalada",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "bistec de res" },
         { "cantidad": 1, "medida": "taza", "ingrediente": "lechuga" },
@@ -32,6 +38,9 @@
     },
     {
       "nombre": "Caldo de res",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 150, "medida": "g", "ingrediente": "chambarete de res" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "zanahoria" },
@@ -45,6 +54,9 @@
     },
     {
       "nombre": "Caldo de pollo",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "pierna o muslo de pollo" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
@@ -57,6 +69,9 @@
     },
     {
       "nombre": "Pacholas con ensalada",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "carne molida de res" },
         { "cantidad": 1, "medida": "taza", "ingrediente": "ensalada verde" }
@@ -69,6 +84,9 @@
     },
     {
       "nombre": "Pollo estilo chino",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "pimiento" },
@@ -83,6 +101,9 @@
     },
     {
       "nombre": "Alambre con cebolla y pimiento",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "carne de res" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "cebolla y pimiento" }
@@ -95,6 +116,9 @@
     },
     {
       "nombre": "Sandwich de calabacitas con jamón y queso",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 2, "medida": "rebanadas", "ingrediente": "pan" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "calabacita" },
@@ -109,6 +133,9 @@
     },
     {
       "nombre": "Ensalada de atún con pasta",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 1, "medida": "lata", "ingrediente": "atún en agua" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "pasta cocida" },
@@ -122,6 +149,9 @@
     },
     {
       "nombre": "Tinga de pollo",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "pollo deshebrado" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "jitomate" },
@@ -135,6 +165,9 @@
     },
     {
       "nombre": "Milanesa de pollo empanizada",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
         { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "huevo" },
@@ -148,6 +181,9 @@
     },
     {
       "nombre": "Pescado empapelado",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 130, "medida": "g", "ingrediente": "filete de pescado" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
@@ -160,6 +196,9 @@
     },
     {
       "nombre": "Adobo con carne de puerco",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
         { "cantidad": 120, "medida": "g", "ingrediente": "carne de puerco" },
         { "cantidad": 0.5, "medida": "taza", "ingrediente": "salsa de adobo" }
