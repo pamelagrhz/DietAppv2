@@ -33,6 +33,8 @@ export default function AddStepsSection({
     return (
         <>
             <h3>Instrucciones:</h3>
+
+            {/* TODO: hacer que la lista se desplace automáticamente hacia el último paso agregado */}
             <List
                 style={{ display: steps.length > 0 ? 'block' : 'none' }}
                 sx={stepsStyle}

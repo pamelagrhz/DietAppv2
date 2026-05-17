@@ -52,8 +52,9 @@ export default function RecipeReviewCard({ recipe }) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={recipe.nombre}
-      //  TODO: Add the date subheader={recipe.fecha}
+        title={recipe.nombre} 
+        subheader={recipe.userId}
+        
       />
       <CardMedia
         component="img"
