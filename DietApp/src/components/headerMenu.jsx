@@ -83,8 +83,14 @@ export default function HeaderMenu({ onMenuOptionClick }) {
 
   return (
     <div style={headerStyle}>
-      <Button onClick={toggleDrawer(true)}>
-        {/* TODO: Remove focus style from this icon */}
+      <Button
+        onClick={toggleDrawer(true)}
+        // Styles to remove focus outline
+        sx={{
+          '&:focus': { outline: 'none' },
+          '&.Mui-focusVisible': { outline: 'none' },
+        }}
+      >
         <MenuIcon />
       </Button>
       <Button onClick={openProfile(true)}>
