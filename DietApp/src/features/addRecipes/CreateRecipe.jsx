@@ -122,7 +122,8 @@ export default function CreateRecipe() {
             porciones: Number(porcionesInput),
             ingredientes: ingredients,
             preparacion: steps,
-        };
+            userId: "pamelagrhz", // TODO: Replace with actual user ID
+            };
 
         try {
             setIsSubmitting(true);

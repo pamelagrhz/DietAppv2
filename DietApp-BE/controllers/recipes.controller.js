@@ -13,10 +13,11 @@ export const getRecipes = async (req, res) => {
 
 export const createRecipe = async (req, res) => {
   try {
-    const { nombre, ingredientes, preparacion, porciones } = req.body ?? {};
+    const { nombre, ingredientes, preparacion, porciones, userId } = req.body ?? {};
 
     if (
       !nombre?.trim() ||
+      !userId?.trim() ||
       !Array.isArray(ingredientes) ||
       ingredientes.length < 1 ||
       !Array.isArray(preparacion) ||
@@ -27,6 +28,9 @@ export const createRecipe = async (req, res) => {
 
     const nuevaReceta = {
       nombre: nombre.trim(),
+      userId: userId.trim(),
+      creationDate: new Date().toISOString(),
+      lastModifiedDate: new Date().toISOString(), 
       porciones: Number(porciones) || 1,
       ingredientes,
       preparacion,
