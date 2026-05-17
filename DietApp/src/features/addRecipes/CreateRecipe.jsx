@@ -5,6 +5,10 @@ import { createRecipe as createRecipeRequest, getIngredients } from '../showReci
 import IngredientsSection from './components/IngredientsSection.jsx';
 import AddStepsSection from './components/AddStepsSection.jsx';
 import NumberSpinner from './components/NumberSpinner.jsx';
+import AlertTitle from '@mui/material/AlertTitle';
+import Alert from '@mui/material/Alert';
+
+
 //TODO: fix the styles of component 
 
 export default function CreateRecipe() {
@@ -129,6 +133,9 @@ export default function CreateRecipe() {
             setIsSubmitting(true);
             await createRecipeRequest(recipePayload);
             setSubmitMessage('Receta creada correctamente');
+            setTimeout(() => {
+                setSubmitMessage("");
+            }, 3000);
             setRecipeName("");
             setPorcionesInput("1");
             setIngredients([]);
@@ -141,6 +148,9 @@ export default function CreateRecipe() {
             setIngredientAttempted(false);
         } catch (error) {
             setSubmitError(error.message || 'No se pudo guardar la receta');
+            setTimeout(() => {
+                setSubmitError("");
+            }, 3000);
         } finally {
             setIsSubmitting(false);
         }
@@ -227,11 +237,20 @@ export default function CreateRecipe() {
                 onAddStep={handleAddStep}
                 onDeleteStep={handleDeleteStep}
             />
-            <div style={actionsAreaStyle}>
-                {submitMessage && <p style={{ color: 'green', margin: 0 }}>{submitMessage}</p>}
-                {submitError && <p style={{ color: 'crimson', margin: 0 }}>{submitError}</p>}
+            {/* TODO: change to a notification component */}
+            <div style={{ ...actionsAreaStyle, display: submitMessage || submitError ? 'block' : 'none' }} >
+                {submitMessage && <Alert severity="success">
+                <AlertTitle>Success</AlertTitle>
+                {submitMessage}
+                </Alert>}
+                {submitError && <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                {submitError}
+                </Alert>}
 
-                <Button
+                
+            </div>
+            <Button
                     size='medium'
                     variant="contained"
                     onClick={handleCreateRecipe}
@@ -239,7 +258,6 @@ export default function CreateRecipe() {
                 >
                     {isSubmitting ? 'Guardando...' : 'Crear Receta'}
                 </Button>
-            </div>
         </div>
     )
 }
