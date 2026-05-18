@@ -35,9 +35,8 @@ export default function IngredientsSection({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 500,
         bgcolor: 'background.paper',
-        border: '2px solid #000',
         boxShadow: 24,
         p: 4,
         };
@@ -48,7 +47,6 @@ export default function IngredientsSection({
 
     const showOtherIngredients = () => {
         setOpenModal(true);
-        //TODO: fix - chip view is cutting ingredient names, maybe show them in a tooltip on hover or something like that
     }
 
     useEffect(() => {
@@ -60,7 +58,9 @@ export default function IngredientsSection({
         }
 
         const checkOverflow = () => {
-            const hasOverflow = container.scrollHeight > container.clientHeight;
+            const hasOverflow =
+                container.scrollHeight > container.clientHeight ||
+                container.scrollWidth > container.clientWidth;
             setShowOverflowChip(hasOverflow);
         };
 
@@ -99,7 +99,6 @@ export default function IngredientsSection({
                     display: ingredients.length > 0 ? 'flex' : 'none',
                     maxHeight: '38px',
                     maxWidth: '90vw',
-                    textOverflow: 'ellipsis',
                     overflow: 'hidden',
                 }}
             >
@@ -108,7 +107,18 @@ export default function IngredientsSection({
                         key={idx}
                         label={`${ing.cantidad} ${ing.medida} ${ing.ingrediente}`}
                         onDelete={() => onDeleteIngredient(idx)}
-                        style={{ margin: 4 }}
+                        sx={{
+                            m: 0.5,
+                            maxWidth: { xs: '56vw', sm: '32vw', md: '24vw' },
+                            minWidth: 0,
+                            flexShrink: 1,
+                            '& .MuiChip-label': {
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                display: 'block',
+                            },
+                        }}
                        
                     />
                 ))}
