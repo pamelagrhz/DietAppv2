@@ -7,8 +7,7 @@ import AddStepsSection from './components/AddStepsSection.jsx';
 import NumberSpinner from './components/NumberSpinner.jsx';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
-//TODO: create a notification component to replace the Alert component used for showing the submit messages
-
+import Grid from '@mui/material/Grid';
 
 //TODO: fix the styles of component 
 
@@ -183,8 +182,13 @@ export default function CreateRecipe() {
 
     return (
         <div style={createRecipeStyle}>
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                <NumberSpinner
+            <Grid container spacing={2}>
+                <Grid 
+                    sx={{
+                        width: { xs: '30%', sm: '10%' }, // 30% en xs, 10% en sm
+                    }}
+                >
+                    <NumberSpinner
                         onValueChange={(value) => {
                             if (value === null) {
                                 setPorcionesInput("");
@@ -202,19 +206,25 @@ export default function CreateRecipe() {
                         helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
                         min={1}
                         max={40}
-                        />  
-               
-                <TextField
-                    id="recipe-name"
-                    style={{ width: '100%', marginTop: 28 }}
-                    label="Nombre de la receta"
-                    size='small'
-                    value={recipeName}
-                    onChange={e => setRecipeName(e.target.value)}
-                    error={fieldErrors.recipeName}
-                    helperText={fieldErrors.recipeName ? "Falta el nombre de la receta" : ""}
-                />
-            </div>
+                    />
+                </Grid>
+                <Grid
+                    sx={{
+                        width: { xs: '100%', sm: '90%' }, // 100% en xs, 90% en sm
+                    }}
+                >
+                    <TextField
+                        id="recipe-name"
+                        label="Nombre de la receta"
+                        size='small'
+                        value={recipeName}
+                        onChange={e => setRecipeName(e.target.value)}
+                        error={fieldErrors.recipeName}
+                        helperText={fieldErrors.recipeName ? "Falta el nombre de la receta" : ""}
+                        fullWidth
+                    />
+                </Grid>
+            </Grid>
             <IngredientsSection
                 ingredients={ingredients}
                 ingredientOptions={ingredientOptions}
