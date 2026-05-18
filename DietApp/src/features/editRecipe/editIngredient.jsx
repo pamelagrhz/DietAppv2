@@ -2,7 +2,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 
-export default function EditIngredient({ ingredients }) {
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+// colors
+import { red, blue } from '@mui/material/colors';
+
+
+export default function EditIngredient({ ingredients, onDeleteIngredient }) {
     const [editingIndex, setEditingIndex] = useState(null);
     const [editValues, setEditValues] = useState({});
 
@@ -30,13 +39,16 @@ export default function EditIngredient({ ingredients }) {
             {ingredients.map((ing, idx) => (
                 <li key={idx}>
                     {editingIndex === idx ? (
+
                         <div>
+
+                            {/* Edit an ingredient */}
                             {/* TODO: change dropdown for medida and autocomplete for ingrediente */}
                             <input
                                 type="text"
                                 value={editValues.cantidad ?? ''}
                                 onChange={(e) => setEditValues({ ...editValues, cantidad: e.target.value })}
-                            />
+                            /> 
                             <input
                                 type="text"
                                 value={editValues.medida ?? ''}
@@ -51,13 +63,20 @@ export default function EditIngredient({ ingredients }) {
                             <button onClick={() => {saveEdits(idx, editValues)}}>Save</button>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            {`${ing.cantidad} ${ing.medida} ${ing.ingrediente}`}
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <EditIcon style={{ cursor: 'hand' }} fontSize="small" onClick={() => edit(idx, ing)}/>
-                                <DeleteIcon style={{ cursor: 'hand' }} fontSize="small" onClick={() => console.log('delete ingredient', idx)}/>
-                            </div>
-                            </div>
+
+                        // Show ingredient details with edit and delete icons
+                        <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>{`${ing.ingrediente} - ${ing.cantidad} ${ing.medida}`}</TableCell>
+                                <TableCell align="right">
+                                    <EditIcon style={buttonStyles} fontSize="small" sx={{color: blue[500]}} onClick={() => edit(idx, ing)}/>
+                                    <DeleteIcon style={buttonStyles} fontSize="small"  sx={{color: red[500]}} onClick={() => onDeleteIngredient(idx)}/>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                        </Table>
+                        
                     )}
                 </li>
             ))}

@@ -131,6 +131,7 @@ export default function IngredientsSection({
             </div>
             
 
+{/* TODO: Create a component for adding ingredients */}
             <div style={addIngredientStyle}>
                 <Autocomplete
                     freeSolo
