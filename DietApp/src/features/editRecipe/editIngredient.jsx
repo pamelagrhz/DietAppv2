@@ -63,12 +63,20 @@ export default function EditIngredient({ ingredients, onDeleteIngredient }) {
                             <button onClick={() => {saveEdits(idx, editValues)}}>Save</button>
                         </div>
                     ) : (
-
+                        //TODO: Fix the view
                         // Show ingredient details with edit and delete icons
                         <Table>
                         <TableBody>
                             <TableRow>
-                                <TableCell>{`${ing.ingrediente} - ${ing.cantidad} ${ing.medida}`}</TableCell>
+                                <TableCell >
+                                    <span style={{
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        display: 'block',
+                                        width: '50%'
+                                        }}>{`${ing.ingrediente}`} </span>
+                                        {`${ing.cantidad} ${ing.medida}`}</TableCell>
                                 <TableCell align="right">
                                     <EditIcon style={buttonStyles} fontSize="small" sx={{color: blue[500]}} onClick={() => edit(idx, ing)}/>
                                     <DeleteIcon style={buttonStyles} fontSize="small"  sx={{color: red[500]}} onClick={() => onDeleteIngredient(idx)}/>

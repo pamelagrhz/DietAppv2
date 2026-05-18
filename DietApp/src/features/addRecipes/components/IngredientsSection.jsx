@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import { Button } from '@mui/material';
 import BasicModal from '../../../components/modal.jsx';
 import EditIngredient from '../../editRecipe/editIngredient.jsx';
+import BakeryDiningIcon from '@mui/icons-material/BakeryDining';
 
 export default function IngredientsSection({
     ingredients,
@@ -103,6 +104,7 @@ export default function IngredientsSection({
                 }}
             >
                 {ingredients.map((ing, idx) => (
+                    // TODO: fix (dont add more chips when the space isn't available)
                     <Chip
                         key={idx}
                         label={`${ing.cantidad} ${ing.medida} ${ing.ingrediente}`}
@@ -125,7 +127,7 @@ export default function IngredientsSection({
             </div>
             {showOverflowChip && ingredients.length > 0 ? (
                 <span style={{ display: 'flex', alignItems: 'center', paddingLeft: 8 }}>
-                    <Chip label={`${ingredients.length} +`} style={{ margin: 4 }}  onClick={() => showOtherIngredients()}/>
+                    <Chip icon={<BakeryDiningIcon />}  label='Edit' style={{ margin: 0 }}  onClick={() => showOtherIngredients()}/>
                 </span>
             ) : null}
             </div>
