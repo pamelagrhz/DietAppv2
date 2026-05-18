@@ -8,10 +8,26 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 100, "medida": "g", "ingrediente": "pechuga de pollo cocida" },
-        { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "huevo" },
-        { "cantidad": 0.25, "medida": "pieza(s)", "ingrediente": "aguacate" },
-        { "cantidad": 1, "medida": "taza", "ingrediente": "lechuga" }
+        {
+          "cantidad": 100,
+          "medida": "g",
+          "ingrediente": "pechuga de pollo cocida"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "huevo"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "pieza(s)",
+          "ingrediente": "aguacate"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza",
+          "ingrediente": "lechuga"
+        }
       ],
       "preparacion": [
         "Cocer el huevo",
@@ -26,9 +42,21 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "bistec de res" },
-        { "cantidad": 1, "medida": "taza", "ingrediente": "lechuga" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "jitomate" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "bistec de res"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza",
+          "ingrediente": "lechuga"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "jitomate"
+        }
       ],
       "preparacion": [
         "Sazonar y asar el bistec",
@@ -42,9 +70,21 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 150, "medida": "g", "ingrediente": "chambarete de res" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "zanahoria" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "papa" }
+        {
+          "cantidad": 150,
+          "medida": "g",
+          "ingrediente": "chambarete de res"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "zanahoria"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "papa"
+        }
       ],
       "preparacion": [
         "Hervir la carne",
@@ -58,8 +98,16 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "pierna o muslo de pollo" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "pierna o muslo de pollo"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "verduras"
+        }
       ],
       "preparacion": [
         "Hervir el pollo",
@@ -73,8 +121,16 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "carne molida de res" },
-        { "cantidad": 1, "medida": "taza", "ingrediente": "ensalada verde" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "carne molida de res"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza",
+          "ingrediente": "ensalada verde"
+        }
       ],
       "preparacion": [
         "Formar pacholas",
@@ -88,10 +144,26 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "pimiento" },
-        { "cantidad": 1, "medida": "cda", "ingrediente": "salsa de soya" },
-        { "cantidad": 1, "medida": "cdita", "ingrediente": "miel" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "pechuga de pollo"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "pimiento"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cda",
+          "ingrediente": "salsa de soya"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cdita",
+          "ingrediente": "miel"
+        }
       ],
       "preparacion": [
         "Saltear el pollo",
@@ -105,8 +177,16 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "carne de res" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "cebolla y pimiento" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "carne de res"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "cebolla y pimiento"
+        }
       ],
       "preparacion": [
         "Saltear la carne",
@@ -120,10 +200,26 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 2, "medida": "rebanadas", "ingrediente": "pan" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "calabacita" },
-        { "cantidad": 2, "medida": "rebanadas", "ingrediente": "jamón" },
-        { "cantidad": 1, "medida": "rebanada", "ingrediente": "queso" }
+        {
+          "cantidad": 2,
+          "medida": "rebanadas",
+          "ingrediente": "pan"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "calabacita"
+        },
+        {
+          "cantidad": 2,
+          "medida": "rebanadas",
+          "ingrediente": "jamón"
+        },
+        {
+          "cantidad": 1,
+          "medida": "rebanada",
+          "ingrediente": "queso"
+        }
       ],
       "preparacion": [
         "Saltear calabacitas",
@@ -137,9 +233,21 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 1, "medida": "lata", "ingrediente": "atún en agua" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "pasta cocida" },
-        { "cantidad": 1, "medida": "cda", "ingrediente": "mayonesa" }
+        {
+          "cantidad": 1,
+          "medida": "lata",
+          "ingrediente": "atún en agua"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "pasta cocida"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cda",
+          "ingrediente": "mayonesa"
+        }
       ],
       "preparacion": [
         "Mezclar el atún con la pasta",
@@ -153,9 +261,21 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "pollo deshebrado" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "jitomate" },
-        { "cantidad": 0.25, "medida": "pieza(s)", "ingrediente": "cebolla" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "pollo deshebrado"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "jitomate"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "pieza(s)",
+          "ingrediente": "cebolla"
+        }
       ],
       "preparacion": [
         "Licuar jitomate",
@@ -169,9 +289,21 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
-        { "cantidad": 1, "medida": "pieza(s)", "ingrediente": "huevo" },
-        { "cantidad": 0.25, "medida": "taza", "ingrediente": "pan molido" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "pechuga de pollo"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "huevo"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "taza",
+          "ingrediente": "pan molido"
+        }
       ],
       "preparacion": [
         "Empanizar el pollo",
@@ -185,8 +317,16 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 130, "medida": "g", "ingrediente": "filete de pescado" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
+        {
+          "cantidad": 130,
+          "medida": "g",
+          "ingrediente": "filete de pescado"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "verduras"
+        }
       ],
       "preparacion": [
         "Colocar ingredientes en papel aluminio",
@@ -200,13 +340,89 @@
       "creationDate": "2024-06-01T12:00:00Z",
       "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "carne de puerco" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "salsa de adobo" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "carne de puerco"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "salsa de adobo"
+        }
       ],
       "preparacion": [
         "Sellar la carne",
         "Agregar adobo",
         "Cocinar hasta suavizar"
+      ]
+    },
+    {
+      "nombre": "asais",
+      "porciones": 1,
+      "ingredientes": [
+        {
+          "cantidad": 1,
+          "medida": "taza(s)",
+          "ingrediente": "asas"
+        }
+      ],
+      "preparacion": [
+        "qwerfg"
+      ],
+      "userId": "pamelagrhz",
+      "creationDate": "2026-05-17T20:47:14.987Z",
+      "lastModifiedDate": "2026-05-17T20:47:14.988Z"
+    },
+    {
+      "nombre": "qwqw",
+      "userId": "pamelagrhz",
+      "creationDate": "2026-05-17T21:20:06.584Z",
+      "lastModifiedDate": "2026-05-17T21:20:06.584Z",
+      "porciones": 2,
+      "ingredientes": [
+        {
+          "cantidad": 2,
+          "medida": "cda(s)",
+          "ingrediente": "q"
+        }
+      ],
+      "preparacion": [
+        "aaa"
+      ]
+    },
+    {
+      "nombre": "asas",
+      "userId": "pamelagrhz",
+      "creationDate": "2026-05-17T21:20:52.008Z",
+      "lastModifiedDate": "2026-05-17T21:20:52.008Z",
+      "porciones": 1,
+      "ingredientes": [
+        {
+          "cantidad": 2,
+          "medida": "kg",
+          "ingrediente": "asas"
+        }
+      ],
+      "preparacion": [
+        "23e4rtfgvfdsa"
+      ]
+    },
+    {
+      "nombre": "awdwsx",
+      "userId": "pamelagrhz",
+      "creationDate": "2026-05-17T21:24:42.489Z",
+      "lastModifiedDate": "2026-05-17T21:24:42.489Z",
+      "porciones": 2,
+      "ingredientes": [
+        {
+          "cantidad": 3,
+          "medida": "g",
+          "ingrediente": "wqer"
+        }
+      ],
+      "preparacion": [
+        "liuytgfhvbn"
       ]
     }
   ]
