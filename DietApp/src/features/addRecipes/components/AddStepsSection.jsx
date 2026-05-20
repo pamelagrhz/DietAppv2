@@ -1,8 +1,10 @@
+import React, { useRef, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+
 //TODO: fix responsive styles
 
 export default function AddStepsSection({
@@ -13,6 +15,14 @@ export default function AddStepsSection({
     onAddStep,
     onDeleteStep,
 }) {
+    const listRef = useRef(null);
+
+    useEffect(() => {
+        if (listRef.current && steps.length > 0) {
+            listRef.current.scrollTop = listRef.current.scrollHeight;
+        }
+    }, [steps]);
+
     const createRecipeStyle = {
         display: 'flex',
         flexDirection: 'column',
@@ -31,12 +41,21 @@ export default function AddStepsSection({
         overflowY: 'auto',
     };
 
+    // Sumbit the step when the user presses Enter in the TextField
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            onAddStep();
+        }
+    };
+
     return (
         <>
             <h3>Instrucciones:</h3>
 
-            {/* TODO: hacer que la lista se desplace automáticamente hacia el último paso agregado */}
+            {/* TODO: reorder list (less important) */}
             <List
+                ref={listRef}
                 style={{ display: steps.length > 0 ? 'block' : 'none' }}
                 sx={stepsStyle}
                 subheader={
@@ -67,7 +86,6 @@ export default function AddStepsSection({
                     </ListItem>
                 ))}
             </List>
-
             <div style={createRecipeStyle}>
                 <TextField
                     id="recipe-instructions"
@@ -76,6 +94,7 @@ export default function AddStepsSection({
                     size="small"
                     value={stepInput}
                     onChange={(e) => setStepInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     error={fieldErrors.steps}
                     helperText={fieldErrors.steps ? 'Agrega al menos un paso' : ''}
                 />
