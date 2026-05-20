@@ -1,5 +1,4 @@
 export default function ShowStepsList({ instructions }) {
-    //TODO: make a functionality to move the steps up and down to reorder.
     return(
         <ol>
           {instructions.map((ins, j) => (

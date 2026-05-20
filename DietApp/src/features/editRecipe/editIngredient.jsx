@@ -1,30 +1,15 @@
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 // colors
-import { red, blue } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
+import Box from '@mui/material/Box';
 
 
 export default function EditIngredient({ ingredients, onDeleteIngredient }) {
-    const [editingIndex, setEditingIndex] = useState(null);
-    const [editValues, setEditValues] = useState({});
-
-    const edit = (index, ingredient) => {
-        setEditingIndex(index);
-        setEditValues({ ...ingredient });
-    };
-    const saveEdits = (index, newValues) => { 
-        // Implement save logic here
-        console.log('Saving edits for index:', index, 'with values:', newValues);
-        setEditingIndex(null);
-    }
-
     const buttonStyles = {
         maxHeight: '16px',
         maxWidth: '16px',
@@ -35,60 +20,32 @@ export default function EditIngredient({ ingredients, onDeleteIngredient }) {
 
     return (
         <>
-        <ol>
-            {ingredients.map((ing, idx) => (
-                <li key={idx}>
-                    {editingIndex === idx ? (
-
-                        <div>
-
-                            {/* Edit an ingredient */}
-                            {/* TODO: change dropdown for medida and autocomplete for ingrediente */}
-                            <input
-                                type="text"
-                                value={editValues.cantidad ?? ''}
-                                onChange={(e) => setEditValues({ ...editValues, cantidad: e.target.value })}
-                            /> 
-                            <input
-                                type="text"
-                                value={editValues.medida ?? ''}
-                                onChange={(e) => setEditValues({ ...editValues, medida: e.target.value })}
-                            />
-                            <input
-                                type="text"
-                                value={editValues.ingrediente ?? ''}
-                                onChange={(e) => setEditValues({ ...editValues, ingrediente: e.target.value })}
-                            />
-                            <button onClick={() => setEditingIndex(null)}>X</button>
-                            <button onClick={() => {saveEdits(idx, editValues)}}>Save</button>
-                        </div>
-                    ) : (
-                        //TODO: Fix the view
-                        // Show ingredient details with edit and delete icons
-                        <Table>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell >
-                                    <span style={{
+            <Table sx={{ width: '100%', tableLayout: 'fixed' }}>
+                <TableBody>
+                    {ingredients.map((ing, idx) => (
+                        <TableRow key={idx}>
+                            <TableCell sx={{ width: '70%' }}>
+                                <Box
+                                    sx={{
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
-                                        display: 'block',
-                                        width: '50%'
-                                        }}>{`${ing.ingrediente}`} </span>
-                                        {`${ing.cantidad} ${ing.medida}`}</TableCell>
-                                <TableCell align="right">
-                                    <EditIcon style={buttonStyles} fontSize="small" sx={{color: blue[500]}} onClick={() => edit(idx, ing)}/>
-                                    <DeleteIcon style={buttonStyles} fontSize="small"  sx={{color: red[500]}} onClick={() => onDeleteIngredient(idx)}/>
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                        </Table>
-                        
-                    )}
-                </li>
-            ))}
-        </ol>
+                                    }}
+                                    title={ing.ingrediente}
+                                >
+                                    {ing.ingrediente}
+                                </Box>
+                            </TableCell>
+                            <TableCell align="right" sx={{ width: '20%', whiteSpace: 'nowrap' }}>
+                                {`${ing.cantidad} ${ing.medida}`}
+                            </TableCell>
+                            <TableCell align="right" sx={{ width: '10%', whiteSpace: 'nowrap' }}>
+                                <DeleteIcon style={buttonStyles} fontSize="small" sx={{ color: red[500] }} onClick={() => onDeleteIngredient(idx)} />
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </>
     );
 }
