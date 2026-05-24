@@ -6,6 +6,8 @@ import HeaderMenu from './components/headerMenu.jsx';
 import CreateRecipe from './features/addRecipes/CreateRecipe.jsx';
 import MealPlans from './features/mealPlans/pages/MealPlans.jsx';
 import GroceryLists from './features/groceryLists/pages/GroceryLists.jsx';
+import Profile from './features/profile/pages/Profile.jsx';
+import MyRecipes from './features/myRecipes/pages/MyRecipes.jsx';
 
 
 function App() {
@@ -24,6 +26,12 @@ function App() {
     if (action === 'groceryLists') {
       navigate('/grocery-lists');
     }
+    if (action === 'profile') {
+      navigate('/profile');
+    }
+    if (action === 'myRecipes') {
+      navigate('/my-recipes');
+    }
   };
 
   return (
@@ -38,6 +46,8 @@ function App() {
           <Route path="/new-recipe" element={<CreateRecipe />} />
           <Route path="/meal-plans" element={<MealPlans />} />
           <Route path="/grocery-lists" element={<GroceryLists />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/my-recipes" element={<MyRecipes />} />
         </Routes>
       </div>
     </>

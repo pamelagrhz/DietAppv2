@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "username": "pam_chef_24",
+      "name": "Pamela Rivers",
+      "age": 29,
+      "genre": "Femenino",
+      "mail": "pamela.rivers@cuisine.com",
+      "password": "pam123",
+      "recipes": [],
+      "score": 4.5
+    }
+  ]
+}

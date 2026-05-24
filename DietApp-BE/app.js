@@ -4,6 +4,7 @@ import cors from 'cors';
 import recipesRoutes from './routes/recipes.routes.js';
 import ingredientsRoutes from './routes/ingredients.routes.js';
 import mealPlansRoutes from './routes/mealPlans.routes.js';
+import usersRoutes from './routes/users.routes.js';
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.use(express.json()); // Middleware to parse JSON bodies
 app.use('/recipes', recipesRoutes);
 app.use('/ingredients', ingredientsRoutes);
 app.use('/meal-plans', mealPlansRoutes);
+app.use('/users', usersRoutes);
 
 export default app;

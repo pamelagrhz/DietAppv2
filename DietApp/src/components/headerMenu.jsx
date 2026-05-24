@@ -17,11 +17,10 @@ export default function HeaderMenu({ onMenuOptionClick }) {
 
   // Menu options
   const userOptions = [
-    {  label: 'Profile' },
-    {  label: 'My account' },
-    {  label: 'Logout' },
-    {  label: 'Settings' },
-    {  label: 'Help' }
+    { label: 'Profile', action: 'profile' },
+    { label: 'My recipes', action: 'myRecipes' },
+    { label: 'Logout' },
+    { label: 'Help' }
   ];
   const helloKitchenOptions = [
     { label: 'New recipe', action: 'newRecipe' },
@@ -41,9 +40,6 @@ export default function HeaderMenu({ onMenuOptionClick }) {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
-  const openProfile = (newOpen) => () => {
-    console.log('open profile section')
-  }
 
   //Styles
   const headerStyle = {
@@ -70,10 +66,10 @@ export default function HeaderMenu({ onMenuOptionClick }) {
       </List>
       <Divider />
       <List>
-        {userOptions.map((text) => (
-          <ListItem key={text.label} disablePadding>
-            <ListItemButton onClick={toggleDrawer(false)}>
-              <ListItemText primary={text.label} />
+        {userOptions.map((option) => (
+          <ListItem key={option.label} disablePadding>
+            <ListItemButton onClick={option.action ? handleOptionClick(option.action) : toggleDrawer(false)}>
+              <ListItemText primary={option.label} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -93,7 +89,7 @@ export default function HeaderMenu({ onMenuOptionClick }) {
       >
         <MenuIcon />
       </Button>
-      <Button onClick={openProfile(true)}>
+      <Button onClick={handleOptionClick('profile')}>
 
                 <Avatar sx={{ bgcolor: red[500], marginRight: '8px' }} aria-label="recipe">
                 R
