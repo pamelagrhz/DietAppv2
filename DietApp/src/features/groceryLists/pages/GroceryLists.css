@@ -1,0 +1,90 @@
+.grocery-lists-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: radial-gradient(circle at top right, #f0f2e7 0%, #f7f8f4 38%, #f4f5f0 100%);
+  min-height: calc(100vh - 40px);
+}
+
+.grocery-lists-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  color: #1c5a40;
+  font-family: Bitter, Cambria, Georgia, serif;
+}
+
+.grocery-lists-subtitle {
+  margin: 8px 0 0;
+  color: #4f5b54;
+}
+
+.grocery-lists-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.grocery-lists-panel {
+  border-radius: 20px;
+  border: 1px solid #d8ddd4;
+  background: #f7f8f4;
+  box-shadow: 0 2px 0 rgba(9, 20, 13, 0.03);
+  padding: 18px;
+}
+
+.grocery-lists-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 0 14px;
+  border-top: 1px solid #d8ddd4;
+  border-bottom: 1px solid #d8ddd4;
+}
+
+.grocery-lists-total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1c5a40;
+}
+
+.grocery-lists-recipe-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+.grocery-lists-ingredient-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grocery-lists-ingredient-table th,
+.grocery-lists-ingredient-table td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid #e1e4df;
+}
+
+.grocery-lists-ingredient-table th {
+  color: #4f5b54;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.grocery-lists-money-input {
+  width: 120px;
+}
+
+@media (min-width: 980px) {
+  .grocery-lists-grid {
+    grid-template-columns: minmax(320px, 0.95fr) minmax(360px, 1.05fr);
+  }
+}

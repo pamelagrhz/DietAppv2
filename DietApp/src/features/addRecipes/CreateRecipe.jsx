@@ -31,9 +31,8 @@ export default function CreateRecipe() {
     const [submitError, setSubmitError] = useState("");
     const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza(s)", "cda(s)", "cdita(s)", "rebanada(s)", "lata(s)"];
 
-    // steps (instructions) states
-    const [steps, setSteps] = useState([]); // array de pasos
-    const [stepInput, setStepInput] = useState("");
+    // instructions state
+    const [instructionsText, setInstructionsText] = useState("");
     // field errors for validation
     const fieldErrors = {
         porciones: submitAttempted && `${porcionesInput}`.trim() === "",
@@ -41,20 +40,7 @@ export default function CreateRecipe() {
         ingredients: submitAttempted && ingredients.length < 1,
         cantidad: ingredientAttempted && cantidadInput === "",
         medida: ingredientAttempted && !medidaInput.trim(),
-        steps: submitAttempted && steps.length < 1,
-    };
-
-    const handleAddStep = () => {
-        if (!stepInput.trim()) {
-            return;
-        }
-        // Add the new step to the steps array and clear the input
-        setSteps([...steps, stepInput.trim()]);
-        setStepInput("");
-    };
-
-    const handleDeleteStep = (idx) => {
-        setSteps(steps.filter((_, i) => i !== idx));
+        steps: submitAttempted && !instructionsText.trim(),
     };
 
     //Add handlers for the chip component, to handle the click and delete events
@@ -110,7 +96,7 @@ export default function CreateRecipe() {
             `${porcionesInput}`.trim() === "" ||
             !recipeName.trim() ||
             ingredients.length < 1 ||
-            steps.length < 1
+            !instructionsText.trim()
         ) {
             return;
         }
@@ -119,7 +105,7 @@ export default function CreateRecipe() {
             nombre: recipeName.trim(),
             porciones: Number(porcionesInput),
             ingredientes: ingredients,
-            preparacion: steps,
+            preparacion: [instructionsText.trim()],
             userId: "pamelagrhz", // TODO: Replace with actual user ID
             };
 
@@ -136,8 +122,7 @@ export default function CreateRecipe() {
             setIngredientInput("");
             setCantidadInput("");
             setMedidaInput("");
-            setSteps([]);
-            setStepInput("");
+            setInstructionsText("");
             setSubmitAttempted(false);
             setIngredientAttempted(false);
         } catch (error) {
@@ -258,12 +243,9 @@ export default function CreateRecipe() {
 
                 <section className="create-recipe-panel">
                     <AddStepsSection
-                        steps={steps}
-                        stepInput={stepInput}
-                        setStepInput={setStepInput}
+                        instructionsText={instructionsText}
+                        setInstructionsText={setInstructionsText}
                         fieldErrors={fieldErrors}
-                        onAddStep={handleAddStep}
-                        onDeleteStep={handleDeleteStep}
                     />
                 </section>
             </div>
