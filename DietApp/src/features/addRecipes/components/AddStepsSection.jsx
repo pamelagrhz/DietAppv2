@@ -1,7 +1,6 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 
-//TODO: fix responsive styles
 
 export default function AddStepsSection({
     instructionsText,

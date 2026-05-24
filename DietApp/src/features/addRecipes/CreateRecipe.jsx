@@ -10,9 +10,6 @@ import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import './CreateRecipe.css';
 
-//TODO: if porciones is more than 1, we need to divide the cantidad of each ingredient by the porciones, to show the cantidad per porcion. (and change the label to "Cantidad por porción" or something like that)
-
-//TODO: fix the styles of component 
 
 export default function CreateRecipe() {
     // ingredients states
