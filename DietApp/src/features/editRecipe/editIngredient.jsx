@@ -75,13 +75,29 @@ export default function EditIngredient({
 
     return (
         <>
-            <Table sx={{ width: '100%', tableLayout: 'fixed' }}>
+            <Table sx={{ width: '100%', tableLayout: { xs: 'auto', sm: 'fixed' } }}>
                 <TableBody>
                     {ingredients.map((ing, idx) => (
-                        <TableRow key={idx}>
+                        <TableRow
+                            key={idx}
+                            sx={{
+                                display: { xs: 'block', sm: 'table-row' },
+                                borderBottom: '1px solid',
+                                borderColor: 'divider',
+                                py: { xs: 1, sm: 0 },
+                            }}
+                        >
                             {editingIndex === idx ? (
                                 <>
-                                    <TableCell sx={{ width: '46%' }}>
+                                    <TableCell
+                                        sx={{
+                                            display: { xs: 'block', sm: 'table-cell' },
+                                            width: { xs: '100%', sm: '46%' },
+                                            borderBottom: { xs: 'none', sm: undefined },
+                                            px: { xs: 0, sm: 2 },
+                                            py: { xs: 0.75, sm: 2 },
+                                        }}
+                                    >
                                         <Autocomplete
                                             freeSolo
                                             options={ingredientOptions}
@@ -102,8 +118,16 @@ export default function EditIngredient({
                                             )}
                                         />
                                     </TableCell>
-                                    <TableCell sx={{ width: '34%' }}>
-                                        <Box sx={{ display: 'flex', gap: 1 }}>
+                                    <TableCell
+                                        sx={{
+                                            display: { xs: 'block', sm: 'table-cell' },
+                                            width: { xs: '100%', sm: '34%' },
+                                            borderBottom: { xs: 'none', sm: undefined },
+                                            px: { xs: 0, sm: 2 },
+                                            py: { xs: 0.75, sm: 2 },
+                                        }}
+                                    >
+                                        <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
                                             <TextField
                                                 label="Cantidad"
                                                 value={editingCantidad}
@@ -121,7 +145,7 @@ export default function EditIngredient({
                                                 }}
                                                 type="number"
                                                 size="small"
-                                                sx={{ width: 90 }}
+                                                sx={{ width: { xs: '100%', sm: 90 } }}
                                                 error={hasEditError && editingCantidad === ''}
                                                 inputProps={{ min: 1 }}
                                             />
@@ -138,11 +162,22 @@ export default function EditIngredient({
                                                         error={hasEditError && !editingMedida.trim()}
                                                     />
                                                 )}
-                                                sx={{ width: 130 }}
+                                                sx={{ width: { xs: '100%', sm: 130 } }}
                                             />
                                         </Box>
                                     </TableCell>
-                                    <TableCell align="right" sx={{ width: '20%', whiteSpace: 'nowrap' }}>
+                                    <TableCell
+                                        align="right"
+                                        sx={{
+                                            display: { xs: 'block', sm: 'table-cell' },
+                                            width: { xs: '100%', sm: '20%' },
+                                            whiteSpace: 'nowrap',
+                                            borderBottom: { xs: 'none', sm: undefined },
+                                            px: { xs: 0, sm: 2 },
+                                            py: { xs: 0.75, sm: 2 },
+                                            textAlign: { xs: 'left', sm: 'right' },
+                                        }}
+                                    >
                                         <IconButton
                                             size="small"
                                             aria-label="guardar ingrediente"
@@ -170,31 +205,62 @@ export default function EditIngredient({
                                 </>
                             ) : (
                                 <>
-                                    <TableCell sx={{ width: '70%' }}>
+                                    <TableCell
+                                        sx={{
+                                            display: { xs: 'block', sm: 'table-cell' },
+                                            width: { xs: '100%', sm: '70%' },
+                                            borderBottom: { xs: 'none', sm: undefined },
+                                            px: { xs: 0, sm: 2 },
+                                            py: { xs: 0.75, sm: 2 },
+                                        }}
+                                    >
                                         <Box
                                             sx={{
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap',
+                                                whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                                                wordBreak: 'break-word',
                                             }}
                                             title={ing.ingrediente}
                                         >
                                             {ing.ingrediente}
                                         </Box>
                                     </TableCell>
-                                    <TableCell align="right" sx={{ width: '20%' }}>
+                                    <TableCell
+                                        align="right"
+                                        sx={{
+                                            display: { xs: 'block', sm: 'table-cell' },
+                                            width: { xs: '100%', sm: '20%' },
+                                            borderBottom: { xs: 'none', sm: undefined },
+                                            px: { xs: 0, sm: 2 },
+                                            py: { xs: 0.5, sm: 2 },
+                                            textAlign: { xs: 'left', sm: 'right' },
+                                        }}
+                                    >
                                         <Box
                                             sx={{
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap',
+                                                whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                                                wordBreak: 'break-word',
                                             }}
                                             title={`${ing.cantidad} ${ing.medida}`}
                                         >
                                             {`${ing.cantidad} ${ing.medida}`}
                                         </Box>
                                     </TableCell>
-                                    <TableCell align="right" sx={{ width: '10%', whiteSpace: 'nowrap' }}>
+                                    <TableCell
+                                        align="right"
+                                        sx={{
+                                            display: { xs: 'block', sm: 'table-cell' },
+                                            width: { xs: '100%', sm: '10%' },
+                                            whiteSpace: 'nowrap',
+                                            borderBottom: { xs: 'none', sm: undefined },
+                                            px: { xs: 0, sm: 2 },
+                                            py: { xs: 0.5, sm: 2 },
+                                            textAlign: { xs: 'left', sm: 'right' },
+                                        }}
+                                    >
                                         <IconButton
                                             size="small"
                                             aria-label="editar ingrediente"
