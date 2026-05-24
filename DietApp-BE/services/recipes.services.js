@@ -8,6 +8,21 @@ import { dirname } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_PATH = path.join(__dirname, '../data/recipes.json');
 
+const normalizePreparation = (value) => {
+  if (typeof value === 'string') {
+    return value.trim();
+  }
+
+  if (Array.isArray(value)) {
+    return value
+      .filter((step) => typeof step === 'string')
+      .join('\n')
+      .trim();
+  }
+
+  return '';
+};
+
 export const getAllRecipes = async () => {
     //make a Join to the path of the json file and read the data from the json file
     const recipesPath = path.join(__dirname, '../data/recipes.json');
@@ -15,7 +30,10 @@ export const getAllRecipes = async () => {
     const data = await fs.readFile(recipesPath, 'utf8');
     //Make a parse to the data and return the recipes
     const json = JSON.parse(data);
-    return json.recetas;
+    return (json.recetas || []).map((recipe) => ({
+      ...recipe,
+      preparacion: normalizePreparation(recipe?.preparacion),
+    }));
 };
 
 export async function addRecipe(nuevaReceta) {
@@ -26,8 +44,16 @@ export async function addRecipe(nuevaReceta) {
   }
 
   // Add the new recipe to the existing recipes array (in json case)
-  data.recetas.push(nuevaReceta);
+  data.recetas = data.recetas.map((recipe) => ({
+    ...recipe,
+    preparacion: normalizePreparation(recipe?.preparacion),
+  }));
+
+  data.recetas.push({
+    ...nuevaReceta,
+    preparacion: normalizePreparation(nuevaReceta?.preparacion),
+  });
   //DATA_PATH es la ruta del archivo JSON donde se almacenan las recetas, y se escribe el nuevo contenido con la receta agregada
   await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
-  return nuevaReceta;
+  return data.recetas[data.recetas.length - 1];
 }

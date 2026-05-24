@@ -105,7 +105,7 @@ export default function CreateRecipe() {
             nombre: recipeName.trim(),
             porciones: Number(porcionesInput),
             ingredientes: ingredients,
-            preparacion: [instructionsText.trim()],
+            preparacion: instructionsText.trim(),
             userId: "pamelagrhz", // TODO: Replace with actual user ID
             };
 

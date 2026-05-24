@@ -29,12 +29,7 @@
           "ingrediente": "lechuga"
         }
       ],
-      "preparacion": [
-        "Cocer el huevo",
-        "Cortar la pechuga y el aguacate",
-        "Mezclar todos los ingredientes",
-        "Sazonar al gusto"
-      ]
+      "preparacion": "Cocer el huevo\nCortar la pechuga y el aguacate\nMezclar todos los ingredientes\nSazonar al gusto"
     },
     {
       "nombre": "Bistec con ensalada",
@@ -58,11 +53,7 @@
           "ingrediente": "jitomate"
         }
       ],
-      "preparacion": [
-        "Sazonar y asar el bistec",
-        "Picar verduras",
-        "Servir juntos"
-      ]
+      "preparacion": "Sazonar y asar el bistec\nPicar verduras\nServir juntos"
     },
     {
       "nombre": "Caldo de res",
@@ -86,11 +77,7 @@
           "ingrediente": "papa"
         }
       ],
-      "preparacion": [
-        "Hervir la carne",
-        "Agregar verduras",
-        "Cocinar hasta suavizar"
-      ]
+      "preparacion": "Hervir la carne\nAgregar verduras\nCocinar hasta suavizar"
     },
     {
       "nombre": "Caldo de pollo",
@@ -109,11 +96,7 @@
           "ingrediente": "verduras"
         }
       ],
-      "preparacion": [
-        "Hervir el pollo",
-        "Agregar verduras",
-        "Rectificar sazón"
-      ]
+      "preparacion": "Hervir el pollo\nAgregar verduras\nRectificar sazón"
     },
     {
       "nombre": "Pacholas con ensalada",
@@ -132,11 +115,7 @@
           "ingrediente": "ensalada verde"
         }
       ],
-      "preparacion": [
-        "Formar pacholas",
-        "Freírlas",
-        "Servir con ensalada"
-      ]
+      "preparacion": "Formar pacholas\nFreírlas\nServir con ensalada"
     },
     {
       "nombre": "Pollo estilo chino",
@@ -165,11 +144,7 @@
           "ingrediente": "miel"
         }
       ],
-      "preparacion": [
-        "Saltear el pollo",
-        "Agregar pimiento",
-        "Incorporar soya y miel"
-      ]
+      "preparacion": "Saltear el pollo\nAgregar pimiento\nIncorporar soya y miel"
     },
     {
       "nombre": "Alambre con cebolla y pimiento",
@@ -188,11 +163,7 @@
           "ingrediente": "cebolla y pimiento"
         }
       ],
-      "preparacion": [
-        "Saltear la carne",
-        "Agregar verduras",
-        "Cocinar hasta dorar"
-      ]
+      "preparacion": "Saltear la carne\nAgregar verduras\nCocinar hasta dorar"
     },
     {
       "nombre": "Sandwich de calabacitas con jamón y queso",
@@ -221,11 +192,7 @@
           "ingrediente": "queso"
         }
       ],
-      "preparacion": [
-        "Saltear calabacitas",
-        "Armar el sandwich",
-        "Dorar en sartén"
-      ]
+      "preparacion": "Saltear calabacitas\nArmar el sandwich\nDorar en sartén"
     },
     {
       "nombre": "Ensalada de atún con pasta",
@@ -249,11 +216,7 @@
           "ingrediente": "mayonesa"
         }
       ],
-      "preparacion": [
-        "Mezclar el atún con la pasta",
-        "Agregar mayonesa",
-        "Refrigerar si se desea"
-      ]
+      "preparacion": "Mezclar el atún con la pasta\nAgregar mayonesa\nRefrigerar si se desea"
     },
     {
       "nombre": "Tinga de pollo",
@@ -277,11 +240,7 @@
           "ingrediente": "cebolla"
         }
       ],
-      "preparacion": [
-        "Licuar jitomate",
-        "Sofreír cebolla",
-        "Agregar pollo y salsa"
-      ]
+      "preparacion": "Licuar jitomate\nSofreír cebolla\nAgregar pollo y salsa"
     },
     {
       "nombre": "Milanesa de pollo empanizada",
@@ -305,11 +264,7 @@
           "ingrediente": "pan molido"
         }
       ],
-      "preparacion": [
-        "Empanizar el pollo",
-        "Freír hasta dorar",
-        "Escurrir exceso de aceite"
-      ]
+      "preparacion": "Empanizar el pollo\nFreír hasta dorar\nEscurrir exceso de aceite"
     },
     {
       "nombre": "Pescado empapelado",
@@ -328,11 +283,7 @@
           "ingrediente": "verduras"
         }
       ],
-      "preparacion": [
-        "Colocar ingredientes en papel aluminio",
-        "Cerrar y hornear",
-        "Servir caliente"
-      ]
+      "preparacion": "Colocar ingredientes en papel aluminio\nCerrar y hornear\nServir caliente"
     },
     {
       "nombre": "Adobo con carne de puerco",
@@ -351,79 +302,7 @@
           "ingrediente": "salsa de adobo"
         }
       ],
-      "preparacion": [
-        "Sellar la carne",
-        "Agregar adobo",
-        "Cocinar hasta suavizar"
-      ]
-    },
-    {
-      "nombre": "asais",
-      "porciones": 1,
-      "ingredientes": [
-        {
-          "cantidad": 1,
-          "medida": "taza(s)",
-          "ingrediente": "asas"
-        }
-      ],
-      "preparacion": [
-        "qwerfg"
-      ],
-      "userId": "pamelagrhz",
-      "creationDate": "2026-05-17T20:47:14.987Z",
-      "lastModifiedDate": "2026-05-17T20:47:14.988Z"
-    },
-    {
-      "nombre": "qwqw",
-      "userId": "pamelagrhz",
-      "creationDate": "2026-05-17T21:20:06.584Z",
-      "lastModifiedDate": "2026-05-17T21:20:06.584Z",
-      "porciones": 2,
-      "ingredientes": [
-        {
-          "cantidad": 2,
-          "medida": "cda(s)",
-          "ingrediente": "q"
-        }
-      ],
-      "preparacion": [
-        "aaa"
-      ]
-    },
-    {
-      "nombre": "asas",
-      "userId": "pamelagrhz",
-      "creationDate": "2026-05-17T21:20:52.008Z",
-      "lastModifiedDate": "2026-05-17T21:20:52.008Z",
-      "porciones": 1,
-      "ingredientes": [
-        {
-          "cantidad": 2,
-          "medida": "kg",
-          "ingrediente": "asas"
-        }
-      ],
-      "preparacion": [
-        "23e4rtfgvfdsa"
-      ]
-    },
-    {
-      "nombre": "awdwsx",
-      "userId": "pamelagrhz",
-      "creationDate": "2026-05-17T21:24:42.489Z",
-      "lastModifiedDate": "2026-05-17T21:24:42.489Z",
-      "porciones": 2,
-      "ingredientes": [
-        {
-          "cantidad": 3,
-          "medida": "g",
-          "ingrediente": "wqer"
-        }
-      ],
-      "preparacion": [
-        "liuytgfhvbn"
-      ]
+      "preparacion": "Sellar la carne\nAgregar adobo\nCocinar hasta suavizar"
     }
   ],
   "mealPlanEntries": [

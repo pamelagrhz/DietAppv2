@@ -15,14 +15,14 @@ export const createRecipe = async (req, res) => {
   try {
     const { nombre, ingredientes, preparacion, porciones, userId } = req.body ?? {};
     const parsedPorciones = Number(porciones ?? 1);
+    const normalizedPreparation = typeof preparacion === 'string' ? preparacion.trim() : '';
 
     if (
       !nombre?.trim() ||
       !userId?.trim() ||
       !Array.isArray(ingredientes) ||
       ingredientes.length < 1 ||
-      !Array.isArray(preparacion) ||
-      preparacion.length < 1 ||
+      !normalizedPreparation ||
       Number.isNaN(parsedPorciones) ||
       parsedPorciones < 1
     ) {
@@ -56,7 +56,7 @@ export const createRecipe = async (req, res) => {
       creationDate: new Date().toISOString(),
       lastModifiedDate: new Date().toISOString(), 
       ingredientes: ingredientesNormalizados,
-      preparacion,
+      preparacion: normalizedPreparation,
     };
 
     //Call the addRecipe function from recipes.services.js to make a push to the json file with the new recipe

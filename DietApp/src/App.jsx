@@ -8,6 +8,8 @@ import MealPlans from './features/mealPlans/pages/MealPlans.jsx';
 import GroceryLists from './features/groceryLists/pages/GroceryLists.jsx';
 import Profile from './features/profile/pages/Profile.jsx';
 import MyRecipes from './features/myRecipes/pages/MyRecipes.jsx';
+import MyRecipesRecipes from './features/myRecipes/pages/MyRecipesRecipes.jsx';
+import MyRecipesFavourites from './features/myRecipes/pages/MyRecipesFavourites.jsx';
 
 
 function App() {
@@ -47,7 +49,11 @@ function App() {
           <Route path="/meal-plans" element={<MealPlans />} />
           <Route path="/grocery-lists" element={<GroceryLists />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/my-recipes" element={<MyRecipes />} />
+          <Route path="/my-recipes" element={<MyRecipes />}>
+            <Route index element={<Navigate to="recipes" replace />} />
+            <Route path="recipes" element={<MyRecipesRecipes />} />
+            <Route path="favourites" element={<MyRecipesFavourites />} />
+          </Route>
         </Routes>
       </div>
     </>

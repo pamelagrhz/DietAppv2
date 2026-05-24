@@ -18,7 +18,7 @@ import { getProfileByUsername, updateProfilePassword } from '../services/profile
 import './Profile.css';
 
 const genderOptions = ['Femenino', 'Masculino', 'No binario', 'Otro'];
-const PROFILE_USERNAME = 'pam_chef_24';
+const PROFILE_USERNAME = 'pamelagrhz'; // TODO: Replace with dynamic username from auth context or similar mechanism
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -212,9 +212,11 @@ export default function Profile() {
               label="Edad"
               value={age}
               onChange={handleAgeChange}
-              slotProps={{ htmlInput: { inputMode: 'numeric', pattern: '[0-9]*' } }}
-              InputProps={{
-                endAdornment: <InputAdornment position="end">años</InputAdornment>,
+              slotProps={{
+                input: {
+                  endAdornment: <InputAdornment position="end">años</InputAdornment>,
+                },
+                htmlInput: { inputMode: 'numeric', pattern: '[0-9]*' },
               }}
             />
             <TextField
@@ -274,18 +276,20 @@ export default function Profile() {
               type={showCurrentPassword ? 'text' : 'password'}
               value={currentPassword}
               onChange={(event) => setCurrentPassword(event.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      onClick={() => setShowCurrentPassword((prev) => !prev)}
-                      aria-label="mostrar u ocultar password actual"
-                    >
-                      {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowCurrentPassword((prev) => !prev)}
+                        aria-label="mostrar u ocultar password actual"
+                      >
+                        {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
             <TextField
@@ -294,18 +298,20 @@ export default function Profile() {
               type={showNewPassword ? 'text' : 'password'}
               value={newPassword}
               onChange={(event) => setNewPassword(event.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      onClick={() => setShowNewPassword((prev) => !prev)}
-                      aria-label="mostrar u ocultar nuevo password"
-                    >
-                      {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowNewPassword((prev) => !prev)}
+                        aria-label="mostrar u ocultar nuevo password"
+                      >
+                        {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
             <TextField
@@ -314,18 +320,20 @@ export default function Profile() {
               type={showConfirmPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      onClick={() => setShowConfirmPassword((prev) => !prev)}
-                      aria-label="mostrar u ocultar confirmacion de password"
-                    >
-                      {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        aria-label="mostrar u ocultar confirmacion de password"
+                      >
+                        {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
           </div>
