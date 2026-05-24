@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { Button } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import BasicModal from '../../../components/modal.jsx';
 import EditIngredient from '../../editRecipe/editIngredient.jsx';
+import AddIngredientInputs from './AddIngredientInputs.jsx';
 
 export default function IngredientsSection({
     ingredients,
@@ -19,31 +19,36 @@ export default function IngredientsSection({
     fieldErrors,
     onAddIngredient,
     onDeleteIngredient,
+    onUpdateIngredient,
 }) {
     const ingredientsContainerRef = useRef(null);
     const [showOverflowChip, setShowOverflowChip] = useState(false);
     const [visibleChipsCount, setVisibleChipsCount] = useState(0);
     const [openModal, setOpenModal] = useState(false);
-    const addIngredientStyle = {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: '8px',
-        marginBottom: '8px',
-    };
     const modalStyle = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 500,
+        width: 'min(92vw, 820px)',
+        maxHeight: '82vh',
         bgcolor: 'background.paper',
         boxShadow: 24,
         p: 4,
+        borderRadius: 2,
+        overflowY: 'auto',
     };
     const modalContent = {
         title: 'Ingredientes',
-        body: <EditIngredient ingredients={ingredients} onDeleteIngredient={onDeleteIngredient} />,
+        body: (
+            <EditIngredient
+                ingredients={ingredients}
+                ingredientOptions={ingredientOptions}
+                medidaOptions={medidaOptions}
+                onDeleteIngredient={onDeleteIngredient}
+                onUpdateIngredient={onUpdateIngredient}
+            />
+        ),
     };
     useEffect(() => {
         const container = ingredientsContainerRef.current;
@@ -129,7 +134,18 @@ export default function IngredientsSection({
                 modalStyle={modalStyle}
                 content={modalContent}
             ></BasicModal>
-            <h3>Ingredientes:</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <h3 style={{ margin: 0 }}>Ingredientes:</h3>
+                <Tooltip title="Editar ingredientes">
+                    <IconButton
+                        size="small"
+                        aria-label="editar ingredientes"
+                        onClick={() => setOpenModal(true)}
+                    >
+                        <EditIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
+            </div>
             <div style={{ display: 'flex', flexDirection: 'row'  }}>
                 <div
                 ref={ingredientsContainerRef}
@@ -173,73 +189,17 @@ export default function IngredientsSection({
                 </span>
             ) : null}
             </div>
-            
-
-{/* TODO: Create a component for adding ingredients */}
-            <div style={addIngredientStyle}>
-                <Autocomplete
-                    freeSolo
-                    options={ingredientOptions}
-                    inputValue={ingredientInput}
-                    onChange={(_, newValue) => setIngredientInput(typeof newValue === 'string' ? newValue : '')}
-                    onInputChange={(_, newInputValue, reason) => {
-                        if (reason === 'reset') return;
-                        setIngredientInput(newInputValue || '');
-                    }}
-                    clearOnBlur={false}
-                    sx={{ width: '50%', minWidth: 200 }}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Ingrediente"
-                            size="small"
-                            type="text"
-                            error={fieldErrors.ingredients}
-                            helperText={fieldErrors.ingredients ? 'Agrega al menos un ingrediente' : ''}
-                        />
-                    )}
-                />
-                <TextField
-                    label="Cantidad"
-                    value={cantidadInput}
-                    onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === '') {
-                            setCantidadInput('');
-                            return;
-                        }
-
-                        const numericValue = Number(val);
-                        if (!Number.isNaN(numericValue) && numericValue >= 0) {
-                            setCantidadInput(val);
-                        }
-                    }}
-                    type="number"
-                    size="small"
-                    style={{ width: 100,  }}
-                    error={fieldErrors.cantidad}
-                    helperText={fieldErrors.cantidad ? 'Agrega cantidad' : ''}
-                    inputProps={{ min: 1 }}
-                />
-                <Autocomplete
-                    disablePortal
-                    options={medidaOptions}
-                    value={medidaInput}
-                    style={{ width: 100 }}
-                    onChange={(_, newValue) => setMedidaInput(newValue || '')}
-                    sx={{ width: 220 }}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Medida"
-                            size="small"
-                            error={fieldErrors.medida}
-                            helperText={fieldErrors.medida ? 'Agrega medida' : ''}
-                        />
-                    )}
-                />
-            </div>
-
+            <AddIngredientInputs
+                ingredientOptions={ingredientOptions}
+                ingredientInput={ingredientInput}
+                setIngredientInput={setIngredientInput}
+                cantidadInput={cantidadInput}
+                setCantidadInput={setCantidadInput}
+                medidaInput={medidaInput}
+                setMedidaInput={setMedidaInput}
+                medidaOptions={medidaOptions}
+                fieldErrors={fieldErrors}
+            />
             <Button size="small" sx={{ width: 100 }} variant="outlined" onClick={onAddIngredient}>
                 Agregar
             </Button>

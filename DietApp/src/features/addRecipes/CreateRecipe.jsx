@@ -109,6 +109,12 @@ export default function CreateRecipe() {
         setIngredients(ingredients.filter((_, i) => i !== idx));
     };
 
+    const handleUpdateIngredient = (idx, updatedIngredient) => {
+        setIngredients((prevIngredients) =>
+            prevIngredients.map((ing, i) => (i === idx ? updatedIngredient : ing))
+        );
+    };
+
     const handleCreateRecipe = async () => {
         setSubmitAttempted(true);
         setSubmitMessage("");
@@ -240,6 +246,7 @@ export default function CreateRecipe() {
                 fieldErrors={fieldErrors}
                 onAddIngredient={handleAddIngredient}
                 onDeleteIngredient={handleDeleteIngredient}
+                onUpdateIngredient={handleUpdateIngredient}
             />
 
             <AddStepsSection
