@@ -38,6 +38,9 @@ function App() {
     if (action === 'help') {
       navigate('/help');
     }
+    if (action === 'logout') {
+      console.log('logout en proceso');
+    }
   };
 
   return (

@@ -19,7 +19,7 @@ export default function HeaderMenu({ onMenuOptionClick }) {
   const userOptions = [
     { label: 'Profile', action: 'profile' },
     { label: 'My recipes', action: 'myRecipes' },
-    { label: 'Logout' },
+    { label: 'Logout', action: 'logout' },
     { label: 'Help', action: 'help' }
   ];
   const helloKitchenOptions = [

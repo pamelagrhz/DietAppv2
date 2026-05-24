@@ -2,6 +2,17 @@
   "title": "Centro de ayuda",
   "subtitle": "Guia rapida para entender las secciones principales de DietApp y aprovechar lo que ya esta disponible en la aplicacion.",
   "intro": "DietApp te permite crear recetas, organizarlas por semana, consultar tus propias recetas, administrar tu perfil y generar una lista de compras a partir de tu planeacion semanal.",
+  "support": {
+    "title": "Tengo alguna duda o algun problema",
+    "description": "Si necesitas ayuda adicional, puedes enviarnos tu duda desde este formulario. Tus datos principales se cargan automaticamente para que solo escribas tu mensaje.",
+    "buttonLabel": "Contactar soporte",
+    "formTitle": "Enviar una duda o reporte",
+    "messageLabel": "Escribe tu duda o problema",
+    "messagePlaceholder": "Cuentanos que paso o que necesitas y te contactaremos por correo.",
+    "submitLabel": "Enviar",
+    "cancelLabel": "Cancelar",
+    "successMessage": "Gracias, nos pondremos en contacto pronto por correo contigo, en maximo 48hr"
+  },
   "sections": [
     {
       "title": "Como agregar una receta nueva",
