@@ -1,36 +1,44 @@
 import { useEffect, useMemo, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { getRecipes } from '../../showRecipes/services/recipes.service';
-import { getMealPlan, saveMealPlan } from '../services/mealPlans.service';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import {
+  getMealPlan,
+  saveMealPlan,
+  searchMealPlanRecipes,
+} from '../services/mealPlans.service';
 import './MealPlans.css';
 
-const DEFAULT_WEEK = [
-  { day: 'Lunes', recipeName: '' },
-  { day: 'Martes', recipeName: '' },
-  { day: 'Miercoles', recipeName: '' },
-  { day: 'Jueves', recipeName: '' },
-  { day: 'Viernes', recipeName: '' },
-  { day: 'Sabado', recipeName: '' },
-  { day: 'Domingo', recipeName: '' },
-];
-
 export default function MealPlans() {
-  const [recipes, setRecipes] = useState([]);
-  const [weekDays, setWeekDays] = useState(DEFAULT_WEEK);
+  const [weekDays, setWeekDays] = useState([]);
+  const [weekPage, setWeekPage] = useState(1);
+  const [weekStart, setWeekStart] = useState('');
+  const [weekEnd, setWeekEnd] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeDate, setActiveDate] = useState('');
+  const [searchResultsByDate, setSearchResultsByDate] = useState({});
+  const [searchInputByDate, setSearchInputByDate] = useState({});
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const recipeNames = useMemo(() => recipes.map((recipe) => recipe?.nombre).filter(Boolean), [recipes]);
+  const weekLabel = useMemo(() => {
+    if (!weekStart || !weekEnd) {
+      return 'Semana';
+    }
+
+    return `${weekStart} - ${weekEnd}`;
+  }, [weekStart, weekEnd]);
 
   useEffect(() => {
     let mounted = true;
@@ -38,19 +46,18 @@ export default function MealPlans() {
     const loadData = async () => {
       try {
         setLoading(true);
-        const [recipesResult, mealPlanResult] = await Promise.all([
-          getRecipes(),
-          getMealPlan(),
-        ]);
+        const mealPlanResult = await getMealPlan({ page: weekPage });
 
         if (!mounted) {
           return;
         }
 
-        setRecipes(Array.isArray(recipesResult) ? recipesResult : []);
-        setWeekDays(Array.isArray(mealPlanResult?.days) && mealPlanResult.days.length === 7
-          ? mealPlanResult.days
-          : DEFAULT_WEEK);
+        setWeekDays(Array.isArray(mealPlanResult?.days) ? mealPlanResult.days : []);
+        setWeekStart(mealPlanResult?.weekStart || '');
+        setWeekEnd(mealPlanResult?.weekEnd || '');
+        setSearchInputByDate({});
+        setSearchResultsByDate({});
+        setSuccess('');
       } catch (fetchError) {
         if (mounted) {
           setError(fetchError.message || 'No se pudo cargar meal plans');
@@ -67,7 +74,41 @@ export default function MealPlans() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [weekPage]);
+
+  useEffect(() => {
+    if (!activeDate || searchTerm.trim().length < 3) {
+      return;
+    }
+
+    let mounted = true;
+    setSearching(true);
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        const results = await searchMealPlanRecipes(searchTerm);
+        if (mounted) {
+          setSearchResultsByDate((prev) => ({
+            ...prev,
+            [activeDate]: results,
+          }));
+        }
+      } catch (searchError) {
+        if (mounted) {
+          setError(searchError.message || 'No se pudo realizar la busqueda');
+        }
+      } finally {
+        if (mounted) {
+          setSearching(false);
+        }
+      }
+    }, 280);
+
+    return () => {
+      mounted = false;
+      clearTimeout(timeoutId);
+    };
+  }, [searchTerm, activeDate]);
 
   const handleRecipeChange = (index, value) => {
     setWeekDays((prev) => prev.map((entry, i) => (i === index ? { ...entry, recipeName: value } : entry)));
@@ -81,6 +122,7 @@ export default function MealPlans() {
       setSaving(true);
       await saveMealPlan({
         userId: 'pamelagrhz',
+        page: weekPage,
         days: weekDays,
       });
       setSuccess('Plan semanal guardado correctamente');
@@ -95,11 +137,29 @@ export default function MealPlans() {
     <div className="meal-plans-page">
       <div>
         <Typography component="h1" className="meal-plans-title">Meal Plans</Typography>
-        <Typography className="meal-plans-subtitle">Asigna una receta para cada dia de la semana.</Typography>
+        <Typography className="meal-plans-subtitle">Busqueda desde el 3er caracter y vista semanal paginada.</Typography>
       </div>
 
       <div className="meal-plans-toolbar">
-        <Typography color="text.secondary">7 espacios disponibles (1 por dia)</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Button
+            variant="outlined"
+            startIcon={<NavigateBeforeIcon />}
+            disabled={weekPage <= 1 || loading}
+            onClick={() => setWeekPage((prev) => Math.max(1, prev - 1))}
+          >
+            Semana anterior
+          </Button>
+          <Typography sx={{ minWidth: 220, textAlign: 'center', fontWeight: 600 }}>{weekLabel}</Typography>
+          <Button
+            variant="outlined"
+            endIcon={<NavigateNextIcon />}
+            disabled={loading}
+            onClick={() => setWeekPage((prev) => prev + 1)}
+          >
+            Semana siguiente
+          </Button>
+        </Box>
         <Button variant="contained" onClick={handleSave} disabled={saving || loading}>
           {saving ? 'Guardando...' : 'Guardar semana'}
         </Button>
@@ -121,25 +181,58 @@ export default function MealPlans() {
 
       <Box className="meal-plans-week-grid">
         {weekDays.map((entry, index) => (
-          <Card key={entry.day} sx={{ borderRadius: 3, border: '1px solid #d8ddd4' }}>
+          <Card key={entry.date || entry.dayLabel} sx={{ borderRadius: 3, border: '1px solid #d8ddd4' }}>
             <CardContent>
               <Typography variant="overline" color="text.secondary">Dia {index + 1}</Typography>
               <Typography variant="h6" sx={{ fontFamily: 'Bitter, Cambria, Georgia, serif', mb: 1 }}>
-                {entry.day}
+                {entry.dayLabel}
               </Typography>
-              <TextField
-                select
+              <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary', mb: 1 }}>{entry.date}</Typography>
+              <Autocomplete
                 fullWidth
-                label="Receta"
-                size="small"
-                value={entry.recipeName}
-                onChange={(event) => handleRecipeChange(index, event.target.value)}
-              >
-                <MenuItem value="">Sin receta</MenuItem>
-                {recipeNames.map((name) => (
-                  <MenuItem key={name} value={name}>{name}</MenuItem>
-                ))}
-              </TextField>
+                options={searchResultsByDate[entry.date] || []}
+                value={entry.recipeName || ''}
+                inputValue={searchInputByDate[entry.date] ?? entry.recipeName ?? ''}
+                onChange={(_, newValue) => {
+                  const selectedName = newValue || '';
+                  handleRecipeChange(index, selectedName);
+                  setSearchInputByDate((prev) => ({
+                    ...prev,
+                    [entry.date]: selectedName,
+                  }));
+                }}
+                onInputChange={(_, newInputValue, reason) => {
+                  if (reason === 'reset') {
+                    return;
+                  }
+
+                  setSearchInputByDate((prev) => ({
+                    ...prev,
+                    [entry.date]: newInputValue,
+                  }));
+
+                  if ((newInputValue || '').trim().length < 3) {
+                    setSearchResultsByDate((prev) => ({
+                      ...prev,
+                      [entry.date]: [],
+                    }));
+                    return;
+                  }
+
+                  setActiveDate(entry.date);
+                  setSearchTerm(newInputValue);
+                }}
+                noOptionsText="Escribe 3 caracteres para buscar"
+                loading={searching && activeDate === entry.date}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    label="Buscar receta"
+                    helperText="Busca por nombre desde 3 letras"
+                  />
+                )}
+              />
             </CardContent>
           </Card>
         ))}

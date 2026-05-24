@@ -9,6 +9,7 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
@@ -52,7 +53,24 @@ export default function RecipeReviewCard({ recipe }) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={recipe.nombre} 
+        title={(
+          <Tooltip title={recipe.nombre || ''} arrow>
+            <Typography
+              variant="subtitle1"
+              noWrap
+              sx={{
+                fontSize: '1rem',
+                lineHeight: 1.2,
+                maxWidth: 170,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {recipe.nombre}
+            </Typography>
+          </Tooltip>
+        )}
         subheader={recipe.userId}
         
       />

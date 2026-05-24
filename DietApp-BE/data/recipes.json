@@ -425,5 +425,49 @@
         "liuytgfhvbn"
       ]
     }
+  ],
+  "mealPlanEntries": [
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-18",
+      "recipeName": "Caldo de pollo",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-19",
+      "recipeName": "Caldo de pollo",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-20",
+      "recipeName": "Caldo de res",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-21",
+      "recipeName": "Sandwich de calabacitas con jamón y queso",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-22",
+      "recipeName": "asais",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-23",
+      "recipeName": "Pacholas con ensalada",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-24",
+      "recipeName": "Caldo de res",
+      "lastModifiedDate": "2026-05-24T15:35:26.174Z"
+    }
   ]
 }
