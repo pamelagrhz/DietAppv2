@@ -14,6 +14,7 @@ export const getRecipes = async (req, res) => {
 export const createRecipe = async (req, res) => {
   try {
     const { nombre, ingredientes, preparacion, porciones, userId } = req.body ?? {};
+    const parsedPorciones = Number(porciones ?? 1);
 
     if (
       !nombre?.trim() ||
@@ -21,18 +22,40 @@ export const createRecipe = async (req, res) => {
       !Array.isArray(ingredientes) ||
       ingredientes.length < 1 ||
       !Array.isArray(preparacion) ||
-      preparacion.length < 1
+      preparacion.length < 1 ||
+      Number.isNaN(parsedPorciones) ||
+      parsedPorciones < 1
     ) {
       return res.status(400).json({ error: 'Datos de receta inválidos' });
     }
+
+    const hasInvalidCantidad = ingredientes.some((ing) => {
+      const cantidadNumerica = Number(ing?.cantidad);
+      return Number.isNaN(cantidadNumerica) || cantidadNumerica < 0;
+    });
+
+    if (hasInvalidCantidad) {
+      return res.status(400).json({ error: 'Cantidad de ingrediente inválida' });
+    }
+
+    const ingredientesNormalizados = ingredientes.map((ing) => {
+      const cantidadNumerica = Number(ing.cantidad);
+      const cantidadPorPorcion = parsedPorciones > 1
+        ? Number((cantidadNumerica / parsedPorciones).toFixed(4))
+        : cantidadNumerica;
+
+      return {
+        ...ing,
+        cantidad: cantidadPorPorcion,
+      };
+    });
 
     const nuevaReceta = {
       nombre: nombre.trim(),
       userId: userId.trim(),
       creationDate: new Date().toISOString(),
       lastModifiedDate: new Date().toISOString(), 
-      porciones: Number(porciones) || 1,
-      ingredientes,
+      ingredientes: ingredientesNormalizados,
       preparacion,
     };
 
