@@ -94,7 +94,20 @@ export default function Help() {
         </Button>
       </section>
 
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="sm">
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="sm"
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: '24px',
+              overflow: 'hidden',
+            },
+          },
+        }}
+      >
         <DialogTitle>{helpContent.support.formTitle}</DialogTitle>
         <DialogContent>
           <div className="help-support-form">
@@ -114,8 +127,10 @@ export default function Help() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>{helpContent.support.cancelLabel}</Button>
-          <Button variant="contained" onClick={handleSubmitSupport}>
+          <Button className="help-dialog-cancel-button" onClick={handleCloseDialog}>
+            {helpContent.support.cancelLabel}
+          </Button>
+          <Button variant="contained" className="help-dialog-submit-button" onClick={handleSubmitSupport}>
             {helpContent.support.submitLabel}
           </Button>
         </DialogActions>

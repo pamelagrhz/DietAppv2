@@ -110,6 +110,26 @@
   gap: 12px;
 }
 
+.profile-dialog-cancel-button {
+  color: #1e5a40 !important;
+  border: 1px solid #b8cbbd !important;
+  text-transform: none !important;
+  border-radius: 999px !important;
+  padding-inline: 16px !important;
+}
+
+.profile-dialog-submit-button {
+  background: #1e5a40 !important;
+  color: #f7faf5 !important;
+  text-transform: none !important;
+  border-radius: 999px !important;
+  padding-inline: 18px !important;
+}
+
+.profile-dialog-submit-button:hover {
+  background: #174732 !important;
+}
+
 @media (min-width: 940px) {
   .profile-grid {
     grid-template-columns: 280px 1fr;

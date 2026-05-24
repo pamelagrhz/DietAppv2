@@ -261,6 +261,14 @@ export default function Profile() {
         onClose={handleClosePasswordDialog}
         fullWidth
         maxWidth="xs"
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: '24px',
+              overflow: 'hidden',
+            },
+          },
+        }}
       >
         <DialogTitle>Cambiar password</DialogTitle>
         <DialogContent>
@@ -339,8 +347,10 @@ export default function Profile() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePasswordDialog}>Cancelar</Button>
-          <Button variant="contained" onClick={handleChangePassword}>
+          <Button className="profile-dialog-cancel-button" onClick={handleClosePasswordDialog}>
+            Cancelar
+          </Button>
+          <Button variant="contained" className="profile-dialog-submit-button" onClick={handleChangePassword}>
             Guardar password
           </Button>
         </DialogActions>
