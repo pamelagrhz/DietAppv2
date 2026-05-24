@@ -16,8 +16,8 @@ export default function AddIngredientInputs({
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: '8px',
-        marginBottom: '8px',
+        gap: '10px',
+        marginBottom: '10px',
     };
 
     return (
@@ -32,7 +32,7 @@ export default function AddIngredientInputs({
                     setIngredientInput(newInputValue || '');
                 }}
                 clearOnBlur={false}
-                sx={{ width: '50%', minWidth: 200 }}
+                sx={{ width: '100%', minWidth: 220 }}
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -61,7 +61,7 @@ export default function AddIngredientInputs({
                 }}
                 type="number"
                 size="small"
-                style={{ width: 100 }}
+                style={{ width: 120 }}
                 error={fieldErrors.cantidad}
                 helperText={fieldErrors.cantidad ? 'Agrega cantidad' : ''}
                 inputProps={{ min: 1 }}
@@ -71,7 +71,7 @@ export default function AddIngredientInputs({
                 options={medidaOptions}
                 value={medidaInput}
                 onChange={(_, newValue) => setMedidaInput(newValue || '')}
-                sx={{ width: 220 }}
+                sx={{ width: 220, flex: 1, minWidth: 160 }}
                 renderInput={(params) => (
                     <TextField
                         {...params}

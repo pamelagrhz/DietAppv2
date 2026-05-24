@@ -37,7 +37,7 @@ export default function AddStepsSection({
         borderColor: 'divider',
         backgroundColor: 'background.paper',
         fontSize: '0.92rem',
-        maxHeight: 150,
+        maxHeight: 170,
         overflowY: 'auto',
     };
 
@@ -51,7 +51,7 @@ export default function AddStepsSection({
 
     return (
         <>
-            <h3>Instrucciones:</h3>
+            <h3 style={{ margin: 0, marginBottom: 8, fontSize: '1.75rem', color: '#1e4033', fontFamily: 'Bitter, Cambria, Georgia, serif' }}>Instrucciones</h3>
 
             {/* TODO: reorder list (less important) */}
             <List
@@ -59,7 +59,7 @@ export default function AddStepsSection({
                 style={{ display: steps.length > 0 ? 'block' : 'none' }}
                 sx={stepsStyle}
                 subheader={
-                    <li style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 1 }}>
+                    <li style={{ position: 'sticky', top: 0, background: '#f7f8f4', zIndex: 1 }}>
                     </li>
                 }
             >
@@ -98,7 +98,7 @@ export default function AddStepsSection({
                     error={fieldErrors.steps}
                     helperText={fieldErrors.steps ? 'Agrega al menos un paso' : ''}
                 />
-                <Button size="small" sx={{ width: 100 }} variant="outlined" onClick={onAddStep}>
+                <Button size="small" sx={{ width: 140, alignSelf: 'flex-end' }} variant="outlined" onClick={onAddStep}>
                     Agregar
                 </Button>
             </div>

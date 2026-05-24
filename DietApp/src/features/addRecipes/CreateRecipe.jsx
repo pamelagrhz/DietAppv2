@@ -8,27 +8,13 @@ import NumberSpinner from './components/NumberSpinner.jsx';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
+import './CreateRecipe.css';
 
 //TODO: if porciones is more than 1, we need to divide the cantidad of each ingredient by the porciones, to show the cantidad per porcion. (and change the label to "Cantidad por porción" or something like that)
 
 //TODO: fix the styles of component 
 
 export default function CreateRecipe() {
-    // Estilos
-    const createRecipeStyle = {
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-        height: "85vh"
-    };
-
-    const actionsAreaStyle = {
-        marginTop: "auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.5rem"
-    };
-
     // ingredients states
     const [ingredients, setIngredients] = useState([]); // array de ingredientes
     const [ingredientInput, setIngredientInput] = useState(""); // input controlado
@@ -189,95 +175,113 @@ export default function CreateRecipe() {
     }, [ingredientInput]);
 
     return (
-        <div style={createRecipeStyle}>
-            <Grid container spacing={2}>
-                <Grid 
-                    sx={{
-                        width: { xs: '30%', sm: '10%' }, // 30% en xs, 10% en sm
-                    }}
-                >
-                    <NumberSpinner
-                        onValueChange={(value) => {
-                            if (value === null) {
-                                setPorcionesInput("");
-                                return;
-                            }
-
-                            if (value >= 0) {
-                                setPorcionesInput(String(value));
-                            }
-                        }}
-                        value={porcionesInput === "" ? null : Number(porcionesInput)}
-                        label="Porciones"
-                        size="small"
-                        error={fieldErrors.porciones}
-                        helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
-                        min={1}
-                        max={40}
-                    />
-                </Grid>
-                <Grid
-                    sx={{
-                        width: { xs: '100%', sm: '90%' }, // 100% en xs, 90% en sm
-                    }}
-                >
-                    <TextField
-                        id="recipe-name"
-                        label="Nombre de la receta"
-                        size='small'
-                        value={recipeName}
-                        onChange={e => setRecipeName(e.target.value)}
-                        error={fieldErrors.recipeName}
-                        helperText={fieldErrors.recipeName ? "Falta el nombre de la receta" : ""}
-                        fullWidth
-                    />
-                </Grid>
-            </Grid>
-            <IngredientsSection
-                ingredients={ingredients}
-                ingredientOptions={ingredientOptions}
-                ingredientInput={ingredientInput}
-                setIngredientInput={setIngredientInput}
-                cantidadInput={cantidadInput}
-                setCantidadInput={setCantidadInput}
-                medidaInput={medidaInput}
-                setMedidaInput={setMedidaInput}
-                medidaOptions={medidaOptions}
-                fieldErrors={fieldErrors}
-                onAddIngredient={handleAddIngredient}
-                onDeleteIngredient={handleDeleteIngredient}
-                onUpdateIngredient={handleUpdateIngredient}
-            />
-
-            <AddStepsSection
-                steps={steps}
-                stepInput={stepInput}
-                setStepInput={setStepInput}
-                fieldErrors={fieldErrors}
-                onAddStep={handleAddStep}
-                onDeleteStep={handleDeleteStep}
-            />
-            {/* TODO: change to a notification component */}
-            <div style={{ ...actionsAreaStyle, display: submitMessage || submitError ? 'block' : 'none' }} >
-                {submitMessage && <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                {submitMessage}
-                </Alert>}
-                {submitError && <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {submitError}
-                </Alert>}
-
-                
+        <div className="create-recipe-page">
+            <div className="create-recipe-header">
+                <div>
+                    <h1 className="create-recipe-title">Crear Nueva Receta</h1>
+                    <p className="create-recipe-subtitle">Captura tu receta, agrega ingredientes y pasos para compartirla.</p>
+                </div>
+                <div className="create-recipe-actions">
+                    {/* TODO: Implement draft saving functionality */}
+                    {/* <Button size="medium" variant="outlined" className="draft-button" disabled>
+                        Guardar borrador
+                    </Button> */}
+                    <Button
+                        size="medium"
+                        variant="contained"
+                        className="publish-button"
+                        onClick={handleCreateRecipe}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Guardando...' : 'Publicar receta'}
+                    </Button>
+                </div>
             </div>
-            <Button
-                    size='medium'
-                    variant="contained"
-                    onClick={handleCreateRecipe}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? 'Guardando...' : 'Crear Receta'}
-                </Button>
+
+            <div className="create-recipe-top-card">
+                <Grid container spacing={2} alignItems="flex-start">
+                    <Grid sx={{ width: { xs: '100%', sm: '70%' } }}>
+                        <TextField
+                            id="recipe-name"
+                            label="Nombre de la receta"
+                            placeholder="Ej: Ensalada fresca con pollo"
+                            size="small"
+                            value={recipeName}
+                            onChange={(e) => setRecipeName(e.target.value)}
+                            error={fieldErrors.recipeName}
+                            helperText={fieldErrors.recipeName ? 'Falta el nombre de la receta' : ''}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid sx={{ width: { xs: '100%', sm: '30%' } }}>
+                        <NumberSpinner
+                            onValueChange={(value) => {
+                                if (value === null) {
+                                    setPorcionesInput('');
+                                    return;
+                                }
+
+                                if (value >= 0) {
+                                    setPorcionesInput(String(value));
+                                }
+                            }}
+                            value={porcionesInput === '' ? null : Number(porcionesInput)}
+                            label="Porciones"
+                            size="small"
+                            error={fieldErrors.porciones}
+                            helperText={fieldErrors.porciones ? 'Faltan las porciones' : ''}
+                            min={1}
+                            max={40}
+                        />
+                    </Grid>
+                </Grid>
+            </div>
+
+            <div className="create-recipe-content-grid">
+                <section className="create-recipe-panel">
+                    <IngredientsSection
+                        ingredients={ingredients}
+                        ingredientOptions={ingredientOptions}
+                        ingredientInput={ingredientInput}
+                        setIngredientInput={setIngredientInput}
+                        cantidadInput={cantidadInput}
+                        setCantidadInput={setCantidadInput}
+                        medidaInput={medidaInput}
+                        setMedidaInput={setMedidaInput}
+                        medidaOptions={medidaOptions}
+                        fieldErrors={fieldErrors}
+                        onAddIngredient={handleAddIngredient}
+                        onDeleteIngredient={handleDeleteIngredient}
+                        onUpdateIngredient={handleUpdateIngredient}
+                    />
+                </section>
+
+                <section className="create-recipe-panel">
+                    <AddStepsSection
+                        steps={steps}
+                        stepInput={stepInput}
+                        setStepInput={setStepInput}
+                        fieldErrors={fieldErrors}
+                        onAddStep={handleAddStep}
+                        onDeleteStep={handleDeleteStep}
+                    />
+                </section>
+            </div>
+
+            <div className="create-recipe-feedback" style={{ display: submitMessage || submitError ? 'block' : 'none' }}>
+                {submitMessage ? (
+                    <Alert severity="success">
+                        <AlertTitle>Success</AlertTitle>
+                        {submitMessage}
+                    </Alert>
+                ) : null}
+                {submitError ? (
+                    <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {submitError}
+                    </Alert>
+                ) : null}
+            </div>
         </div>
-    )
+    );
 }

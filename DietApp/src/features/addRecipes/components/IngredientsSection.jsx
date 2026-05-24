@@ -134,8 +134,8 @@ export default function IngredientsSection({
                 modalStyle={modalStyle}
                 content={modalContent}
             ></BasicModal>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <h3 style={{ margin: 0 }}>Ingredientes:</h3>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: 8 }}>
+                <h3 style={{ margin: 0, fontSize: '1.75rem', color: '#1e4033', fontFamily: 'Bitter, Cambria, Georgia, serif' }}>Ingredientes</h3>
                 <Tooltip title="Editar ingredientes">
                     <IconButton
                         size="small"
@@ -146,14 +146,14 @@ export default function IngredientsSection({
                     </IconButton>
                 </Tooltip>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row'  }}>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 6 }}>
                 <div
                 ref={ingredientsContainerRef}
                 style={{
                     display: ingredients.length > 0 ? 'flex' : 'none',
-                    width: '90vw',
+                    width: '100%',
                     maxHeight: '38px',
-                    maxWidth: '90vw',
+                    maxWidth: '100%',
                     overflow: 'hidden',
                     flexWrap: 'nowrap',
                 }}
@@ -165,9 +165,11 @@ export default function IngredientsSection({
                         onDelete={() => onDeleteIngredient(idx)}
                         sx={{
                             m: 0.5,
-                            maxWidth: { xs: '56vw', sm: '32vw', md: '24vw' },
+                            maxWidth: { xs: '62vw', sm: '28vw', md: '17vw' },
                             minWidth: 0,
                             flexShrink: 1,
+                            bgcolor: '#2f7c58',
+                            color: '#f4f8f5',
                             '& .MuiChip-label': {
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -200,7 +202,7 @@ export default function IngredientsSection({
                 medidaOptions={medidaOptions}
                 fieldErrors={fieldErrors}
             />
-            <Button size="small" sx={{ width: 100 }} variant="outlined" onClick={onAddIngredient}>
+            <Button size="small" sx={{ width: 130, alignSelf: 'flex-start' }} variant="outlined" onClick={onAddIngredient}>
                 Agregar
             </Button>
         </>
