@@ -10,6 +10,7 @@ import Profile from './features/profile/pages/Profile.jsx';
 import MyRecipes from './features/myRecipes/pages/MyRecipes.jsx';
 import MyRecipesRecipes from './features/myRecipes/pages/MyRecipesRecipes.jsx';
 import MyRecipesFavourites from './features/myRecipes/pages/MyRecipesFavourites.jsx';
+import Help from './features/help/pages/Help.jsx';
 
 
 function App() {
@@ -34,6 +35,9 @@ function App() {
     if (action === 'myRecipes') {
       navigate('/my-recipes');
     }
+    if (action === 'help') {
+      navigate('/help');
+    }
   };
 
   return (
@@ -49,6 +53,7 @@ function App() {
           <Route path="/meal-plans" element={<MealPlans />} />
           <Route path="/grocery-lists" element={<GroceryLists />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/help" element={<Help />} />
           <Route path="/my-recipes" element={<MyRecipes />}>
             <Route index element={<Navigate to="recipes" replace />} />
             <Route path="recipes" element={<MyRecipesRecipes />} />

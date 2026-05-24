@@ -1,0 +1,72 @@
+{
+  "title": "Centro de ayuda",
+  "subtitle": "Guia rapida para entender las secciones principales de DietApp y aprovechar lo que ya esta disponible en la aplicacion.",
+  "intro": "DietApp te permite crear recetas, organizarlas por semana, consultar tus propias recetas, administrar tu perfil y generar una lista de compras a partir de tu planeacion semanal.",
+  "sections": [
+    {
+      "title": "Como agregar una receta nueva",
+      "content": [
+        "Entra a la seccion New recipe desde el menu lateral.",
+        "Escribe el nombre de la receta y define el numero de porciones.",
+        "Agrega los ingredientes con cantidad y medida. Puedes editarlos despues con el icono de lapiz en la tarjeta de ingredientes.",
+        "Captura la preparacion en el campo de pasos. Actualmente se guarda como un solo texto.",
+        "Presiona Publicar receta para guardarla en el sistema."
+      ]
+    },
+    {
+      "title": "Como editar o revisar ingredientes",
+      "content": [
+        "Dentro de la pantalla de crear receta, abre el editor de ingredientes con el icono de editar.",
+        "Desde ahi puedes modificar nombre, cantidad y medida de cada ingrediente.",
+        "Tambien puedes eliminar ingredientes si ya no los necesitas.",
+        "En pantallas pequenas, los campos se acomodan verticalmente para que puedas ver todos los controles."
+      ]
+    },
+    {
+      "title": "Como ver mis recetas",
+      "content": [
+        "Puedes entrar desde Profile con el boton Ver mis recetas o desde la opcion My recipes del menu.",
+        "La seccion tiene dos apartados: My recipes y Favourites.",
+        "En My recipes se muestran las recetas creadas por tu usuario usando tarjetas visuales.",
+        "En Favourites quedara el espacio para mostrar recetas favoritas cuando esa parte se conecte."
+      ]
+    },
+    {
+      "title": "Como agregar recetas a mi semana",
+      "content": [
+        "Entra a Meal Plans desde el menu principal.",
+        "Cada semana muestra 7 espacios, uno por dia.",
+        "Escribe el nombre de una receta en el campo del dia correspondiente para buscarla.",
+        "La busqueda consulta el backend a partir del tercer caracter.",
+        "Cuando termines de organizar la semana, guarda los cambios para conservar tu planeacion."
+      ]
+    },
+    {
+      "title": "Donde veo mi lista de compras",
+      "content": [
+        "Entra a Grocery Lists desde el menu principal.",
+        "La lista se genera usando las recetas que estan asignadas en tu meal plan semanal.",
+        "Los ingredientes iguales se agrupan para mostrar cantidades consolidadas.",
+        "Puedes marcar ingredientes individualmente y capturar un precio opcional para calcular el total."
+      ]
+    },
+    {
+      "title": "Como funciona mi perfil",
+      "content": [
+        "En Profile puedes revisar username, nombre, edad, genero y correo.",
+        "La foto de perfil usa un icono base y puede cambiarse desde el boton de camara.",
+        "El password no se muestra directamente; se cambia desde un formulario seguro con password actual, nuevo password y confirmacion.",
+        "Tambien puedes navegar desde ahi a la vista de tus recetas."
+      ]
+    },
+    {
+      "title": "Consejos generales de uso",
+      "content": [
+        "Si una vista no muestra informacion, revisa que ya existan datos guardados para tu usuario.",
+        "Las recetas nuevas se reflejan mejor cuando el userId coincide con el username del perfil activo.",
+        "Si trabajas desde movil, algunas tablas y formularios cambian a disposicion vertical para que todo sea visible.",
+        "Puedes usar este centro de ayuda como referencia rapida mientras seguimos agregando funciones nuevas."
+      ]
+    }
+  ]
+}
