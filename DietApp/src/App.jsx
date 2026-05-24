@@ -4,6 +4,7 @@ import './App.css'
 import Recipes from './features/showRecipes/pages/Recipes.jsx';
 import HeaderMenu from './components/headerMenu.jsx';
 import CreateRecipe from './features/addRecipes/CreateRecipe.jsx';
+import MealPlans from './features/mealPlans/pages/MealPlans.jsx';
 
 
 function App() {
@@ -15,6 +16,9 @@ function App() {
     }
     if (action === 'recipes') {
       navigate('/recipes');
+    }
+    if (action === 'mealPlans') {
+      navigate('/meal-plans');
     }
   };
 
@@ -28,6 +32,7 @@ function App() {
           <Route path="/" element={<Navigate to="/recipes" replace />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/new-recipe" element={<CreateRecipe />} />
+          <Route path="/meal-plans" element={<MealPlans />} />
         </Routes>
       </div>
     </>

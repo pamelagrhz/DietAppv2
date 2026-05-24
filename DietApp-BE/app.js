@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors'; 
 import recipesRoutes from './routes/recipes.routes.js';
 import ingredientsRoutes from './routes/ingredients.routes.js';
+import mealPlansRoutes from './routes/mealPlans.routes.js';
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use(express.json()); // Middleware to parse JSON bodies
 //use routes/recipes.routes.js for all the endpoints related to recipes
 app.use('/recipes', recipesRoutes);
 app.use('/ingredients', ingredientsRoutes);
+app.use('/meal-plans', mealPlansRoutes);
 
 export default app;

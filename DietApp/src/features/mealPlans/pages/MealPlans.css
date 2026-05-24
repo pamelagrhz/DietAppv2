@@ -1,0 +1,47 @@
+.meal-plans-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meal-plans-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  color: #173a2c;
+  line-height: 1;
+  font-family: Bitter, Cambria, Georgia, serif;
+}
+
+.meal-plans-subtitle {
+  margin: 8px 0 0;
+  color: #5c6661;
+}
+
+.meal-plans-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.meal-plans-week-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 700px) {
+  .meal-plans-week-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1020px) {
+  .meal-plans-week-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
