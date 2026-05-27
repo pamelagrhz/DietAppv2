@@ -3,17 +3,15 @@ import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { createRecipe as createRecipeRequest, getIngredients } from '../showRecipes/services/recipes.service';
 import IngredientsSection from './components/IngredientsSection.jsx';
-import StepsSection from './components/StepsSection.jsx';
+import AddStepsSection from './components/AddStepsSection.jsx';
+import NumberSpinner from './components/NumberSpinner.jsx';
+import AlertTitle from '@mui/material/AlertTitle';
+import Alert from '@mui/material/Alert';
+import Grid from '@mui/material/Grid';
+import './CreateRecipe.css';
 
 
 export default function CreateRecipe() {
-    // Estilos
-    const createRecipeStyle = {
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-    }
-
     // ingredients states
     const [ingredients, setIngredients] = useState([]); // array de ingredientes
     const [ingredientInput, setIngredientInput] = useState(""); // input controlado
@@ -30,9 +28,8 @@ export default function CreateRecipe() {
     const [submitError, setSubmitError] = useState("");
     const medidaOptions = ["g", "kg", "ml", "l", "pieza(s)", "taza(s)", "cda(s)", "cdita(s)", "rebanada(s)", "lata(s)"];
 
-    // steps (instructions) states
-    const [steps, setSteps] = useState([]); // array de pasos
-    const [stepInput, setStepInput] = useState("");
+    // instructions state
+    const [instructionsText, setInstructionsText] = useState("");
     // field errors for validation
     const fieldErrors = {
         porciones: submitAttempted && `${porcionesInput}`.trim() === "",
@@ -40,20 +37,7 @@ export default function CreateRecipe() {
         ingredients: submitAttempted && ingredients.length < 1,
         cantidad: ingredientAttempted && cantidadInput === "",
         medida: ingredientAttempted && !medidaInput.trim(),
-        steps: submitAttempted && steps.length < 1,
-    };
-
-    const handleAddStep = () => {
-        if (!stepInput.trim()) {
-            return;
-        }
-        // Add the new step to the steps array and clear the input
-        setSteps([...steps, stepInput.trim()]);
-        setStepInput("");
-    };
-
-    const handleDeleteStep = (idx) => {
-        setSteps(steps.filter((_, i) => i !== idx));
+        steps: submitAttempted && !instructionsText.trim(),
     };
 
     //Add handlers for the chip component, to handle the click and delete events
@@ -94,6 +78,12 @@ export default function CreateRecipe() {
         setIngredients(ingredients.filter((_, i) => i !== idx));
     };
 
+    const handleUpdateIngredient = (idx, updatedIngredient) => {
+        setIngredients((prevIngredients) =>
+            prevIngredients.map((ing, i) => (i === idx ? updatedIngredient : ing))
+        );
+    };
+
     const handleCreateRecipe = async () => {
         setSubmitAttempted(true);
         setSubmitMessage("");
@@ -103,7 +93,7 @@ export default function CreateRecipe() {
             `${porcionesInput}`.trim() === "" ||
             !recipeName.trim() ||
             ingredients.length < 1 ||
-            steps.length < 1
+            !instructionsText.trim()
         ) {
             return;
         }
@@ -112,25 +102,31 @@ export default function CreateRecipe() {
             nombre: recipeName.trim(),
             porciones: Number(porcionesInput),
             ingredientes: ingredients,
-            preparacion: steps,
-        };
+            preparacion: instructionsText.trim(),
+            userId: "pamelagrhz", // TODO: Replace with actual user ID
+            };
 
         try {
             setIsSubmitting(true);
             await createRecipeRequest(recipePayload);
             setSubmitMessage('Receta creada correctamente');
+            setTimeout(() => {
+                setSubmitMessage("");
+            }, 3000);
             setRecipeName("");
             setPorcionesInput("1");
             setIngredients([]);
             setIngredientInput("");
             setCantidadInput("");
             setMedidaInput("");
-            setSteps([]);
-            setStepInput("");
+            setInstructionsText("");
             setSubmitAttempted(false);
             setIngredientAttempted(false);
         } catch (error) {
             setSubmitError(error.message || 'No se pudo guardar la receta');
+            setTimeout(() => {
+                setSubmitError("");
+            }, 3000);
         } finally {
             setIsSubmitting(false);
         }
@@ -161,76 +157,110 @@ export default function CreateRecipe() {
     }, [ingredientInput]);
 
     return (
-        <div style={createRecipeStyle}>
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                <TextField
-                    value={porcionesInput}
-                    onChange={e => {
-                        const val = e.target.value;
-                        // Allow empty input to let users clear the field
-                        if (val === "") {
-                            setPorcionesInput("");
-                            return;
-                        }
-                        // Validate that the input is a non-negative number
-                        const numericValue = Number(val);
-                        if (!Number.isNaN(numericValue) && numericValue >= 0) {
-                            setPorcionesInput(val);
-                        }
-                    }}
-                    style={{ width: 80 }}
-                    label="Porciones"
-                    size="small"
-                    type="number"
-                    error={fieldErrors.porciones}
-                    helperText={fieldErrors.porciones ? "Faltan las porciones" : ""}
-                    inputProps={{ min: 1 }}
-                />
-                <TextField
-                    id="recipe-name"
-                    style={{ width: '100%' }}
-                    label="Nombre de la receta"
-                    size='small'
-                    value={recipeName}
-                    onChange={e => setRecipeName(e.target.value)}
-                    error={fieldErrors.recipeName}
-                    helperText={fieldErrors.recipeName ? "Falta el nombre de la receta" : ""}
-                />
+        <div className="create-recipe-page">
+            <div className="create-recipe-header">
+                <div>
+                    <h1 className="create-recipe-title">Crear Nueva Receta</h1>
+                    <p className="create-recipe-subtitle">Captura tu receta, agrega ingredientes y pasos para compartirla.</p>
+                </div>
+                <div className="create-recipe-actions">
+                    {/* TODO: Implement draft saving functionality */}
+                    {/* <Button size="medium" variant="outlined" className="draft-button" disabled>
+                        Guardar borrador
+                    </Button> */}
+                    <Button
+                        size="medium"
+                        variant="contained"
+                        className="publish-button"
+                        onClick={handleCreateRecipe}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Guardando...' : 'Publicar receta'}
+                    </Button>
+                </div>
             </div>
-            <IngredientsSection
-                ingredients={ingredients}
-                ingredientOptions={ingredientOptions}
-                ingredientInput={ingredientInput}
-                setIngredientInput={setIngredientInput}
-                cantidadInput={cantidadInput}
-                setCantidadInput={setCantidadInput}
-                medidaInput={medidaInput}
-                setMedidaInput={setMedidaInput}
-                medidaOptions={medidaOptions}
-                fieldErrors={fieldErrors}
-                onAddIngredient={handleAddIngredient}
-                onDeleteIngredient={handleDeleteIngredient}
-            />
 
-            <StepsSection
-                steps={steps}
-                stepInput={stepInput}
-                setStepInput={setStepInput}
-                fieldErrors={fieldErrors}
-                onAddStep={handleAddStep}
-                onDeleteStep={handleDeleteStep}
-            />
-            {submitMessage && <p style={{ color: 'green', margin: 0 }}>{submitMessage}</p>}
-            {submitError && <p style={{ color: 'crimson', margin: 0 }}>{submitError}</p>}
+            <div className="create-recipe-top-card">
+                <Grid container spacing={2} alignItems="flex-start">
+                    <Grid sx={{ width: { xs: '100%', sm: '70%' } }}>
+                        <TextField
+                            id="recipe-name"
+                            label="Nombre de la receta"
+                            placeholder="Ej: Ensalada fresca con pollo"
+                            size="small"
+                            value={recipeName}
+                            onChange={(e) => setRecipeName(e.target.value)}
+                            error={fieldErrors.recipeName}
+                            helperText={fieldErrors.recipeName ? 'Falta el nombre de la receta' : ''}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid sx={{ width: { xs: '100%', sm: '30%' } }}>
+                        <NumberSpinner
+                            onValueChange={(value) => {
+                                if (value === null) {
+                                    setPorcionesInput('');
+                                    return;
+                                }
 
-            <Button
-                size='medium'
-                variant="contained"
-                onClick={handleCreateRecipe}
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? 'Guardando...' : 'Crear Receta'}
-            </Button>
+                                if (value >= 0) {
+                                    setPorcionesInput(String(value));
+                                }
+                            }}
+                            value={porcionesInput === '' ? null : Number(porcionesInput)}
+                            label="Porciones"
+                            size="small"
+                            error={fieldErrors.porciones}
+                            helperText={fieldErrors.porciones ? 'Faltan las porciones' : ''}
+                            min={1}
+                            max={40}
+                        />
+                    </Grid>
+                </Grid>
+            </div>
+
+            <div className="create-recipe-content-grid">
+                <section className="create-recipe-panel">
+                    <IngredientsSection
+                        ingredients={ingredients}
+                        ingredientOptions={ingredientOptions}
+                        ingredientInput={ingredientInput}
+                        setIngredientInput={setIngredientInput}
+                        cantidadInput={cantidadInput}
+                        setCantidadInput={setCantidadInput}
+                        medidaInput={medidaInput}
+                        setMedidaInput={setMedidaInput}
+                        medidaOptions={medidaOptions}
+                        fieldErrors={fieldErrors}
+                        onAddIngredient={handleAddIngredient}
+                        onDeleteIngredient={handleDeleteIngredient}
+                        onUpdateIngredient={handleUpdateIngredient}
+                    />
+                </section>
+
+                <section className="create-recipe-panel">
+                    <AddStepsSection
+                        instructionsText={instructionsText}
+                        setInstructionsText={setInstructionsText}
+                        fieldErrors={fieldErrors}
+                    />
+                </section>
+            </div>
+
+            <div className="create-recipe-feedback" style={{ display: submitMessage || submitError ? 'block' : 'none' }}>
+                {submitMessage ? (
+                    <Alert severity="success">
+                        <AlertTitle>Success</AlertTitle>
+                        {submitMessage}
+                    </Alert>
+                ) : null}
+                {submitError ? (
+                    <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {submitError}
+                    </Alert>
+                ) : null}
+            </div>
         </div>
-    )
+    );
 }

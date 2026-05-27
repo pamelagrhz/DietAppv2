@@ -1,0 +1,109 @@
+.create-recipe-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: radial-gradient(circle at top right, #f0f2e7 0%, #f7f8f4 38%, #f4f5f0 100%);
+  min-height: calc(100vh - 40px);
+}
+
+.create-recipe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.create-recipe-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.02;
+  color: #1c5a40;
+  font-family: Bitter, Cambria, Georgia, serif;
+}
+
+.create-recipe-subtitle {
+  margin: 8px 0 0;
+  color: #4f5b54;
+  font-size: 1rem;
+  max-width: 650px;
+}
+
+.create-recipe-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.create-recipe-actions .draft-button {
+  color: #4a524d;
+  border-color: #c6cbc4;
+  background: #ecefea;
+  text-transform: none;
+  border-radius: 10px;
+  min-width: 132px;
+}
+
+.create-recipe-actions .publish-button {
+  background: #a75a07;
+  text-transform: none;
+  border-radius: 10px;
+  min-width: 146px;
+  box-shadow: none;
+}
+
+.create-recipe-actions .publish-button:hover {
+  background: #8f4f08;
+  box-shadow: none;
+}
+
+.create-recipe-top-card,
+.create-recipe-panel {
+  border-radius: 20px;
+  border: 1px solid #d8ddd4;
+  background: #f7f8f4;
+  box-shadow: 0 2px 0 rgba(9, 20, 13, 0.03);
+}
+
+.create-recipe-top-card {
+  padding: 20px;
+}
+
+.create-recipe-content-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.create-recipe-panel {
+  padding: 18px;
+  height: fit-content;
+}
+
+.create-recipe-feedback {
+  min-height: 0;
+}
+
+@media (min-width: 900px) {
+  .create-recipe-content-grid {
+    grid-template-columns: minmax(320px, 0.92fr) minmax(360px, 1.08fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .create-recipe-header {
+    flex-direction: column;
+  }
+
+  .create-recipe-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .create-recipe-actions .draft-button,
+  .create-recipe-actions .publish-button {
+    flex: 1;
+  }
+}

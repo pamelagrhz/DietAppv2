@@ -1,19 +1,68 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css'
 import Recipes from './features/showRecipes/pages/Recipes.jsx';
-import AppHeader from './components/appHeader.jsx';
+import HeaderMenu from './components/headerMenu.jsx';
+import CreateRecipe from './features/addRecipes/CreateRecipe.jsx';
+import MealPlans from './features/mealPlans/pages/MealPlans.jsx';
+import GroceryLists from './features/groceryLists/pages/GroceryLists.jsx';
+import Profile from './features/profile/pages/Profile.jsx';
+import MyRecipes from './features/myRecipes/pages/MyRecipes.jsx';
+import MyRecipesRecipes from './features/myRecipes/pages/MyRecipesRecipes.jsx';
+import MyRecipesFavourites from './features/myRecipes/pages/MyRecipesFavourites.jsx';
+import Help from './features/help/pages/Help.jsx';
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  const navigate = useNavigate();
+
+  const handleMenuOptionClick = (action) => {
+    if (action === 'newRecipe') {
+      navigate('/new-recipe');
+    }
+    if (action === 'recipes') {
+      navigate('/recipes');
+    }
+    if (action === 'mealPlans') {
+      navigate('/meal-plans');
+    }
+    if (action === 'groceryLists') {
+      navigate('/grocery-lists');
+    }
+    if (action === 'profile') {
+      navigate('/profile');
+    }
+    if (action === 'myRecipes') {
+      navigate('/my-recipes');
+    }
+    if (action === 'help') {
+      navigate('/help');
+    }
+    if (action === 'logout') {
+      console.log('logout en proceso');
+    }
+  };
+
   return (
     <>
+            <HeaderMenu onMenuOptionClick={handleMenuOptionClick} />
+
       <div className="card">
-        {/* <button onClick={() => setCount((count) => count + 1)}>
-          useState for a counter {count}
-        </button> */}
-        <AppHeader/>
-        <Recipes/> 
+        
+        <Routes>
+          <Route path="/" element={<Navigate to="/recipes" replace />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/new-recipe" element={<CreateRecipe />} />
+          <Route path="/meal-plans" element={<MealPlans />} />
+          <Route path="/grocery-lists" element={<GroceryLists />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/my-recipes" element={<MyRecipes />}>
+            <Route index element={<Navigate to="recipes" replace />} />
+            <Route path="recipes" element={<MyRecipesRecipes />} />
+            <Route path="favourites" element={<MyRecipesFavourites />} />
+          </Route>
+        </Routes>
       </div>
     </>
   )

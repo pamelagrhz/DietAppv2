@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "username": "pamelagrhz",
+      "name": "Pamela Ruíz",
+      "age": 29,
+      "genre": "Femenino",
+      "mail": "pamela.ruiz@cuisine.com",
+      "password": "pam123",
+      "recipes": [],
+      "score": 4.5
+    }
+  ]
+}

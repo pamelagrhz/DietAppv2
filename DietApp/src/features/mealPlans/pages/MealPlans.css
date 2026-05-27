@@ -1,0 +1,108 @@
+.meal-plans-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: radial-gradient(circle at top right, #f0f2e7 0%, #f7f8f4 38%, #f4f5f0 100%);
+  min-height: calc(100vh - 40px);
+}
+
+.meal-plans-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  color: #1c5a40;
+  line-height: 1;
+  font-family: Bitter, Cambria, Georgia, serif;
+}
+
+.meal-plans-subtitle {
+  margin: 8px 0 0;
+  color: #4f5b54;
+}
+
+.meal-plans-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 0 14px;
+  border-top: 1px solid #d8ddd4;
+  border-bottom: 1px solid #d8ddd4;
+}
+
+.meal-plans-week-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.meal-plans-recipe-preview {
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.meal-plans-empty-card {
+  margin-top: 12px;
+  min-height: 120px;
+  border: 1px dashed #cdd4cf;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #f7f8f4;
+}
+
+.meal-plans-surface {
+  border-radius: 20px !important;
+  border: 1px solid #d8ddd4 !important;
+  background: #f7f8f4 !important;
+  box-shadow: 0 2px 0 rgba(9, 20, 13, 0.03) !important;
+}
+
+.meal-plans-outline-button {
+  color: #1c5a40 !important;
+  border-color: #c6cbc4 !important;
+  background: #ecefea !important;
+  text-transform: none !important;
+  border-radius: 10px !important;
+}
+
+.meal-plans-primary-button {
+  background: #a75a07 !important;
+  text-transform: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.meal-plans-primary-button:hover {
+  background: #8f4f08 !important;
+  box-shadow: none !important;
+}
+
+.meal-plans-compact-label {
+  color: #4f5b54;
+}
+
+@media (min-width: 700px) {
+  .meal-plans-week-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1020px) {
+  .meal-plans-week-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1440px) {
+  .meal-plans-week-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

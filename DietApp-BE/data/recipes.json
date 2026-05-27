@@ -4,171 +4,343 @@
   "recetas": [
     {
       "nombre": "Ensalada de pechuga, huevo duro y aguacate",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 100, "medida": "g", "ingrediente": "pechuga de pollo cocida" },
-        { "cantidad": 1, "medida": "pieza", "ingrediente": "huevo" },
-        { "cantidad": 0.25, "medida": "pieza", "ingrediente": "aguacate" },
-        { "cantidad": 1, "medida": "taza", "ingrediente": "lechuga" }
+        {
+          "cantidad": 100,
+          "medida": "g",
+          "ingrediente": "pechuga de pollo cocida"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "huevo"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "pieza(s)",
+          "ingrediente": "aguacate"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza",
+          "ingrediente": "lechuga"
+        }
       ],
-      "preparacion": [
-        "Cocer el huevo",
-        "Cortar la pechuga y el aguacate",
-        "Mezclar todos los ingredientes",
-        "Sazonar al gusto"
-      ]
+      "preparacion": "Cocer el huevo\nCortar la pechuga y el aguacate\nMezclar todos los ingredientes\nSazonar al gusto"
     },
     {
       "nombre": "Bistec con ensalada",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "bistec de res" },
-        { "cantidad": 1, "medida": "taza", "ingrediente": "lechuga" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "jitomate" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "bistec de res"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza",
+          "ingrediente": "lechuga"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "jitomate"
+        }
       ],
-      "preparacion": [
-        "Sazonar y asar el bistec",
-        "Picar verduras",
-        "Servir juntos"
-      ]
+      "preparacion": "Sazonar y asar el bistec\nPicar verduras\nServir juntos"
     },
     {
       "nombre": "Caldo de res",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 150, "medida": "g", "ingrediente": "chambarete de res" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "zanahoria" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "papa" }
+        {
+          "cantidad": 150,
+          "medida": "g",
+          "ingrediente": "chambarete de res"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "zanahoria"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "papa"
+        }
       ],
-      "preparacion": [
-        "Hervir la carne",
-        "Agregar verduras",
-        "Cocinar hasta suavizar"
-      ]
+      "preparacion": "Hervir la carne\nAgregar verduras\nCocinar hasta suavizar"
     },
     {
       "nombre": "Caldo de pollo",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 1, "medida": "pieza", "ingrediente": "pierna o muslo de pollo" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "pierna o muslo de pollo"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "verduras"
+        }
       ],
-      "preparacion": [
-        "Hervir el pollo",
-        "Agregar verduras",
-        "Rectificar sazón"
-      ]
+      "preparacion": "Hervir el pollo\nAgregar verduras\nRectificar sazón"
     },
     {
       "nombre": "Pacholas con ensalada",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "carne molida de res" },
-        { "cantidad": 1, "medida": "taza", "ingrediente": "ensalada verde" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "carne molida de res"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza",
+          "ingrediente": "ensalada verde"
+        }
       ],
-      "preparacion": [
-        "Formar pacholas",
-        "Freírlas",
-        "Servir con ensalada"
-      ]
+      "preparacion": "Formar pacholas\nFreírlas\nServir con ensalada"
     },
     {
       "nombre": "Pollo estilo chino",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "pimiento" },
-        { "cantidad": 1, "medida": "cda", "ingrediente": "salsa de soya" },
-        { "cantidad": 1, "medida": "cdita", "ingrediente": "miel" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "pechuga de pollo"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "pimiento"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cda",
+          "ingrediente": "salsa de soya"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cdita",
+          "ingrediente": "miel"
+        }
       ],
-      "preparacion": [
-        "Saltear el pollo",
-        "Agregar pimiento",
-        "Incorporar soya y miel"
-      ]
+      "preparacion": "Saltear el pollo\nAgregar pimiento\nIncorporar soya y miel"
     },
     {
       "nombre": "Alambre con cebolla y pimiento",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "carne de res" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "cebolla y pimiento" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "carne de res"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "cebolla y pimiento"
+        }
       ],
-      "preparacion": [
-        "Saltear la carne",
-        "Agregar verduras",
-        "Cocinar hasta dorar"
-      ]
+      "preparacion": "Saltear la carne\nAgregar verduras\nCocinar hasta dorar"
     },
     {
       "nombre": "Sandwich de calabacitas con jamón y queso",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 2, "medida": "rebanadas", "ingrediente": "pan" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "calabacita" },
-        { "cantidad": 2, "medida": "rebanadas", "ingrediente": "jamón" },
-        { "cantidad": 1, "medida": "rebanada", "ingrediente": "queso" }
+        {
+          "cantidad": 2,
+          "medida": "rebanadas",
+          "ingrediente": "pan"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "calabacita"
+        },
+        {
+          "cantidad": 2,
+          "medida": "rebanadas",
+          "ingrediente": "jamón"
+        },
+        {
+          "cantidad": 1,
+          "medida": "rebanada",
+          "ingrediente": "queso"
+        }
       ],
-      "preparacion": [
-        "Saltear calabacitas",
-        "Armar el sandwich",
-        "Dorar en sartén"
-      ]
+      "preparacion": "Saltear calabacitas\nArmar el sandwich\nDorar en sartén"
     },
     {
       "nombre": "Ensalada de atún con pasta",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 1, "medida": "lata", "ingrediente": "atún en agua" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "pasta cocida" },
-        { "cantidad": 1, "medida": "cda", "ingrediente": "mayonesa" }
+        {
+          "cantidad": 1,
+          "medida": "lata",
+          "ingrediente": "atún en agua"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "pasta cocida"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cda",
+          "ingrediente": "mayonesa"
+        }
       ],
-      "preparacion": [
-        "Mezclar el atún con la pasta",
-        "Agregar mayonesa",
-        "Refrigerar si se desea"
-      ]
+      "preparacion": "Mezclar el atún con la pasta\nAgregar mayonesa\nRefrigerar si se desea"
     },
     {
       "nombre": "Tinga de pollo",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "pollo deshebrado" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "jitomate" },
-        { "cantidad": 0.25, "medida": "pieza", "ingrediente": "cebolla" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "pollo deshebrado"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "jitomate"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "pieza(s)",
+          "ingrediente": "cebolla"
+        }
       ],
-      "preparacion": [
-        "Licuar jitomate",
-        "Sofreír cebolla",
-        "Agregar pollo y salsa"
-      ]
+      "preparacion": "Licuar jitomate\nSofreír cebolla\nAgregar pollo y salsa"
     },
     {
       "nombre": "Milanesa de pollo empanizada",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "pechuga de pollo" },
-        { "cantidad": 1, "medida": "pieza", "ingrediente": "huevo" },
-        { "cantidad": 0.25, "medida": "taza", "ingrediente": "pan molido" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "pechuga de pollo"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "huevo"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "taza",
+          "ingrediente": "pan molido"
+        }
       ],
-      "preparacion": [
-        "Empanizar el pollo",
-        "Freír hasta dorar",
-        "Escurrir exceso de aceite"
-      ]
+      "preparacion": "Empanizar el pollo\nFreír hasta dorar\nEscurrir exceso de aceite"
     },
     {
       "nombre": "Pescado empapelado",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 130, "medida": "g", "ingrediente": "filete de pescado" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "verduras" }
+        {
+          "cantidad": 130,
+          "medida": "g",
+          "ingrediente": "filete de pescado"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "verduras"
+        }
       ],
-      "preparacion": [
-        "Colocar ingredientes en papel aluminio",
-        "Cerrar y hornear",
-        "Servir caliente"
-      ]
+      "preparacion": "Colocar ingredientes en papel aluminio\nCerrar y hornear\nServir caliente"
     },
     {
       "nombre": "Adobo con carne de puerco",
+      "userId": "pamelagrhz",
+      "creationDate": "2024-06-01T12:00:00Z",
+      "lastModifiedDate": "2024-06-01T12:00:00Z",
       "ingredientes": [
-        { "cantidad": 120, "medida": "g", "ingrediente": "carne de puerco" },
-        { "cantidad": 0.5, "medida": "taza", "ingrediente": "salsa de adobo" }
+        {
+          "cantidad": 120,
+          "medida": "g",
+          "ingrediente": "carne de puerco"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "taza",
+          "ingrediente": "salsa de adobo"
+        }
       ],
-      "preparacion": [
-        "Sellar la carne",
-        "Agregar adobo",
-        "Cocinar hasta suavizar"
-      ]
+      "preparacion": "Sellar la carne\nAgregar adobo\nCocinar hasta suavizar"
+    }
+  ],
+  "mealPlanEntries": [
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-18",
+      "recipeName": "Caldo de pollo",
+      "lastModifiedDate": "2026-05-24T17:10:13.769Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-19",
+      "recipeName": "Caldo de res",
+      "lastModifiedDate": "2026-05-24T17:10:13.769Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-20",
+      "recipeName": "Caldo de res",
+      "lastModifiedDate": "2026-05-24T17:10:13.769Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-21",
+      "recipeName": "Sandwich de calabacitas con jamón y queso",
+      "lastModifiedDate": "2026-05-24T17:10:13.769Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-23",
+      "recipeName": "Pacholas con ensalada",
+      "lastModifiedDate": "2026-05-24T17:10:13.769Z"
+    },
+    {
+      "userId": "pamelagrhz",
+      "date": "2026-05-24",
+      "recipeName": "Caldo de res",
+      "lastModifiedDate": "2026-05-24T17:10:13.769Z"
     }
   ]
 }
