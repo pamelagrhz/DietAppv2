@@ -13,8 +13,9 @@ export const getRecipes = async (req, res) => {
 
 export const createRecipe = async (req, res) => {
   try {
-    const { nombre, ingredientes, preparacion, porciones, userId } = req.body ?? {};
+    const { nombre, ingredientes, preparacion, porciones, userId, score } = req.body ?? {};
     const parsedPorciones = Number(porciones ?? 1);
+    const parsedScore = Number(score ?? 0);
     const normalizedPreparation = typeof preparacion === 'string' ? preparacion.trim() : '';
 
     if (
@@ -24,7 +25,10 @@ export const createRecipe = async (req, res) => {
       ingredientes.length < 1 ||
       !normalizedPreparation ||
       Number.isNaN(parsedPorciones) ||
-      parsedPorciones < 1
+      parsedPorciones < 1 ||
+      Number.isNaN(parsedScore) ||
+      parsedScore < 0 ||
+      parsedScore > 5
     ) {
       return res.status(400).json({ error: 'Datos de receta inválidos' });
     }
@@ -55,6 +59,7 @@ export const createRecipe = async (req, res) => {
       userId: userId.trim(),
       creationDate: new Date().toISOString(),
       lastModifiedDate: new Date().toISOString(), 
+      score: Number(parsedScore.toFixed(2)),
       ingredientes: ingredientesNormalizados,
       preparacion: normalizedPreparation,
     };
