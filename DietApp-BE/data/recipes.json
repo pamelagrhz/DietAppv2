@@ -303,6 +303,94 @@
         }
       ],
       "preparacion": "Sellar la carne\nAgregar adobo\nCocinar hasta suavizar"
+    },
+    {
+      "nombre": "Pescado empanizado + chayote y pure de papa",
+      "userId": "pamelagrhz",
+      "creationDate": "2026-05-26T02:00:38.016Z",
+      "lastModifiedDate": "2026-05-26T02:00:38.016Z",
+      "ingredientes": [
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "filete de pescado"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "chayote"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cdita(s)",
+          "ingrediente": "mantequilla"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "pieza(s)",
+          "ingrediente": "cebolla"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "papa"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "huevo"
+        },
+        {
+          "cantidad": 2,
+          "medida": "taza(s)",
+          "ingrediente": "pan molido"
+        }
+      ],
+      "preparacion": "Sumergir el pescado en huevo\nempanizar con pan molido\nfreir en aceite\nhervir chayote y papa hasta que estén blandos\npelar chayote y papa\ncortar en cubos\naplastar papa, agregar mantequilla y sal (leche si es necesario)\ncortar en julianas cebolla\ncolocar mantequilla, y freir chayotes y cebolla"
+    },
+    {
+      "nombre": "Sopa de moño",
+      "userId": "pamelagrhz",
+      "creationDate": "2026-05-26T02:03:15.491Z",
+      "lastModifiedDate": "2026-05-26T02:03:15.491Z",
+      "ingredientes": [
+        {
+          "cantidad": 0.5,
+          "medida": "pieza(s)",
+          "ingrediente": "pasta de moño"
+        },
+        {
+          "cantidad": 1,
+          "medida": "pieza(s)",
+          "ingrediente": "jitomate"
+        },
+        {
+          "cantidad": 0.25,
+          "medida": "pieza(s)",
+          "ingrediente": "cebolla"
+        },
+        {
+          "cantidad": 0.5,
+          "medida": "pieza(s)",
+          "ingrediente": "ajo"
+        },
+        {
+          "cantidad": 1,
+          "medida": "taza(s)",
+          "ingrediente": "agua"
+        },
+        {
+          "cantidad": 1,
+          "medida": "cdita(s)",
+          "ingrediente": "aceite"
+        },
+        {
+          "cantidad": 1.5,
+          "medida": "cda(s)",
+          "ingrediente": "caldo de pollo"
+        }
+      ],
+      "preparacion": "Triturar en la licuadora jitomate, cebolla, ajo y agua\ncalentar un sarten con aceite y freir la sopa\ncuando no se pegue agregar el caldo de jitomate\nAgregar caldo de pollo en polvo al gusto y revolver hasta que la pasta esté blanda"
     }
   ],
   "mealPlanEntries": [
