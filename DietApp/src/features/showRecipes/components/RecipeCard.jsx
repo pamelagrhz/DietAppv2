@@ -81,9 +81,6 @@ export default function RecipeReviewCard({ recipe }) {
         alt={recipe.nombre}
       />
       <CardContent>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Here we can add an excerpt of the recipe, or a short description. This is just placeholder text to show how it would look like.
-        </Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
