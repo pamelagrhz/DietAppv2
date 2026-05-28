@@ -1,25 +1,4 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_PATH = path.join(__dirname, '../data/users.json');
-
-const readUsersData = async () => {
-  const rawData = await fs.readFile(DATA_PATH, 'utf-8');
-  const parsedData = JSON.parse(rawData);
-
-  if (!Array.isArray(parsedData.users)) {
-    parsedData.users = [];
-  }
-
-  return parsedData;
-};
-
-const saveUsersData = async (data) => {
-  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
-};
+import pool from '../db.js';
 
 export const getUserByUsername = async (username) => {
   const normalizedUsername = String(username || '').trim();
@@ -27,12 +6,31 @@ export const getUserByUsername = async (username) => {
     throw new Error('Debes enviar un username valido.');
   }
 
-  const data = await readUsersData();
-  const user = data.users.find((item) => item.username === normalizedUsername);
+  const [rows] = await pool.query(
+    `
+      SELECT id, username, name, age, genre, mail, score
+      FROM users
+      WHERE username = ?
+      LIMIT 1
+    `,
+    [normalizedUsername]
+  );
+
+  const user = rows[0];
 
   if (!user) {
     throw new Error('Usuario no encontrado.');
   }
+
+  const [recipesRows] = await pool.query(
+    `
+      SELECT nombre
+      FROM recipes
+      WHERE user_id = ?
+      ORDER BY nombre ASC
+    `,
+    [user.id]
+  );
 
   return {
     username: user.username,
@@ -40,8 +38,9 @@ export const getUserByUsername = async (username) => {
     age: user.age,
     genre: user.genre,
     mail: user.mail,
-    recipes: Array.isArray(user.recipes) ? user.recipes : [],
-    score: typeof user.score === 'number' ? user.score : 4.5,
+    recipes: recipesRows.map((recipe) => recipe.nombre),
+    recipeLength: recipesRows.length,
+    score: typeof user.score === 'number' ? user.score : Number(user.score ?? 4.5),
   };
 };
 
@@ -63,20 +62,28 @@ export const changeUserPassword = async ({ username, currentPassword, newPasswor
     throw new Error('La confirmacion del password no coincide.');
   }
 
-  const data = await readUsersData();
-  const userIndex = data.users.findIndex((item) => item.username === normalizedUsername);
+  const [rows] = await pool.query(
+    `
+      SELECT id, password_hash
+      FROM users
+      WHERE username = ?
+      LIMIT 1
+    `,
+    [normalizedUsername]
+  );
 
-  if (userIndex < 0) {
+  const user = rows[0];
+
+  if (!user) {
     throw new Error('Usuario no encontrado.');
   }
 
-  const storedPassword = String(data.users[userIndex].password || '');
+  const storedPassword = String(user.password_hash || '');
   if (storedPassword !== current) {
     throw new Error('El password actual es incorrecto.');
   }
 
-  data.users[userIndex].password = nextPassword;
-  await saveUsersData(data);
+  await pool.query('UPDATE users SET password_hash = ? WHERE id = ?', [nextPassword, user.id]);
 
   return { message: 'Password actualizado correctamente.' };
 };
