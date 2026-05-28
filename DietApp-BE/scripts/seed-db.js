@@ -2,6 +2,13 @@ import 'dotenv/config';
 import fs from 'fs/promises';
 import pool from '../db.js';
 
+const toDateOrNow = (value) => {
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+};
+
+const toMySqlDateTime = (value) => toDateOrNow(value).toISOString().slice(0, 19).replace('T', ' ');
+
 // Read json db files
 const usersPath = new URL('../data/users.json', import.meta.url);
 const recipesPath = new URL('../data/recipes.json', import.meta.url);
@@ -49,8 +56,8 @@ try {
       continue;
     }
 
-    const creationDate = recipe.creationDate || new Date().toISOString();
-    const lastModifiedDate = recipe.lastModifiedDate || creationDate;
+    const creationDate = toMySqlDateTime(recipe.creationDate);
+    const lastModifiedDate = toMySqlDateTime(recipe.lastModifiedDate || recipe.creationDate);
 
     const [insertRecipe] = await conn.query(
       `
