@@ -1,10 +1,4 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_PATH = path.join(__dirname, '../data/recipes.json');
+import pool from '../db.js';
 
 const WEEK_DAYS = [
   'Lunes',
@@ -65,10 +59,26 @@ const buildWeekDays = (weekStart, entriesMap) => {
   return days;
 };
 
-const ensureEntriesArray = (data) => {
-  if (!Array.isArray(data.mealPlanEntries)) {
-    data.mealPlanEntries = [];
+const resolveUserId = async (userRef) => {
+  const normalizedUserRef = String(userRef || '').trim();
+  if (!normalizedUserRef) {
+    throw new Error('Debes enviar un userId valido.');
   }
+
+  const asNumber = Number(normalizedUserRef);
+  if (!Number.isNaN(asNumber)) {
+    const [numericRows] = await pool.query('SELECT id FROM users WHERE id = ? LIMIT 1', [asNumber]);
+    if (numericRows.length > 0) {
+      return numericRows[0].id;
+    }
+  }
+
+  const [usernameRows] = await pool.query('SELECT id FROM users WHERE username = ? LIMIT 1', [normalizedUserRef]);
+  if (usernameRows.length === 0) {
+    throw new Error('Usuario no encontrado.');
+  }
+
+  return usernameRows[0].id;
 };
 
 export async function searchRecipesByName(search = '') {
@@ -77,14 +87,18 @@ export async function searchRecipesByName(search = '') {
     return [];
   }
 
-  const data = JSON.parse(await fs.readFile(DATA_PATH, 'utf-8'));
-  const recipes = Array.isArray(data.recetas) ? data.recetas : [];
+  const [rows] = await pool.query(
+    `
+      SELECT nombre
+      FROM recipes
+      WHERE LOWER(nombre) LIKE CONCAT('%', ?, '%')
+      ORDER BY nombre ASC
+      LIMIT 25
+    `,
+    [normalizedSearch]
+  );
 
-  return recipes
-    .map((recipe) => recipe?.nombre)
-    .filter((name) => typeof name === 'string')
-    .filter((name) => name.toLowerCase().includes(normalizedSearch))
-    .slice(0, 25);
+  return rows.map((row) => row.nombre).filter((name) => typeof name === 'string');
 }
 
 export async function getMealPlanWeek({ userId = 'pamelagrhz', page = 1 }) {
@@ -93,9 +107,15 @@ export async function getMealPlanWeek({ userId = 'pamelagrhz', page = 1 }) {
     throw new Error('El parametro page debe ser un numero mayor o igual a 1.');
   }
 
-  const data = JSON.parse(await fs.readFile(DATA_PATH, 'utf-8'));
-  const entries = Array.isArray(data.mealPlanEntries) ? data.mealPlanEntries : [];
-  const userEntries = entries.filter((entry) => entry.userId === userId);
+  const resolvedUserId = await resolveUserId(userId);
+  const [userEntries] = await pool.query(
+    `
+      SELECT date, recipe_name AS recipeName
+      FROM meal_plan_entries
+      WHERE user_id = ?
+    `,
+    [resolvedUserId]
+  );
   const entriesMap = new Map(
     userEntries
       .map((entry) => [normalizeDateKey(entry.date), entry.recipeName])
@@ -126,11 +146,10 @@ export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days }
     throw new Error('Debes enviar 7 dias para guardar la semana.');
   }
 
-  const data = JSON.parse(await fs.readFile(DATA_PATH, 'utf-8'));
-  const recipes = Array.isArray(data.recetas) ? data.recetas : [];
-  const validRecipeNames = new Set(recipes.map((recipe) => recipe?.nombre).filter(Boolean));
+  const resolvedUserId = await resolveUserId(userId);
 
-  ensureEntriesArray(data);
+  const [recipesRows] = await pool.query('SELECT nombre FROM recipes');
+  const validRecipeNames = new Set(recipesRows.map((recipe) => recipe?.nombre).filter(Boolean));
 
   const weekStart = getWeekStartByPage(normalizedPage);
 
@@ -153,31 +172,44 @@ export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days }
     };
   });
 
-  const nextEntries = data.mealPlanEntries.filter((entry) => {
-    if (entry.userId !== userId) {
-      return true;
+  const weekDates = normalizedDays.map((day) => day.date);
+  const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+  const conn = await pool.getConnection();
+
+  try {
+    await conn.beginTransaction();
+
+    await conn.query(
+      `
+        DELETE FROM meal_plan_entries
+        WHERE user_id = ?
+          AND date IN (${weekDates.map(() => '?').join(',')})
+      `,
+      [resolvedUserId, ...weekDates]
+    );
+
+    for (const day of normalizedDays) {
+      if (!day.recipeName) {
+        continue;
+      }
+
+      await conn.query(
+        `
+          INSERT INTO meal_plan_entries (user_id, date, recipe_name, last_modified_date)
+          VALUES (?, ?, ?, ?)
+        `,
+        [resolvedUserId, day.date, day.recipeName, timestamp]
+      );
     }
 
-    const dateKey = normalizeDateKey(entry.date);
-    return !normalizedDays.some((day) => day.date === dateKey);
-  });
-
-  const timestamp = new Date().toISOString();
-  normalizedDays.forEach((day) => {
-    if (!day.recipeName) {
-      return;
-    }
-
-    nextEntries.push({
-      userId,
-      date: day.date,
-      recipeName: day.recipeName,
-      lastModifiedDate: timestamp,
-    });
-  });
-
-  data.mealPlanEntries = nextEntries;
-  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
+    await conn.commit();
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
 
   return getMealPlanWeek({ userId, page: normalizedPage });
 }

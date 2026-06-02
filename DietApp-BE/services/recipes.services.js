@@ -1,12 +1,4 @@
-//Logic to read the recipes data from the json file
-//And return the recipes from the json file
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_PATH = path.join(__dirname, '../data/recipes.json');
+import pool from '../db.js';
 
 const normalizePreparation = (value) => {
   if (typeof value === 'string') {
@@ -23,37 +15,143 @@ const normalizePreparation = (value) => {
   return '';
 };
 
+const toDateOrNow = (value) => {
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+};
+
+const toMySqlDateTime = (value) => toDateOrNow(value).toISOString().slice(0, 19).replace('T', ' ');
+
 export const getAllRecipes = async () => {
-    //make a Join to the path of the json file and read the data from the json file
-    const recipesPath = path.join(__dirname, '../data/recipes.json');
-    // Use file system to read the data from the json file and return the recipes
-    const data = await fs.readFile(recipesPath, 'utf8');
-    //Make a parse to the data and return the recipes
-    const json = JSON.parse(data);
-    return (json.recetas || []).map((recipe) => ({
-      ...recipe,
-      preparacion: normalizePreparation(recipe?.preparacion),
-    }));
+  const [rows] = await pool.query(
+    `
+      SELECT
+        r.id,
+        r.nombre,
+        u.username AS userId,
+        r.creation_date AS creationDate,
+        r.last_modified_date AS lastModifiedDate,
+        r.preparacion,
+        r.score,
+        ri.cantidad,
+        ri.medida,
+        ri.ingrediente
+      FROM recipes r
+      INNER JOIN users u ON u.id = r.user_id
+      LEFT JOIN recipe_ingredients ri ON ri.recipe_id = r.id
+      ORDER BY r.id ASC, ri.id ASC
+    `
+  );
+
+  const recipesMap = new Map();
+
+  rows.forEach((row) => {
+    if (!recipesMap.has(row.id)) {
+      recipesMap.set(row.id, {
+        nombre: row.nombre,
+        userId: row.userId,
+        creationDate: new Date(row.creationDate).toISOString(),
+        lastModifiedDate: new Date(row.lastModifiedDate).toISOString(),
+        score: Number(row.score),
+        ingredientes: [],
+        preparacion: normalizePreparation(row.preparacion),
+      });
+    }
+
+    if (row.ingrediente) {
+      recipesMap.get(row.id).ingredientes.push({
+        cantidad: Number(row.cantidad),
+        medida: row.medida,
+        ingrediente: row.ingrediente,
+      });
+    }
+  });
+
+  return Array.from(recipesMap.values());
+};
+
+const resolveUserId = async (conn, userRef) => {
+  const asNumber = Number(userRef);
+
+  if (!Number.isNaN(asNumber)) {
+    const [numericRows] = await conn.query('SELECT id FROM users WHERE id = ? LIMIT 1', [asNumber]);
+    if (numericRows.length > 0) {
+      return numericRows[0].id;
+    }
+  }
+
+  const [usernameRows] = await conn.query('SELECT id FROM users WHERE username = ? LIMIT 1', [String(userRef)]);
+  if (usernameRows.length === 0) {
+    throw new Error('Usuario no encontrado para crear receta.');
+  }
+
+  return usernameRows[0].id;
 };
 
 export async function addRecipe(nuevaReceta) {
-  const data = JSON.parse(await fs.readFile(DATA_PATH, 'utf-8'));
+  const conn = await pool.getConnection();
 
-  if (!Array.isArray(data.recetas)) {
-    data.recetas = [];
+  try {
+    await conn.beginTransaction();
+
+    const userId = await resolveUserId(conn, nuevaReceta.userId);
+    const creationDateObject = toDateOrNow(nuevaReceta.creationDate);
+    const lastModifiedDateObject = toDateOrNow(nuevaReceta.lastModifiedDate || creationDateObject);
+    const creationDate = toMySqlDateTime(creationDateObject);
+    const lastModifiedDate = toMySqlDateTime(lastModifiedDateObject);
+    const porciones = Number(nuevaReceta.porciones ?? 1);
+    const score = Number(nuevaReceta.score ?? 4.5);
+
+    const [recipeInsertResult] = await conn.query(
+      `
+        INSERT INTO recipes (nombre, user_id, preparacion, score, porciones, creation_date, last_modified_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        nuevaReceta.nombre,
+        userId,
+        normalizePreparation(nuevaReceta.preparacion),
+        Number.isNaN(score) ? 4.5 : score,
+        Number.isNaN(porciones) || porciones < 1 ? 1 : porciones,
+        creationDate,
+        lastModifiedDate,
+      ]
+    );
+
+    const recipeId = recipeInsertResult.insertId;
+    const ingredients = Array.isArray(nuevaReceta.ingredientes) ? nuevaReceta.ingredientes : [];
+
+    for (const ingredient of ingredients) {
+      await conn.query(
+        `
+          INSERT INTO recipe_ingredients (recipe_id, ingrediente, cantidad, medida)
+          VALUES (?, ?, ?, ?)
+        `,
+        [
+          recipeId,
+          String(ingredient.ingrediente || '').trim(),
+          Number(ingredient.cantidad),
+          String(ingredient.medida || '').trim(),
+        ]
+      );
+    }
+
+    await conn.commit();
+
+    const [userRows] = await conn.query('SELECT username FROM users WHERE id = ? LIMIT 1', [userId]);
+    return {
+      nombre: nuevaReceta.nombre,
+      userId: userRows[0]?.username || String(nuevaReceta.userId),
+      creationDate: creationDateObject.toISOString(),
+      lastModifiedDate: lastModifiedDateObject.toISOString(),
+      score: Number.isNaN(score) ? 4.5 : score,
+      ingredientes: ingredients,
+      preparacion: normalizePreparation(nuevaReceta.preparacion),
+    };
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
   }
-
-  // Add the new recipe to the existing recipes array (in json case)
-  data.recetas = data.recetas.map((recipe) => ({
-    ...recipe,
-    preparacion: normalizePreparation(recipe?.preparacion),
-  }));
-
-  data.recetas.push({
-    ...nuevaReceta,
-    preparacion: normalizePreparation(nuevaReceta?.preparacion),
-  });
-  //DATA_PATH es la ruta del archivo JSON donde se almacenan las recetas, y se escribe el nuevo contenido con la receta agregada
-  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
-  return data.recetas[data.recetas.length - 1];
 }
