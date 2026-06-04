@@ -5,10 +5,10 @@ export const getIngredients = async (search = '') => {
 
     const [rows] = await pool.query(
         `
-            SELECT DISTINCT ingrediente
-            FROM recipe_ingredients
-            WHERE (? = '' OR LOWER(ingrediente) LIKE CONCAT('%', ?, '%'))
-            ORDER BY ingrediente ASC
+            SELECT nombre AS ingrediente
+            FROM ingredients
+            WHERE (? = '' OR LOWER(nombre) LIKE CONCAT('%', ?, '%'))
+            ORDER BY nombre ASC
         `,
         [normalizedSearch, normalizedSearch]
     );

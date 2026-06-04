@@ -8,6 +8,7 @@ const toDateOrNow = (value) => {
 };
 
 const toMySqlDateTime = (value) => toDateOrNow(value).toISOString().slice(0, 19).replace('T', ' ');
+const normalizeIngredientName = (value) => String(value || '').trim();
 
 // Read json db files
 const usersPath = new URL('../data/users.json', import.meta.url);
@@ -27,6 +28,7 @@ try {
 // Clean tables before inserting new data
   await conn.query('DELETE FROM meal_plan_entries');
   await conn.query('DELETE FROM recipe_ingredients');
+  await conn.query('DELETE FROM ingredients');
   await conn.query('DELETE FROM recipes');
   await conn.query('DELETE FROM users');
 // Insert users and recipes data into the MySQL database, linking recipes to users by username and ensuring that all data is properly formatted and validated before insertion
@@ -82,14 +84,32 @@ try {
     const ingredients = Array.isArray(recipe.ingredientes) ? recipe.ingredientes : [];
 
     for (const ingredient of ingredients) {
+      const ingredientName = normalizeIngredientName(ingredient.ingrediente);
+
+      if (!ingredientName) {
+        continue;
+      }
+
       await conn.query(
         `
-          INSERT INTO recipe_ingredients (recipe_id, ingrediente, cantidad, medida)
+          INSERT INTO ingredients (nombre)
+          VALUES (?)
+          ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)
+        `,
+        [ingredientName]
+      );
+
+      const [ingredientIdRows] = await conn.query('SELECT LAST_INSERT_ID() AS id');
+      const ingredientId = ingredientIdRows[0]?.id;
+
+      await conn.query(
+        `
+          INSERT INTO recipe_ingredients (recipe_id, ingredient_id, cantidad, medida)
           VALUES (?, ?, ?, ?)
         `,
         [
           insertRecipe.insertId,
-          String(ingredient.ingrediente || '').trim(),
+          ingredientId,
           Number(ingredient.cantidad ?? 0),
           String(ingredient.medida || '').trim(),
         ]

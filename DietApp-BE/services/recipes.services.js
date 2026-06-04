@@ -21,6 +21,7 @@ const toDateOrNow = (value) => {
 };
 
 const toMySqlDateTime = (value) => toDateOrNow(value).toISOString().slice(0, 19).replace('T', ' ');
+const normalizeIngredientName = (value) => String(value || '').trim();
 
 export const getAllRecipes = async () => {
   const [rows] = await pool.query(
@@ -35,10 +36,11 @@ export const getAllRecipes = async () => {
         r.score,
         ri.cantidad,
         ri.medida,
-        ri.ingrediente
+        i.nombre AS ingrediente
       FROM recipes r
       INNER JOIN users u ON u.id = r.user_id
       LEFT JOIN recipe_ingredients ri ON ri.recipe_id = r.id
+      LEFT JOIN ingredients i ON i.id = ri.ingredient_id
       ORDER BY r.id ASC, ri.id ASC
     `
   );
@@ -122,14 +124,32 @@ export async function addRecipe(nuevaReceta) {
     const ingredients = Array.isArray(nuevaReceta.ingredientes) ? nuevaReceta.ingredientes : [];
 
     for (const ingredient of ingredients) {
+      const ingredientName = normalizeIngredientName(ingredient.ingrediente);
+
+      if (!ingredientName) {
+        continue;
+      }
+
       await conn.query(
         `
-          INSERT INTO recipe_ingredients (recipe_id, ingrediente, cantidad, medida)
+          INSERT INTO ingredients (nombre)
+          VALUES (?)
+          ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)
+        `,
+        [ingredientName]
+      );
+
+      const [ingredientIdRows] = await conn.query('SELECT LAST_INSERT_ID() AS id');
+      const ingredientId = ingredientIdRows[0]?.id;
+
+      await conn.query(
+        `
+          INSERT INTO recipe_ingredients (recipe_id, ingredient_id, cantidad, medida)
           VALUES (?, ?, ?, ?)
         `,
         [
           recipeId,
-          String(ingredient.ingrediente || '').trim(),
+          ingredientId,
           Number(ingredient.cantidad),
           String(ingredient.medida || '').trim(),
         ]

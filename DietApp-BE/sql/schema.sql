@@ -31,18 +31,31 @@ CREATE TABLE IF NOT EXISTS recipes (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
+
+-- Table for ingredients catalog
+CREATE TABLE IF NOT EXISTS ingredients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- Table for recipe ingredients
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
   id INT AUTO_INCREMENT PRIMARY KEY,
   recipe_id INT NOT NULL,
-  ingrediente VARCHAR(255) NOT NULL,
+  ingredient_id INT NOT NULL,
   cantidad DECIMAL(10,4) NOT NULL,
   medida VARCHAR(60) NOT NULL,
   INDEX idx_recipe_ingredients_recipe_id (recipe_id),
-  INDEX idx_recipe_ingredients_ingrediente (ingrediente),
+  INDEX idx_recipe_ingredients_ingredient_id (ingredient_id),
   CONSTRAINT fk_recipe_ingredients_recipe FOREIGN KEY (recipe_id)
     REFERENCES recipes(id)
     ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_recipe_ingredients_ingredient FOREIGN KEY (ingredient_id)
+    REFERENCES ingredients(id)
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 -- Table for meal plan entries
