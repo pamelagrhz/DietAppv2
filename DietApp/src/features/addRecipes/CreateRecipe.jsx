@@ -164,10 +164,6 @@ export default function CreateRecipe() {
                     <p className="create-recipe-subtitle">Captura tu receta, agrega ingredientes y pasos para compartirla.</p>
                 </div>
                 <div className="create-recipe-actions">
-                    {/* TODO: Implement draft saving functionality */}
-                    {/* <Button size="medium" variant="outlined" className="draft-button" disabled>
-                        Guardar borrador
-                    </Button> */}
                     <Button
                         size="medium"
                         variant="contained"

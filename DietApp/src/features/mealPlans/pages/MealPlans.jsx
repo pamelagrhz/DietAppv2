@@ -9,8 +9,8 @@ import CardContent from '@mui/material/CardContent';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Tooltip from '@mui/material/Tooltip';
+
 import { getRecipes } from '../../showRecipes/services/recipes.service';
 import RecipeReviewCard from '../../showRecipes/components/RecipeCard.jsx';
 import {
@@ -19,6 +19,12 @@ import {
   searchMealPlanRecipes,
 } from '../services/mealPlans.service';
 import './MealPlans.css';
+
+// Icons
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
+
 
 export default function MealPlans() {
   const [recipes, setRecipes] = useState([]);
@@ -100,6 +106,7 @@ export default function MealPlans() {
         setWeekDays(Array.isArray(mealPlanResult?.days) ? mealPlanResult.days : []);
         setWeekStart(mealPlanResult?.weekStart || '');
         setWeekEnd(mealPlanResult?.weekEnd || '');
+      
         setSearchInputByDate({});
         setSearchResultsByDate({});
         setSelectedDays({});
@@ -162,6 +169,9 @@ export default function MealPlans() {
     setWeekDays((prev) => prev.map((entry, i) => (i === index ? { ...entry, recipeName: value } : entry)));
   };
 
+  const navigate = (path) => {
+    window.location.href = path;
+  }
   const handleBulkApply = () => {
     const selectedDates = Object.keys(selectedDays).filter((date) => selectedDays[date]);
 
@@ -223,6 +233,7 @@ export default function MealPlans() {
 
       <div className="meal-plans-toolbar">
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {/* Semana anterior */}
           <Button
             variant="outlined"
             className="meal-plans-outline-button"
@@ -230,11 +241,11 @@ export default function MealPlans() {
             disabled={weekPage <= 1 || loading}
             onClick={() => setWeekPage((prev) => Math.max(1, prev - 1))}
           >
-            Semana anterior
           </Button>
           <Typography sx={{ minWidth: 220, textAlign: 'center', fontWeight: 600 }} className="meal-plans-compact-label">
             {weekLabel}
           </Typography>
+          {/* Semana siguiente */}
           <Button
             variant="outlined"
             className="meal-plans-outline-button"
@@ -242,10 +253,10 @@ export default function MealPlans() {
             disabled={loading}
             onClick={() => setWeekPage((prev) => prev + 1)}
           >
-            Semana siguiente
           </Button>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+         <Tooltip title="Lista de compras"><Button variant="outlined" className="meal-plans-outline-button" onClick={() => navigate('/grocery-lists')} disabled={loading}><PlaylistAddCheckCircleIcon /></Button></Tooltip>
           <Button
             variant={bulkEditMode ? 'contained' : 'outlined'}
             className={bulkEditMode ? 'meal-plans-primary-button' : 'meal-plans-outline-button'}

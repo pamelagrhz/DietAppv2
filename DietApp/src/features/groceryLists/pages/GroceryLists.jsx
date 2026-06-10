@@ -41,7 +41,9 @@ export default function GroceryLists() {
           setRecipes(Array.isArray(recipesData) ? recipesData : []);
           setMealPlanDays(Array.isArray(mealPlanData?.days) ? mealPlanData.days : []);
           setWeekLabel(mealPlanData?.weekStart && mealPlanData?.weekEnd
-            ? `${mealPlanData.weekStart} - ${mealPlanData.weekEnd}`
+            ? new Date(mealPlanData.weekStart).toLocaleString('es-ES', { month: 'long' }) === new Date(mealPlanData.weekEnd).toLocaleString('es-ES', { month: 'long' })
+              ? `${mealPlanData.weekStart.split('-')[2]} - ${mealPlanData.weekEnd.split('-')[2]} ${new Date(mealPlanData.weekStart).toLocaleString('es-ES', { month: 'long' })} ${new Date(mealPlanData.weekStart).getFullYear()}`
+              : `${mealPlanData.weekStart.split('-')[2]} ${new Date(mealPlanData.weekStart).toLocaleString('es-ES', { month: 'long' })} - ${mealPlanData.weekEnd.split('-')[2]} ${new Date(mealPlanData.weekEnd).toLocaleString('es-ES', { month: 'long' })} ${new Date(mealPlanData.weekEnd).getFullYear()}`
             : 'Semana');
         }
       } catch (fetchError) {
@@ -105,6 +107,9 @@ export default function GroceryLists() {
     }));
   };
 
+  const navigate = (path) => {
+    window.location.href = path;
+  }
   const handleSelectAllIngredients = () => {
     const next = {};
     groceryItems.forEach((item) => {
@@ -135,6 +140,7 @@ export default function GroceryLists() {
 
       <div className="grocery-lists-toolbar">
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+          {/* Semana anterior */}
           <Button
             variant="outlined"
             className="meal-plans-outline-button"
@@ -142,9 +148,9 @@ export default function GroceryLists() {
             disabled={loading || mealPlanPage <= 1}
             onClick={handlePreviousWeek}
           >
-            Semana anterior
           </Button>
           <Typography className="grocery-lists-subtitle">{weekLabel}</Typography>
+          {/* Semana siguiente */}
           <Button
             variant="outlined"
             className="meal-plans-outline-button"
@@ -152,7 +158,6 @@ export default function GroceryLists() {
             disabled={loading}
             onClick={handleNextWeek}
           >
-            Semana siguiente
           </Button>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
@@ -171,8 +176,10 @@ export default function GroceryLists() {
       <div className="grocery-lists-grid">
         <section className="grocery-lists-panel">
           <Typography variant="h6" sx={{ fontFamily: 'Bitter, Cambria, Georgia, serif', mb: 1 }}>Recetas del meal plan</Typography>
-          <Typography sx={{ color: '#4f5b54', mb: 2 }}>
-            Estas recetas salen automáticamente del plan semanal seleccionado.
+          <Typography sx={{ color: '#4f5b54', mb: 2 , cursor: 'pointer'}}>
+            Estas recetas salen automáticamente del 
+                      <a onClick={() => navigate('/meal-plans')} disabled={loading}> plan semanal seleccionado.</a>
+
           </Typography>
 
           <Box sx={{ display: 'grid', gap: 1 }}>
@@ -199,10 +206,6 @@ export default function GroceryLists() {
         </section>
 
         <section className="grocery-lists-panel">
-          <Typography variant="h6" sx={{ fontFamily: 'Bitter, Cambria, Georgia, serif', mb: 1 }}>Lista consolidada</Typography>
-          <Typography sx={{ color: '#4f5b54', mb: 2 }}>
-            Suma ingredientes repetidos por nombre y medida. Marca el checkbox cuando ya lo tengas o lo hayas comprado.
-          </Typography>
 
           <table className="grocery-lists-ingredient-table">
             <thead>
