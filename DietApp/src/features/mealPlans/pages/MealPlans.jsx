@@ -32,6 +32,7 @@ export default function MealPlans() {
   const [weekPage, setWeekPage] = useState(1);
   const [weekStart, setWeekStart] = useState('');
   const [weekEnd, setWeekEnd] = useState('');
+  const [weekLabel, setWeekLabel] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -60,12 +61,12 @@ export default function MealPlans() {
     return map;
   }, [recipes]);
 
-  const weekLabel = useMemo(() => {
-    if (!weekStart || !weekEnd) {
-      return 'Semana';
-    }
-
-    return `${weekStart} - ${weekEnd}`;
+   useEffect(() => {
+    setWeekLabel(weekStart && weekEnd
+      ? new Date(weekStart).toLocaleString('es-ES', { month: 'long' }) === new Date(weekEnd).toLocaleString('es-ES', { month: 'long' })
+        ? `${weekStart.split('-')[2]} - ${weekEnd.split('-')[2]} ${new Date(weekStart).toLocaleString('es-ES', { month: 'long' })} ${new Date(weekStart).getFullYear()}`
+        : `${weekStart.split('-')[2]} ${new Date(weekStart).toLocaleString('es-ES', { month: 'long' })} - ${weekEnd.split('-')[2]} ${new Date(weekEnd).toLocaleString('es-ES', { month: 'long' })} ${new Date(weekEnd).getFullYear()}`
+      : 'Semana');
   }, [weekStart, weekEnd]);
 
   useEffect(() => {
