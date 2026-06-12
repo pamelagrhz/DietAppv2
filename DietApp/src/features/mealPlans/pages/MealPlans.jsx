@@ -91,6 +91,15 @@ export default function MealPlans() {
       mounted = false;
     };
   }, []);
+  
+  const randomRecipe = (index) => {
+    if (recipes.length === 0) {
+      console.error('No hay recetas disponibles para seleccionar aleatoriamente.');
+      return;
+    }
+    const randomIndex = Math.floor(Math.random() * recipes.length);
+    handleRecipeChange(index, recipes[randomIndex]?.nombre);
+  }
 
   useEffect(() => {
     let mounted = true;
@@ -381,19 +390,20 @@ export default function MealPlans() {
                     {...params}
                     size="small"
                     label="Buscar receta"
-                    helperText="Muestra todas; desde 3 letras consulta backend"
-                  />
+                  />  
                 )}
               />
-
               {entry.recipeName && recipesByName.get(entry.recipeName) ? (
                 <div className="meal-plans-recipe-preview">
+                  {/* Recipe selected */}
                   <RecipeReviewCard recipe={recipesByName.get(entry.recipeName)} />
                 </div>
               ) : (
                 <div className="meal-plans-empty-card">
                   <Typography sx={{ color: '#6f7872', fontStyle: 'italic' }}>Empty Atelier</Typography>
                   <Typography sx={{ color: '#7e8781', fontSize: '0.85rem' }}>Selecciona una receta para este dia</Typography>
+                  <Button onClick={() => randomRecipe(index)}>Receta aleatoria</Button>
+
                 </div>
               )}
             </CardContent>
