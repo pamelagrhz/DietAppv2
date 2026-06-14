@@ -1,7 +1,7 @@
 import {
   getMealPlanWeek,
   saveMealPlanWeek,
-  searchRecipesByName,
+  searchRecipesByNameAndType,
 } from '../services/mealPlans.services.js';
 
 export const getMealPlan = async (req, res) => {
@@ -39,8 +39,8 @@ export const upsertMealPlan = async (req, res) => {
 
 export const searchMealPlanRecipes = async (req, res) => {
   try {
-    const { q = '' } = req.query;
-    const results = await searchRecipesByName(String(q));
+    const { q = '', type = '' } = req.query;
+    const results = await searchRecipesByNameAndType(String(q), String(type));
     res.json(results);
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -3,6 +3,7 @@
   "porcion_base_KG": 50,
   "recetas": [
     {
+      "recipeType": "comida",
       "nombre": "Ensalada de pechuga, huevo duro y aguacate",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -32,6 +33,7 @@
       "preparacion": "Cocer el huevo\nCortar la pechuga y el aguacate\nMezclar todos los ingredientes\nSazonar al gusto"
     },
     {
+      "recipeType": "comida",
       "nombre": "Bistec con ensalada",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -56,6 +58,7 @@
       "preparacion": "Sazonar y asar el bistec\nPicar verduras\nServir juntos"
     },
     {
+      "recipeType": "comida",
       "nombre": "Caldo de res",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -80,6 +83,7 @@
       "preparacion": "Hervir la carne\nAgregar verduras\nCocinar hasta suavizar"
     },
     {
+      "recipeType": "comida",
       "nombre": "Caldo de pollo",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -99,6 +103,7 @@
       "preparacion": "Hervir el pollo\nAgregar verduras\nRectificar sazón"
     },
     {
+      "recipeType": "comida",
       "nombre": "Pacholas con ensalada",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -118,6 +123,7 @@
       "preparacion": "Formar pacholas\nFreírlas\nServir con ensalada"
     },
     {
+      "recipeType": "comida",
       "nombre": "Pollo estilo chino",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -147,6 +153,7 @@
       "preparacion": "Saltear el pollo\nAgregar pimiento\nIncorporar soya y miel"
     },
     {
+      "recipeType": "comida",
       "nombre": "Alambre con cebolla y pimiento",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -166,6 +173,7 @@
       "preparacion": "Saltear la carne\nAgregar verduras\nCocinar hasta dorar"
     },
     {
+      "recipeType": "comida",
       "nombre": "Sandwich de calabacitas con jamón y queso",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -195,6 +203,7 @@
       "preparacion": "Saltear calabacitas\nArmar el sandwich\nDorar en sartén"
     },
     {
+      "recipeType": "comida",
       "nombre": "Ensalada de atún con pasta",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -219,6 +228,7 @@
       "preparacion": "Mezclar el atún con la pasta\nAgregar mayonesa\nRefrigerar si se desea"
     },
     {
+      "recipeType": "comida",
       "nombre": "Tinga de pollo",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -243,6 +253,7 @@
       "preparacion": "Licuar jitomate\nSofreír cebolla\nAgregar pollo y salsa"
     },
     {
+      "recipeType": "comida",
       "nombre": "Milanesa de pollo empanizada",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -267,6 +278,7 @@
       "preparacion": "Empanizar el pollo\nFreír hasta dorar\nEscurrir exceso de aceite"
     },
     {
+      "recipeType": "comida",
       "nombre": "Pescado empapelado",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -286,6 +298,7 @@
       "preparacion": "Colocar ingredientes en papel aluminio\nCerrar y hornear\nServir caliente"
     },
     {
+      "recipeType": "comida",
       "nombre": "Adobo con carne de puerco",
       "userId": "pamelagrhz",
       "creationDate": "2024-06-01T12:00:00Z",
@@ -305,6 +318,7 @@
       "preparacion": "Sellar la carne\nAgregar adobo\nCocinar hasta suavizar"
     },
     {
+      "recipeType": "comida",
       "nombre": "Pescado empanizado + chayote y pure de papa",
       "userId": "pamelagrhz",
       "creationDate": "2026-05-26T02:00:38.016Z",
@@ -349,6 +363,7 @@
       "preparacion": "Sumergir el pescado en huevo\nempanizar con pan molido\nfreir en aceite\nhervir chayote y papa hasta que estén blandos\npelar chayote y papa\ncortar en cubos\naplastar papa, agregar mantequilla y sal (leche si es necesario)\ncortar en julianas cebolla\ncolocar mantequilla, y freir chayotes y cebolla"
     },
     {
+      "recipeType": "comida",
       "nombre": "Sopa de moño",
       "userId": "pamelagrhz",
       "creationDate": "2026-05-26T02:03:15.491Z",

@@ -22,6 +22,12 @@ const toDateOrNow = (value) => {
 
 const toMySqlDateTime = (value) => toDateOrNow(value).toISOString().slice(0, 19).replace('T', ' ');
 const normalizeIngredientName = (value) => String(value || '').trim();
+const ALLOWED_RECIPE_TYPES = new Set(['comida', 'sopa', 'complemento', 'otro']);
+
+const normalizeRecipeType = (value) => {
+  const normalized = String(value || '').trim().toLowerCase();
+  return ALLOWED_RECIPE_TYPES.has(normalized) ? normalized : 'comida';
+};
 
 export const getAllRecipes = async () => {
   const [rows] = await pool.query(
@@ -32,6 +38,7 @@ export const getAllRecipes = async () => {
         u.username AS userId,
         r.creation_date AS creationDate,
         r.last_modified_date AS lastModifiedDate,
+        r.recipe_type AS recipeType,
         r.preparacion,
         r.score,
         ri.cantidad,
@@ -54,6 +61,7 @@ export const getAllRecipes = async () => {
         userId: row.userId,
         creationDate: new Date(row.creationDate).toISOString(),
         lastModifiedDate: new Date(row.lastModifiedDate).toISOString(),
+        recipeType: normalizeRecipeType(row.recipeType),
         score: Number(row.score),
         ingredientes: [],
         preparacion: normalizePreparation(row.preparacion),
@@ -103,11 +111,12 @@ export async function addRecipe(nuevaReceta) {
     const lastModifiedDate = toMySqlDateTime(lastModifiedDateObject);
     const porciones = Number(nuevaReceta.porciones ?? 1);
     const score = Number(nuevaReceta.score ?? 4.5);
+    const recipeType = normalizeRecipeType(nuevaReceta.recipeType);
 
     const [recipeInsertResult] = await conn.query(
       `
-        INSERT INTO recipes (nombre, user_id, preparacion, score, porciones, creation_date, last_modified_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO recipes (nombre, user_id, preparacion, score, porciones, creation_date, last_modified_date, recipe_type)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         nuevaReceta.nombre,
@@ -117,6 +126,7 @@ export async function addRecipe(nuevaReceta) {
         Number.isNaN(porciones) || porciones < 1 ? 1 : porciones,
         creationDate,
         lastModifiedDate,
+        recipeType,
       ]
     );
 
@@ -164,6 +174,7 @@ export async function addRecipe(nuevaReceta) {
       userId: userRows[0]?.username || String(nuevaReceta.userId),
       creationDate: creationDateObject.toISOString(),
       lastModifiedDate: lastModifiedDateObject.toISOString(),
+      recipeType,
       score: Number.isNaN(score) ? 4.5 : score,
       ingredientes: ingredients,
       preparacion: normalizePreparation(nuevaReceta.preparacion),

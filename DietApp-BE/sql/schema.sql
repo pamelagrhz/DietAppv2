@@ -16,6 +16,13 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 -- Table for recipes
+CREATE TABLE IF NOT EXISTS recipe_types (
+  name VARCHAR(30) PRIMARY KEY
+);
+
+INSERT IGNORE INTO recipe_types (name)
+VALUES ('comida'), ('sopa'), ('complemento'), ('otro');
+
 CREATE TABLE IF NOT EXISTS recipes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
@@ -25,10 +32,16 @@ CREATE TABLE IF NOT EXISTS recipes (
   porciones INT NOT NULL DEFAULT 1,
   creation_date DATETIME NOT NULL,
   last_modified_date DATETIME NOT NULL,
+  recipe_type VARCHAR(30) NOT NULL DEFAULT 'comida',
   INDEX idx_recipes_user_id (user_id),
+  INDEX idx_recipes_recipe_type (recipe_type),
   CONSTRAINT fk_recipes_user FOREIGN KEY (user_id)
     REFERENCES users(id)
     ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_recipes_recipe_type FOREIGN KEY (recipe_type)
+    REFERENCES recipe_types(name)
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );
 
@@ -70,5 +83,24 @@ CREATE TABLE IF NOT EXISTS meal_plan_entries (
   CONSTRAINT fk_meal_plan_user FOREIGN KEY (user_id)
     REFERENCES users(id)
     ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS meal_plan_week_sections (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  week_start DATE NOT NULL,
+  section_type VARCHAR(30) NOT NULL,
+  recipe_name VARCHAR(255) NOT NULL,
+  last_modified_date DATETIME NOT NULL,
+  UNIQUE KEY uq_week_section_recipe (user_id, week_start, section_type, recipe_name),
+  INDEX idx_week_sections_user_week (user_id, week_start),
+  CONSTRAINT fk_week_sections_user FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_week_sections_type FOREIGN KEY (section_type)
+    REFERENCES recipe_types(name)
+    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );

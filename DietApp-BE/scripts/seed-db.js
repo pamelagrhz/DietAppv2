@@ -27,10 +27,13 @@ try {
   await conn.beginTransaction();
 // Clean tables before inserting new data
   await conn.query('DELETE FROM meal_plan_entries');
+  await conn.query('DELETE FROM meal_plan_week_sections');
   await conn.query('DELETE FROM recipe_ingredients');
   await conn.query('DELETE FROM ingredients');
   await conn.query('DELETE FROM recipes');
+  await conn.query('DELETE FROM recipe_types');
   await conn.query('DELETE FROM users');
+  await conn.query("INSERT INTO recipe_types (name) VALUES ('comida'), ('sopa'), ('complemento'), ('otro')");
 // Insert users and recipes data into the MySQL database, linking recipes to users by username and ensuring that all data is properly formatted and validated before insertion
   for (const user of users) {
     await conn.query(
@@ -63,8 +66,8 @@ try {
 
     const [insertRecipe] = await conn.query(
       `
-        INSERT INTO recipes (nombre, user_id, preparacion, score, porciones, creation_date, last_modified_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO recipes (nombre, user_id, preparacion, score, porciones, creation_date, last_modified_date, recipe_type)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         recipe.nombre,
@@ -78,6 +81,7 @@ try {
         1,
         creationDate,
         lastModifiedDate,
+        String(recipe.recipeType || 'comida').trim() || 'comida',
       ]
     );
 

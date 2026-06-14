@@ -40,6 +40,7 @@ export const getUserByUsername = async (username) => {
     mail: user.mail,
     recipes: recipesRows.map((recipe) => recipe.nombre),
     recipeLength: recipesRows.length,
+    // recipetypes
     score: typeof user.score === 'number' ? user.score : Number(user.score ?? 4.5),
   };
 };

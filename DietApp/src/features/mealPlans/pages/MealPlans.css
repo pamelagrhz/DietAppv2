@@ -65,6 +65,13 @@
   box-shadow: 0 2px 0 rgba(9, 20, 13, 0.03) !important;
 }
 
+.meal-plans-week-sections-card {
+  border-radius: 20px !important;
+  border: 1px solid #d8ddd4 !important;
+  background: #f7f8f4 !important;
+  box-shadow: 0 2px 0 rgba(9, 20, 13, 0.03) !important;
+}
+
 .meal-plans-outline-button {
   color: #1c5a40 !important;
   border-color: #c6cbc4 !important;
