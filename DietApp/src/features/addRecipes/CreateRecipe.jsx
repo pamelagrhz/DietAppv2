@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { createRecipe as createRecipeRequest, getIngredients } from '../showRecipes/services/recipes.service';
+import { createRecipe as createRecipeRequest, getIngredients, getRecipeTypes } from '../showRecipes/services/recipes.service';
 import IngredientsSection from './components/IngredientsSection.jsx';
 import AddStepsSection from './components/AddStepsSection.jsx';
 import NumberSpinner from './components/NumberSpinner.jsx';
@@ -9,6 +9,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import './CreateRecipe.css';
+import Autocomplete from '@mui/material/Autocomplete';
 
 
 export default function CreateRecipe() {
@@ -16,6 +17,8 @@ export default function CreateRecipe() {
     const [ingredients, setIngredients] = useState([]); // array de ingredientes
     const [ingredientInput, setIngredientInput] = useState(""); // input controlado
     const [ingredientOptions, setIngredientOptions] = useState([]);
+    const [recipeType, setRecipeType] = useState("");
+    const [recipeTypeInput, setRecipeTypeInput] = useState("");
     const [cantidadInput, setCantidadInput] = useState("");
     const [porcionesInput, setPorcionesInput] = useState("1");
     const [medidaInput, setMedidaInput] = useState("");
@@ -103,6 +106,7 @@ export default function CreateRecipe() {
             porciones: Number(porcionesInput),
             ingredientes: ingredients,
             preparacion: instructionsText.trim(),
+            recipeType: 'comida',
             userId: "pamelagrhz", // TODO: Replace with actual user ID
             };
 
@@ -131,6 +135,28 @@ export default function CreateRecipe() {
             setIsSubmitting(false);
         }
     };
+    useEffect(() => {
+        let isMounted = true;
+        const loadRecipeTypes = async () => {
+            try {
+                const types = await getRecipeTypes();
+                if (isMounted) {
+                    const uniqueTypes = Array.from(new Set(types));
+                    setRecipeType(uniqueTypes);
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setRecipeType([]);
+                }
+            }
+        };
+
+        loadRecipeTypes();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -141,7 +167,7 @@ export default function CreateRecipe() {
                 if (isMounted) {
                     const unique = Array.from(new Set(result));
                     setIngredientOptions(unique);
-                }
+                } 
             } catch (error) {
                 if (isMounted) {
                     setIngredientOptions([]);
@@ -190,7 +216,27 @@ export default function CreateRecipe() {
                             helperText={fieldErrors.recipeName ? 'Falta el nombre de la receta' : ''}
                             fullWidth
                         />
+                        <Autocomplete
+                            freeSolo
+                            options={recipeType}
+                            inputValue={recipeTypeInput}
+                            onInputChange={(event, newInputValue) => {
+                                setRecipeTypeInput(newInputValue);
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Tipo de receta"
+                                    placeholder="Ej: Sopa"
+                                    size="small"
+                                    error={fieldErrors.tipoReceta}
+                                    helperText={fieldErrors.tipoReceta ? 'Falta el tipo de receta' : ''}
+                                />
+                            )}
+                        />
+                        
                     </Grid>
+                    
                     <Grid sx={{ width: { xs: '100%', sm: '30%' } }}>
                         <NumberSpinner
                             onValueChange={(value) => {

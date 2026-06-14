@@ -42,3 +42,11 @@ export const createRecipe = async (recipeData) => {
 
     return response.json();
 };
+
+export const getRecipeTypes = async () => {
+    const response = await fetch('/api/recipe-types');
+    if (!response.ok) {
+        throw new Error('No se pudieron obtener los tipos de receta');
+    }
+    return response.json();
+};

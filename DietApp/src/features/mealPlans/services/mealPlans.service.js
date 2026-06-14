@@ -9,13 +9,13 @@ export const getMealPlan = async ({ userId = 'pamelagrhz', page = 1 } = {}) => {
   return response.json();
 };
 
-export const saveMealPlan = async ({ userId = 'pamelagrhz', page = 1, days }) => {
+export const saveMealPlan = async ({ userId = 'pamelagrhz', page = 1, days, weekSections }) => {
   const response = await fetch('/api/meal-plans', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userId, page, days }),
+    body: JSON.stringify({ userId, page, days, weekSections }),
   });
 
   if (!response.ok) {
@@ -26,13 +26,16 @@ export const saveMealPlan = async ({ userId = 'pamelagrhz', page = 1, days }) =>
   return response.json();
 };
 
-export const searchMealPlanRecipes = async (query) => {
+export const searchMealPlanRecipes = async (query, type = '') => {
   const normalizedQuery = query.trim();
   if (normalizedQuery.length < 3) {
     return [];
   }
 
   const searchParams = new URLSearchParams({ q: normalizedQuery });
+  if (type.trim()) {
+    searchParams.set('type', type.trim());
+  }
   const response = await fetch(`/api/meal-plans/recipes/search?${searchParams.toString()}`);
 
   if (!response.ok) {

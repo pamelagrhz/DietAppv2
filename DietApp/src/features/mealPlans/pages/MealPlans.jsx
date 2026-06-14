@@ -29,6 +29,7 @@ import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCirc
 export default function MealPlans() {
   const [recipes, setRecipes] = useState([]);
   const [weekDays, setWeekDays] = useState([]);
+  const [weekSections, setWeekSections] = useState({ sopa: [], complemento: [], otro: [] });
   const [weekPage, setWeekPage] = useState(1);
   const [weekStart, setWeekStart] = useState('');
   const [weekEnd, setWeekEnd] = useState('');
@@ -47,9 +48,32 @@ export default function MealPlans() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const recipesByType = useMemo(() => {
+    const grouped = {
+      comida: [],
+      sopa: [],
+      complemento: [],
+      otro: [],
+    };
+
+    recipes.forEach((recipe) => {
+      const name = recipe?.nombre;
+      const type = String(recipe?.recipeType || 'comida').trim().toLowerCase();
+      if (!name) {
+        return;
+      }
+
+      if (grouped[type]) {
+        grouped[type].push(name);
+      }
+    });
+
+    return grouped;
+  }, [recipes]);
+
   const recipeNames = useMemo(
-    () => recipes.map((recipe) => recipe?.nombre).filter(Boolean),
-    [recipes]
+    () => recipesByType.comida,
+    [recipesByType]
   );
   const recipesByName = useMemo(() => {
     const map = new Map();
@@ -93,12 +117,12 @@ export default function MealPlans() {
   }, []);
   
   const randomRecipe = (index) => {
-    if (recipes.length === 0) {
+    if (recipeNames.length === 0) {
       console.error('No hay recetas disponibles para seleccionar aleatoriamente.');
       return;
     }
-    const randomIndex = Math.floor(Math.random() * recipes.length);
-    handleRecipeChange(index, recipes[randomIndex]?.nombre);
+    const randomIndex = Math.floor(Math.random() * recipeNames.length);
+    handleRecipeChange(index, recipeNames[randomIndex] || '');
   }
 
   useEffect(() => {
@@ -114,6 +138,11 @@ export default function MealPlans() {
         }
 
         setWeekDays(Array.isArray(mealPlanResult?.days) ? mealPlanResult.days : []);
+        setWeekSections({
+          sopa: Array.isArray(mealPlanResult?.weekSections?.sopa) ? mealPlanResult.weekSections.sopa : [],
+          complemento: Array.isArray(mealPlanResult?.weekSections?.complemento) ? mealPlanResult.weekSections.complemento : [],
+          otro: Array.isArray(mealPlanResult?.weekSections?.otro) ? mealPlanResult.weekSections.otro : [],
+        });
         setWeekStart(mealPlanResult?.weekStart || '');
         setWeekEnd(mealPlanResult?.weekEnd || '');
       
@@ -151,7 +180,7 @@ export default function MealPlans() {
 
     const timeoutId = setTimeout(async () => {
       try {
-        const results = await searchMealPlanRecipes(searchTerm);
+        const results = await searchMealPlanRecipes(searchTerm, 'comida');
         if (mounted) {
           setSearchResultsByDate((prev) => ({
             ...prev,
@@ -225,6 +254,7 @@ export default function MealPlans() {
         userId: 'pamelagrhz',
         page: weekPage,
         days: weekDays,
+        weekSections,
       });
       setSuccess('Plan semanal guardado correctamente');
     } catch (saveError) {
@@ -410,6 +440,41 @@ export default function MealPlans() {
           </Card>
         ))}
       </Box>
+
+      <Card className="meal-plans-week-sections-card">
+        <CardContent>
+          <Typography variant="h6" sx={{ fontFamily: 'Bitter, Cambria, Georgia, serif', mb: 1 }}>
+            Otros // TODO: Implementar en BD
+          </Typography>
+          <Typography sx={{ fontSize: '0.9rem', color: '#5f6863', mb: 2 }}>
+            Agrega varias recetas por categoria para la semana.
+          </Typography>
+
+          <Box sx={{ display: 'grid', gap: 2 }}>
+            <Autocomplete
+              multiple
+              options={recipesByType.sopa}
+              value={weekSections.sopa}
+              onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, sopa: newValue }))}
+              renderInput={(params) => <TextField {...params} size="small" label="Sopas" />}
+            />
+            <Autocomplete
+              multiple
+              options={recipesByType.complemento}
+              value={weekSections.complemento}
+              onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, complemento: newValue }))}
+              renderInput={(params) => <TextField {...params} size="small" label="Complementos" />}
+            />
+            <Autocomplete
+              multiple
+              options={recipesByType.otro}
+              value={weekSections.otro}
+              onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, otro: newValue }))}
+              renderInput={(params) => <TextField {...params} size="small" label="Otros" />}
+            />
+          </Box>
+        </CardContent>
+      </Card>
     </div>
   );
 }
