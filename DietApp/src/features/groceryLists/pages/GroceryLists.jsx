@@ -76,7 +76,9 @@ export default function GroceryLists() {
 
   const mealPlanAssignments = useMemo(
     () => mealPlanDays
-      .map((day) => ({
+      .map((day) => (
+        // console.log('Procesando día del meal plan:', day),
+         {
         date: day?.date,
         dayLabel: day?.dayLabel,
         recipeName: day?.recipeName || '',
@@ -181,7 +183,7 @@ export default function GroceryLists() {
                       <a onClick={() => navigate('/meal-plans')} disabled={loading}> plan semanal seleccionado.</a>
 
           </Typography>
-
+{/* TODO: implementar los complementos meal_plan_week_sections db */}
           <Box sx={{ display: 'grid', gap: 1 }}>
             {mealPlanAssignments.length > 0 ? mealPlanAssignments.map((entry, idx) => (
               <Typography

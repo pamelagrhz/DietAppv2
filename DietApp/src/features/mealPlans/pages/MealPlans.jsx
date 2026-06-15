@@ -20,16 +20,14 @@ import {
 } from '../services/mealPlans.service';
 import './MealPlans.css';
 
-// Icons
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
 
-
 export default function MealPlans() {
   const [recipes, setRecipes] = useState([]);
   const [weekDays, setWeekDays] = useState([]);
-  const [weekSections, setWeekSections] = useState({ sopa: [], complemento: [], otro: [] });
+  const [weekSections, setWeekSections] = useState({ otros: [] });
   const [weekPage, setWeekPage] = useState(1);
   const [weekStart, setWeekStart] = useState('');
   const [weekEnd, setWeekEnd] = useState('');
@@ -48,33 +46,16 @@ export default function MealPlans() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const recipesByType = useMemo(() => {
-    const grouped = {
-      comida: [],
-      sopa: [],
-      complemento: [],
-      otro: [],
-    };
-
-    recipes.forEach((recipe) => {
-      const name = recipe?.nombre;
-      const type = String(recipe?.recipeType || 'comida').trim().toLowerCase();
-      if (!name) {
-        return;
-      }
-
-      if (grouped[type]) {
-        grouped[type].push(name);
-      }
-    });
-
-    return grouped;
-  }, [recipes]);
-
-  const recipeNames = useMemo(
-    () => recipesByType.comida,
-    [recipesByType]
+  const mainRecipeNames = useMemo(
+    () => recipes.filter((recipe) => String(recipe?.recipeType || '').toLowerCase() === 'comida').map((recipe) => recipe?.nombre).filter(Boolean),
+    [recipes]
   );
+
+  const otherRecipeNames = useMemo(
+    () => recipes.filter((recipe) => String(recipe?.recipeType || '').toLowerCase() !== 'comida').map((recipe) => recipe?.nombre).filter(Boolean),
+    [recipes]
+  );
+
   const recipesByName = useMemo(() => {
     const map = new Map();
     recipes.forEach((recipe) => {
@@ -85,12 +66,14 @@ export default function MealPlans() {
     return map;
   }, [recipes]);
 
-   useEffect(() => {
-    setWeekLabel(weekStart && weekEnd
-      ? new Date(weekStart).toLocaleString('es-ES', { month: 'long' }) === new Date(weekEnd).toLocaleString('es-ES', { month: 'long' })
-        ? `${weekStart.split('-')[2]} - ${weekEnd.split('-')[2]} ${new Date(weekStart).toLocaleString('es-ES', { month: 'long' })} ${new Date(weekStart).getFullYear()}`
-        : `${weekStart.split('-')[2]} ${new Date(weekStart).toLocaleString('es-ES', { month: 'long' })} - ${weekEnd.split('-')[2]} ${new Date(weekEnd).toLocaleString('es-ES', { month: 'long' })} ${new Date(weekEnd).getFullYear()}`
-      : 'Semana');
+  useEffect(() => {
+    setWeekLabel(
+      weekStart && weekEnd
+        ? new Date(weekStart).toLocaleString('es-ES', { month: 'long' }) === new Date(weekEnd).toLocaleString('es-ES', { month: 'long' })
+          ? `${weekStart.split('-')[2]} - ${weekEnd.split('-')[2]} ${new Date(weekStart).toLocaleString('es-ES', { month: 'long' })} ${new Date(weekStart).getFullYear()}`
+          : `${weekStart.split('-')[2]} ${new Date(weekStart).toLocaleString('es-ES', { month: 'long' })} - ${weekEnd.split('-')[2]} ${new Date(weekEnd).toLocaleString('es-ES', { month: 'long' })} ${new Date(weekEnd).getFullYear()}`
+        : 'Semana'
+    );
   }, [weekStart, weekEnd]);
 
   useEffect(() => {
@@ -115,15 +98,6 @@ export default function MealPlans() {
       mounted = false;
     };
   }, []);
-  
-  const randomRecipe = (index) => {
-    if (recipeNames.length === 0) {
-      console.error('No hay recetas disponibles para seleccionar aleatoriamente.');
-      return;
-    }
-    const randomIndex = Math.floor(Math.random() * recipeNames.length);
-    handleRecipeChange(index, recipeNames[randomIndex] || '');
-  }
 
   useEffect(() => {
     let mounted = true;
@@ -139,13 +113,10 @@ export default function MealPlans() {
 
         setWeekDays(Array.isArray(mealPlanResult?.days) ? mealPlanResult.days : []);
         setWeekSections({
-          sopa: Array.isArray(mealPlanResult?.weekSections?.sopa) ? mealPlanResult.weekSections.sopa : [],
-          complemento: Array.isArray(mealPlanResult?.weekSections?.complemento) ? mealPlanResult.weekSections.complemento : [],
-          otro: Array.isArray(mealPlanResult?.weekSections?.otro) ? mealPlanResult.weekSections.otro : [],
+          otros: Array.isArray(mealPlanResult?.weekSections?.otros) ? mealPlanResult.weekSections.otros : [],
         });
         setWeekStart(mealPlanResult?.weekStart || '');
         setWeekEnd(mealPlanResult?.weekEnd || '');
-      
         setSearchInputByDate({});
         setSearchResultsByDate({});
         setSelectedDays({});
@@ -210,7 +181,8 @@ export default function MealPlans() {
 
   const navigate = (path) => {
     window.location.href = path;
-  }
+  };
+
   const handleBulkApply = () => {
     const selectedDates = Object.keys(selectedDays).filter((date) => selectedDays[date]);
 
@@ -234,14 +206,14 @@ export default function MealPlans() {
     const inputValue = (searchInputByDate[entry.date] ?? '').trim().toLowerCase();
 
     if (!inputValue) {
-      return recipeNames;
+      return mainRecipeNames;
     }
 
     if (inputValue.length < 3) {
-      return recipeNames.filter((name) => name.toLowerCase().includes(inputValue));
+      return mainRecipeNames.filter((name) => name.toLowerCase().includes(inputValue));
     }
 
-    return searchResultsByDate[entry.date] || recipeNames.filter((name) => name.toLowerCase().includes(inputValue));
+    return searchResultsByDate[entry.date] || mainRecipeNames.filter((name) => name.toLowerCase().includes(inputValue));
   };
 
   const handleSave = async () => {
@@ -264,6 +236,15 @@ export default function MealPlans() {
     }
   };
 
+  const randomRecipe = (index) => {
+    if (mainRecipeNames.length === 0) {
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * mainRecipeNames.length);
+    handleRecipeChange(index, mainRecipeNames[randomIndex] || '');
+  };
+
   return (
     <div className="meal-plans-page">
       <div>
@@ -273,30 +254,30 @@ export default function MealPlans() {
 
       <div className="meal-plans-toolbar">
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {/* Semana anterior */}
           <Button
             variant="outlined"
             className="meal-plans-outline-button"
             startIcon={<NavigateBeforeIcon />}
             disabled={weekPage <= 1 || loading}
             onClick={() => setWeekPage((prev) => Math.max(1, prev - 1))}
-          >
-          </Button>
+          />
           <Typography sx={{ minWidth: 220, textAlign: 'center', fontWeight: 600 }} className="meal-plans-compact-label">
             {weekLabel}
           </Typography>
-          {/* Semana siguiente */}
           <Button
             variant="outlined"
             className="meal-plans-outline-button"
             endIcon={<NavigateNextIcon />}
             disabled={loading}
             onClick={() => setWeekPage((prev) => prev + 1)}
-          >
-          </Button>
+          />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-         <Tooltip title="Lista de compras"><Button variant="outlined" className="meal-plans-outline-button" onClick={() => navigate('/grocery-lists')} disabled={loading}><PlaylistAddCheckCircleIcon /></Button></Tooltip>
+          <Tooltip title="Lista de compras">
+            <Button variant="outlined" className="meal-plans-outline-button" onClick={() => navigate('/grocery-lists')} disabled={loading}>
+              <PlaylistAddCheckCircleIcon />
+            </Button>
+          </Tooltip>
           <Button
             variant={bulkEditMode ? 'contained' : 'outlined'}
             className={bulkEditMode ? 'meal-plans-primary-button' : 'meal-plans-outline-button'}
@@ -319,7 +300,7 @@ export default function MealPlans() {
             <Typography sx={{ fontWeight: 600 }}>Edicion multiple:</Typography>
             <Autocomplete
               sx={{ minWidth: 300, flex: 1 }}
-              options={recipeNames}
+              options={mainRecipeNames}
               value={bulkRecipeName}
               inputValue={bulkInputValue}
               onChange={(_, newValue) => setBulkRecipeName(newValue || '')}
@@ -333,7 +314,7 @@ export default function MealPlans() {
                 />
               )}
             />
-              <Button variant="outlined" className="meal-plans-outline-button" onClick={handleBulkApply}>Aplicar a seleccionados</Button>
+            <Button variant="outlined" className="meal-plans-outline-button" onClick={handleBulkApply}>Aplicar a seleccionados</Button>
           </CardContent>
         </Card>
       ) : null}
@@ -405,7 +386,7 @@ export default function MealPlans() {
                   if ((newInputValue || '').trim().length < 3) {
                     setSearchResultsByDate((prev) => ({
                       ...prev,
-                      [entry.date]: recipeNames,
+                      [entry.date]: mainRecipeNames,
                     }));
                     return;
                   }
@@ -420,12 +401,12 @@ export default function MealPlans() {
                     {...params}
                     size="small"
                     label="Buscar receta"
-                  />  
+                  />
                 )}
               />
+
               {entry.recipeName && recipesByName.get(entry.recipeName) ? (
                 <div className="meal-plans-recipe-preview">
-                  {/* Recipe selected */}
                   <RecipeReviewCard recipe={recipesByName.get(entry.recipeName)} />
                 </div>
               ) : (
@@ -433,7 +414,6 @@ export default function MealPlans() {
                   <Typography sx={{ color: '#6f7872', fontStyle: 'italic' }}>Empty Atelier</Typography>
                   <Typography sx={{ color: '#7e8781', fontSize: '0.85rem' }}>Selecciona una receta para este dia</Typography>
                   <Button onClick={() => randomRecipe(index)}>Receta aleatoria</Button>
-
                 </div>
               )}
             </CardContent>
@@ -444,35 +424,26 @@ export default function MealPlans() {
       <Card className="meal-plans-week-sections-card">
         <CardContent>
           <Typography variant="h6" sx={{ fontFamily: 'Bitter, Cambria, Georgia, serif', mb: 1 }}>
-            Otros // TODO: Implementar en BD
+            Otros
           </Typography>
           <Typography sx={{ fontSize: '0.9rem', color: '#5f6863', mb: 2 }}>
-            Agrega varias recetas por categoria para la semana.
+            Aquí puedes agregar varias recetas de tipo sopa, complemento u otro.
           </Typography>
 
-          <Box sx={{ display: 'grid', gap: 2 }}>
-            <Autocomplete
-              multiple
-              options={recipesByType.sopa}
-              value={weekSections.sopa}
-              onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, sopa: newValue }))}
-              renderInput={(params) => <TextField {...params} size="small" label="Sopas" />}
-            />
-            <Autocomplete
-              multiple
-              options={recipesByType.complemento}
-              value={weekSections.complemento}
-              onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, complemento: newValue }))}
-              renderInput={(params) => <TextField {...params} size="small" label="Complementos" />}
-            />
-            <Autocomplete
-              multiple
-              options={recipesByType.otro}
-              value={weekSections.otro}
-              onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, otro: newValue }))}
-              renderInput={(params) => <TextField {...params} size="small" label="Otros" />}
-            />
-          </Box>
+          <Autocomplete
+            multiple
+            options={otherRecipeNames}
+            value={weekSections.otros}
+            onChange={(_, newValue) => setWeekSections((prev) => ({ ...prev, otros: newValue || [] }))}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                size="small"
+                label="Otros"
+                placeholder="Selecciona varias recetas"
+              />
+            )}
+          />
         </CardContent>
       </Card>
     </div>

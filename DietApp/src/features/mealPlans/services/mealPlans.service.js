@@ -1,6 +1,7 @@
 export const getMealPlan = async ({ userId = 'pamelagrhz', page = 1 } = {}) => {
   const query = new URLSearchParams({ userId, page: String(page) });
   const response = await fetch(`/api/meal-plans?${query.toString()}`);
+  console.log('Respuesta del servidor para getMealPlan:', response);
 
   if (!response.ok) {
     throw new Error('No se pudo obtener el plan semanal');
