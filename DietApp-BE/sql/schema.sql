@@ -98,9 +98,5 @@ CREATE TABLE IF NOT EXISTS meal_plan_week_sections (
   CONSTRAINT fk_week_sections_user FOREIGN KEY (user_id)
     REFERENCES users(id)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_week_sections_type FOREIGN KEY (section_type)
-    REFERENCES recipe_types(name)
-    ON DELETE RESTRICT
     ON UPDATE CASCADE
 );

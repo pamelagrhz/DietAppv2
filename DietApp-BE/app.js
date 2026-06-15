@@ -5,6 +5,7 @@ import recipesRoutes from './routes/recipes.routes.js';
 import ingredientsRoutes from './routes/ingredients.routes.js';
 import mealPlansRoutes from './routes/mealPlans.routes.js';
 import usersRoutes from './routes/users.routes.js';
+import recipeTypesRoutes from './routes/recipeTypes.routes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json()); // Middleware to parse JSON bodies
 //all the recipes routes will be prefixed with /recipes
 //use routes/recipes.routes.js for all the endpoints related to recipes
 app.use('/recipes', recipesRoutes);
+app.use('/recipe-types', recipeTypesRoutes);
 app.use('/ingredients', ingredientsRoutes);
 app.use('/meal-plans', mealPlansRoutes);
 app.use('/users', usersRoutes);

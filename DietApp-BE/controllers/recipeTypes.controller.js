@@ -1,11 +1,10 @@
-import getRecipesData from '../data/recipes.json';
+import getAllRecipeTypes from '../services/recipeTypes.services.js';
 
-export const getAllRecipes = async () => {
-  return getRecipesData;
+export const listRecipeTypes = async (req, res) => {
+  try {
+    const recipeTypes = await getAllRecipeTypes();
+    res.json(recipeTypes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
-
-export const addRecipe = async (recipe) => {
-  // This is a placeholder function. In a real application, you would save the recipe to a database.
-  // For now, it just returns the recipe that was passed in.
-  return recipe;
-}

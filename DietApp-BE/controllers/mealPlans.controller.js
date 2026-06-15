@@ -19,7 +19,7 @@ export const getMealPlan = async (req, res) => {
 
 export const upsertMealPlan = async (req, res) => {
   try {
-    const { userId = 'pamelagrhz', page = 1, days } = req.body ?? {};
+    const { userId = 'pamelagrhz', page = 1, days, weekSections = {} } = req.body ?? {};
 
     if (!Array.isArray(days)) {
       return res.status(400).json({ error: 'Debes enviar el plan semanal en days.' });
@@ -29,6 +29,7 @@ export const upsertMealPlan = async (req, res) => {
       userId: String(userId),
       page: Number(page),
       days,
+      weekSections,
     });
 
     res.status(200).json(savedPlan);

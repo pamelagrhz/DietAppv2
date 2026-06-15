@@ -3,7 +3,6 @@
 import { getAllRecipes, addRecipe } from '../services/recipes.services.js'
 
 const ALLOWED_RECIPE_TYPES = new Set(['comida', 'sopa', 'complemento', 'otro']);
-
 export const getRecipes = async (req, res) => {
   try {
     const recipes = await getAllRecipes();

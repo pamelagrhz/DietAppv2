@@ -11,7 +11,7 @@ const WEEK_DAYS = [
 ];
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const WEEK_SECTION_TYPES = ['sopa', 'complemento', 'otro'];
+const OTHER_SECTION_TYPE = 'otros';
 
 const normalizeDateKey = (value) => {
   if (!value) {
@@ -121,18 +121,19 @@ export async function searchRecipesByNameAndType(search = '', recipeType = '') {
     return [];
   }
 
-  const hasType = WEEK_SECTION_TYPES.includes(normalizedType) || normalizedType === 'comida';
+  const usesFoodFilter = normalizedType === 'comida';
+  const usesOtherFilter = normalizedType === OTHER_SECTION_TYPE || normalizedType === 'otros';
 
   const [rows] = await pool.query(
     `
       SELECT nombre
       FROM recipes
       WHERE LOWER(nombre) LIKE CONCAT('%', ?, '%')
-        ${hasType ? 'AND recipe_type = ?' : ''}
+        ${usesFoodFilter ? 'AND recipe_type = ?' : usesOtherFilter ? "AND recipe_type <> 'comida'" : ''}
       ORDER BY nombre ASC
       LIMIT 25
     `,
-    hasType ? [normalizedSearch, normalizedType] : [normalizedSearch]
+    usesFoodFilter ? [normalizedSearch, normalizedType] : [normalizedSearch]
   );
 
   return rows.map((row) => row.nombre).filter((name) => typeof name === 'string');
@@ -174,15 +175,13 @@ export async function getMealPlanWeek({ userId = 'pamelagrhz', page = 1 }) {
   );
 
   const weekSections = {
-    sopa: [],
-    complemento: [],
-    otro: [],
+    otros: [],
   };
 
   sectionRows.forEach((row) => {
     const sectionType = String(row.sectionType || '').trim().toLowerCase();
-    if (WEEK_SECTION_TYPES.includes(sectionType)) {
-      weekSections[sectionType].push(row.recipeName);
+    if (sectionType === OTHER_SECTION_TYPE) {
+      weekSections.otros.push(row.recipeName);
     }
   });
 
@@ -244,30 +243,26 @@ export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days, 
   });
 
   const normalizedWeekSections = {
-    sopa: Array.isArray(weekSections?.sopa) ? weekSections.sopa : [],
-    complemento: Array.isArray(weekSections?.complemento) ? weekSections.complemento : [],
-    otro: Array.isArray(weekSections?.otro) ? weekSections.otro : [],
+    otros: Array.isArray(weekSections?.otros) ? weekSections.otros : [],
   };
 
-  for (const sectionType of WEEK_SECTION_TYPES) {
-    const normalizedNames = normalizedWeekSections[sectionType]
+  const otherRecipes = [...new Set(
+    normalizedWeekSections.otros
       .map((name) => (typeof name === 'string' ? name.trim() : ''))
-      .filter(Boolean);
+      .filter(Boolean)
+  )];
 
-    const uniqueNames = [...new Set(normalizedNames)];
+  otherRecipes.forEach((recipeName) => {
+    if (!recipesByName.has(recipeName)) {
+      throw new Error(`La receta "${recipeName}" no existe.`);
+    }
 
-    uniqueNames.forEach((recipeName) => {
-      if (!recipesByName.has(recipeName)) {
-        throw new Error(`La receta "${recipeName}" no existe.`);
-      }
+    if (recipesByName.get(recipeName) === 'comida') {
+      throw new Error(`La receta "${recipeName}" no puede ir en otros porque es de tipo comida.`);
+    }
+  });
 
-      if (recipesByName.get(recipeName) !== sectionType) {
-        throw new Error(`La receta "${recipeName}" debe ser de tipo ${sectionType}.`);
-      }
-    });
-
-    normalizedWeekSections[sectionType] = uniqueNames;
-  }
+  normalizedWeekSections.otros = otherRecipes;
 
   const weekDates = normalizedDays.map((day) => day.date);
   const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -308,16 +303,14 @@ export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days, 
       [resolvedUserId, weekStartDate]
     );
 
-    for (const sectionType of WEEK_SECTION_TYPES) {
-      for (const recipeName of normalizedWeekSections[sectionType]) {
-        await conn.query(
-          `
-            INSERT INTO meal_plan_week_sections (user_id, week_start, section_type, recipe_name, last_modified_date)
-            VALUES (?, ?, ?, ?, ?)
-          `,
-          [resolvedUserId, weekStartDate, sectionType, recipeName, timestamp]
-        );
-      }
+    for (const recipeName of normalizedWeekSections.otros) {
+      await conn.query(
+        `
+          INSERT INTO meal_plan_week_sections (user_id, week_start, section_type, recipe_name, last_modified_date)
+          VALUES (?, ?, ?, ?, ?)
+        `,
+        [resolvedUserId, weekStartDate, OTHER_SECTION_TYPE, recipeName, timestamp]
+      );
     }
 
     await conn.commit();
