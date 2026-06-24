@@ -19,6 +19,7 @@ import './GroceryLists.css';
 export default function GroceryLists() {
   const [recipes, setRecipes] = useState([]);
   const [mealPlanDays, setMealPlanDays] = useState([]);
+  const [mealExtraPlans, setMealExtraPlans] = useState([]);
   const [mealPlanPage, setMealPlanPage] = useState(1);
   const [weekLabel, setWeekLabel] = useState('');
   const [costByItem, setCostByItem] = useState({});
@@ -40,6 +41,7 @@ export default function GroceryLists() {
         if (mounted) {
           setRecipes(Array.isArray(recipesData) ? recipesData : []);
           setMealPlanDays(Array.isArray(mealPlanData?.days) ? mealPlanData.days : []);
+          setMealExtraPlans(Array.isArray(mealPlanData?.weekSections?.otros) ? mealPlanData.weekSections.otros : []);
           setWeekLabel(mealPlanData?.weekStart && mealPlanData?.weekEnd
             ? new Date(mealPlanData.weekStart).toLocaleString('es-ES', { month: 'long' }) === new Date(mealPlanData.weekEnd).toLocaleString('es-ES', { month: 'long' })
               ? `${mealPlanData.weekStart.split('-')[2]} - ${mealPlanData.weekEnd.split('-')[2]} ${new Date(mealPlanData.weekStart).toLocaleString('es-ES', { month: 'long' })} ${new Date(mealPlanData.weekStart).getFullYear()}`
@@ -86,7 +88,17 @@ export default function GroceryLists() {
       })),
     [mealPlanDays, recipesByName]
   );
-
+  const mealPlanExtraAssignments = useMemo(
+      () => mealExtraPlans
+        .map((extra) => (
+          {
+          recipeName: extra,
+          dayLabel: 'Extra',
+          recipe: recipesByName.get(extra),
+        })),
+      [mealExtraPlans, recipesByName]
+    );
+  
   const selectedRecipes = useMemo(
     () => mealPlanAssignments.map((entry) => entry.recipe).filter(Boolean),
     [mealPlanAssignments]
@@ -183,7 +195,7 @@ export default function GroceryLists() {
                       <a onClick={() => navigate('/meal-plans')} disabled={loading}> plan semanal seleccionado.</a>
 
           </Typography>
-{/* TODO: implementar los complementos meal_plan_week_sections db */}
+{/* TODO: implementar los complementos meal_plan_week_sections db */}          
           <Box sx={{ display: 'grid', gap: 1 }}>
             {mealPlanAssignments.length > 0 ? mealPlanAssignments.map((entry, idx) => (
               <Typography
@@ -203,6 +215,27 @@ export default function GroceryLists() {
               </Typography>
             )) : (
               <Alert severity="info">No hay recetas asignadas en el meal plan de esta semana.</Alert>
+            )}
+          </Box>
+          <Box sx={{ display: 'grid', gap: 1 }}>
+            {mealPlanExtraAssignments.length > 0 ? mealPlanExtraAssignments.map((entry, idx) => (
+              <Typography
+                key={entry.date || `${entry.dayLabel || 'dia'}-${entry.recipeName || 'sin-asignar'}-${idx}`}
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  color: '#1c5a40',
+                  px: 1,
+                  py: 0.75,
+                  borderRadius: 2,
+                  backgroundColor: '#ecefea',
+                  border: '1px solid #d8ddd4',
+                }}
+              >
+                {entry.dayLabel ? `${entry.dayLabel}: ` : ''}{entry.recipeName || 'Sin asignar'}
+              </Typography>
+            )) : (
+              <Alert severity="info">No hay recetas extras asignadas en el meal plan de esta semana.</Alert>
             )}
           </Box>
         </section>
