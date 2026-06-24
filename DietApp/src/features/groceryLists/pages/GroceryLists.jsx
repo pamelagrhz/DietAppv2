@@ -103,10 +103,14 @@ export default function GroceryLists() {
     () => mealPlanAssignments.map((entry) => entry.recipe).filter(Boolean),
     [mealPlanAssignments]
   );
+  const selectedExtraRecipes = useMemo(
+    () => mealPlanExtraAssignments.map((entry) => entry.recipe).filter(Boolean),
+    [mealPlanExtraAssignments]
+  );
 
   const groceryItems = useMemo(
-    () => aggregateIngredients(selectedRecipes),
-    [selectedRecipes]
+    () => aggregateIngredients(selectedRecipes).concat(aggregateIngredients(selectedExtraRecipes)),
+    [selectedRecipes, selectedExtraRecipes]
   );
 
   const totalSpent = useMemo(
@@ -195,7 +199,6 @@ export default function GroceryLists() {
                       <a onClick={() => navigate('/meal-plans')} disabled={loading}> plan semanal seleccionado.</a>
 
           </Typography>
-{/* TODO: implementar los complementos meal_plan_week_sections db */}          
           <Box sx={{ display: 'grid', gap: 1 }}>
             {mealPlanAssignments.length > 0 ? mealPlanAssignments.map((entry, idx) => (
               <Typography
@@ -217,7 +220,7 @@ export default function GroceryLists() {
               <Alert severity="info">No hay recetas asignadas en el meal plan de esta semana.</Alert>
             )}
           </Box>
-          <Box sx={{ display: 'grid', gap: 1 }}>
+          <Box sx={{ display: 'grid', gap: 1, mt: 1 }}>
             {mealPlanExtraAssignments.length > 0 ? mealPlanExtraAssignments.map((entry, idx) => (
               <Typography
                 key={entry.date || `${entry.dayLabel || 'dia'}-${entry.recipeName || 'sin-asignar'}-${idx}`}
