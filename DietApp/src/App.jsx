@@ -48,7 +48,7 @@ function App() {
             <HeaderMenu onMenuOptionClick={handleMenuOptionClick} />
 
       <div className="card">
-        
+        {/* Routing */}
         <Routes>
           <Route path="/" element={<Navigate to="/recipes" replace />} />
           <Route path="/recipes" element={<Recipes />} />
