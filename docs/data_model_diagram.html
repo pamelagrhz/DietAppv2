@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagrama de modelo de datos – DietApp v2</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#e1f5fe',
+        primaryTextColor: '#01579b',
+        primaryBorderColor: '#0288d1',
+        lineColor: '#0288d1',
+        secondaryColor: '#fff3e0',
+        tertiaryColor: '#e8f5e9',
+        fontFamily: 'Segoe UI, Roboto, Helvetica, Arial, sans-serif'
+      },
+      er: {
+        diagramPadding: 24,
+        entityPadding: 12
+      }
+    });
+  </script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7fa;
+      color: #263238;
+    }
+    header {
+      background: #0288d1;
+      color: #fff;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    .diagram-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    .legend {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #0288d1;
+    }
+    .dot.pk { background: #e1f5fe; }
+    .dot.fk { background: #fff3e0; }
+    .dot.uk { background: #e8f5e9; }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+      color: #607d8b;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Modelo de datos – DietApp v2</h1>
+    <p>Diagrama entidad-relación con tablas, llaves primarias, foráneas e índices</p>
+  </header>
+
+  <main>
+    <div class="diagram-card">
+      <pre class="mermaid">
+erDiagram
+    users ||--o{ recipes : "publica"
+    users ||--o{ meal_plan_entries : "planifica"
+    users ||--o{ meal_plan_week_sections : "planifica"
+    recipe_types ||--o{ recipes : "clasifica"
+    recipes ||--o{ recipe_ingredients : "contiene"
+    ingredients ||--o{ recipe_ingredients : "es usado en"
+
+    users {
+        int id PK "AUTO_INCREMENT"
+        varchar_120 username UK "NOT NULL"
+        varchar_200 name "NOT NULL"
+        int age "NULL"
+        varchar_50 genre "NULL"
+        varchar_200 mail UK "NOT NULL"
+        varchar_255 password_hash "NOT NULL"
+        decimal_3_2 score "DEFAULT 4.50"
+        timestamp created_at "DEFAULT CURRENT_TIMESTAMP"
+        timestamp updated_at "ON UPDATE CURRENT_TIMESTAMP"
+    }
+
+    recipe_types {
+        varchar_30 name PK
+    }
+
+    recipes {
+        int id PK "AUTO_INCREMENT"
+        varchar_255 nombre "NOT NULL"
+        int user_id FK "NOT NULL"
+        text preparacion "NOT NULL"
+        decimal_3_2 score "DEFAULT 4.50"
+        int porciones "DEFAULT 1"
+        datetime creation_date "NOT NULL"
+        datetime last_modified_date "NOT NULL"
+        varchar_30 recipe_type FK "DEFAULT 'comida'"
+    }
+
+    ingredients {
+        int id PK "AUTO_INCREMENT"
+        varchar_255 nombre UK "NOT NULL"
+        timestamp created_at "DEFAULT CURRENT_TIMESTAMP"
+        timestamp updated_at "ON UPDATE CURRENT_TIMESTAMP"
+    }
+
+    recipe_ingredients {
+        int id PK "AUTO_INCREMENT"
+        int recipe_id FK "NOT NULL"
+        int ingredient_id FK "NOT NULL"
+        decimal_10_4 cantidad "NOT NULL"
+        varchar_60 medida "NOT NULL"
+    }
+
+    meal_plan_entries {
+        int id PK "AUTO_INCREMENT"
+        int user_id FK "NOT NULL"
+        date date "NOT NULL"
+        varchar_255 recipe_name "NOT NULL"
+        datetime last_modified_date "NOT NULL"
+    }
+
+    meal_plan_week_sections {
+        int id PK "AUTO_INCREMENT"
+        int user_id FK "NOT NULL"
+        date week_start "NOT NULL"
+        varchar_30 section_type "NOT NULL"
+        varchar_255 recipe_name "NOT NULL"
+        datetime last_modified_date "NOT NULL"
+    }
+      </pre>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="dot pk"></span> Llave primaria (PK)</div>
+      <div class="legend-item"><span class="dot fk"></span> Llave foránea (FK)</div>
+      <div class="legend-item"><span class="dot uk"></span> Llave única (UK)</div>
+    </div>
+  </main>
+
+  <footer>
+    Generado a partir de DietApp-BE/sql/schema.sql
+  </footer>
+</body>
+</html>
