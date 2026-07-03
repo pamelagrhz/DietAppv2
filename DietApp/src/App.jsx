@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import './App.css'
 import Recipes from './features/showRecipes/pages/Recipes.jsx';
 import HeaderMenu from './components/headerMenu.jsx';
@@ -11,10 +10,15 @@ import MyRecipes from './features/myRecipes/pages/MyRecipes.jsx';
 import MyRecipesRecipes from './features/myRecipes/pages/MyRecipesRecipes.jsx';
 import MyRecipesFavourites from './features/myRecipes/pages/MyRecipesFavourites.jsx';
 import Help from './features/help/pages/Help.jsx';
-
+import Login from './features/auth/pages/Login.jsx';
+import Logout from './features/auth/pages/Logout.jsx';
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Ocultar el menú en la pantalla de login
+  const showHeader = location.pathname !== '/login';
 
   const handleMenuOptionClick = (action) => {
     if (action === 'newRecipe') {
@@ -39,18 +43,19 @@ function App() {
       navigate('/help');
     }
     if (action === 'logout') {
-      console.log('logout en proceso');
+      navigate('/logout');
     }
   };
 
   return (
     <>
-            <HeaderMenu onMenuOptionClick={handleMenuOptionClick} />
+      {showHeader && <HeaderMenu onMenuOptionClick={handleMenuOptionClick} />}
 
       <div className="card">
-        {/* Routing */}
         <Routes>
           <Route path="/" element={<Navigate to="/recipes" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/new-recipe" element={<CreateRecipe />} />
           <Route path="/meal-plans" element={<MealPlans />} />
