@@ -10,7 +10,9 @@ import MyRecipes from './features/myRecipes/pages/MyRecipes.jsx';
 import MyRecipesRecipes from './features/myRecipes/pages/MyRecipesRecipes.jsx';
 import MyRecipesFavourites from './features/myRecipes/pages/MyRecipesFavourites.jsx';
 import Help from './features/help/pages/Help.jsx';
-import Login from './features/auth/pages/Login.jsx';
+import AuthLayout from './features/auth/components/login/AuthLayout.jsx';
+import Login from './features/auth/pages/login/Login.jsx';
+import Register from './features/auth/pages/register/Register.jsx';
 import Logout from './features/auth/pages/Logout.jsx';
 
 function App() {
@@ -18,7 +20,7 @@ function App() {
   const location = useLocation();
 
   // Ocultar el menú en la pantalla de login
-  const showHeader = location.pathname !== '/login';
+  const showHeader = location.pathname !== '/login' && location.pathname !== '/register';
 
   const handleMenuOptionClick = (action) => {
     if (action === 'newRecipe') {
@@ -54,7 +56,12 @@ function App() {
       <div className="card">
         <Routes>
           <Route path="/" element={<Navigate to="/recipes" replace />} />
-          <Route path="/login" element={<Login />} />
+
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+
           <Route path="/logout" element={<Logout />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/new-recipe" element={<CreateRecipe />} />
