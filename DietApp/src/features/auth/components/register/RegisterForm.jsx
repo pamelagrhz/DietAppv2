@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -9,8 +9,13 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import Alert from '@mui/material/Alert';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { isValidEmail, isValidName, validatePassword, passwordRequirements } from '../../../../utils/validation.js';
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,8 +37,41 @@ export default function RegisterForm() {
     setShowPassword((prev) => !prev);
   };
 
+  const passwordValidation = useMemo(
+    () => validatePassword(register.password),
+    [register.password]
+  );
+
+  const emailError = register.mail.trim().length > 0 && !isValidEmail(register.mail);
+  const firstNameError = register.firstName.trim().length > 0 && !isValidName(register.firstName);
+  const lastNameError = register.lastName.trim().length > 0 && !isValidName(register.lastName);
+
+  const currentYear = new Date().getFullYear();
+  const birthYearNum = Number(register.birthYear);
+  const birthYearError =
+    register.birthYear !== '' &&
+    (Number.isNaN(birthYearNum) || birthYearNum < 1900 || birthYearNum > currentYear);
+
+  const isFormValid = useMemo(() => {
+    const trimmedUsername = register.username.trim();
+    const trimmedMail = register.mail.trim();
+
+    return (
+      trimmedUsername.length > 0 &&
+      isValidName(register.firstName) &&
+      isValidName(register.lastName) &&
+      register.birthYear !== '' &&
+      !birthYearError &&
+      register.genre !== '' &&
+      isValidEmail(trimmedMail) &&
+      passwordValidation.isValid
+    );
+  }, [register, birthYearError, passwordValidation.isValid]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!isFormValid) return;
+
     const fullName = `${register.firstName} ${register.lastName}`.trim();
     console.log('Register:', { ...register, name: fullName });
     // TODO: llamar al servicio de registro
@@ -44,7 +82,8 @@ export default function RegisterForm() {
       <Typography variant="h6" sx={{ color: 'var(--dark-gray-color)' }}>
         Crear cuenta
       </Typography>
-//TODO: Agregar validaciones usuername disponible y mensajes de error
+      //TODO: validar el nombre de usuario 
+
       <TextField
         label="Nombre de usuario"
         value={register.username}
@@ -52,7 +91,7 @@ export default function RegisterForm() {
         fullWidth
         required
       />
-//Agregar validaciones de nombre y apellido, que no sean numeros, que no esten vacios, que no tengan caracteres especiales
+
       <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
           label="Nombre"
@@ -60,6 +99,8 @@ export default function RegisterForm() {
           onChange={handleChange('firstName')}
           fullWidth
           required
+          error={firstNameError}
+          helperText={firstNameError ? 'Solo letras, acentos y espacios' : ''}
         />
         <TextField
           label="Apellido"
@@ -67,9 +108,11 @@ export default function RegisterForm() {
           onChange={handleChange('lastName')}
           fullWidth
           required
+          error={lastNameError}
+          helperText={lastNameError ? 'Solo letras, acentos y espacios' : ''}
         />
       </Box>
-// Agregar validaciones de año de nacimiento, que sea un numero, que no sea mayor al año actual, que no sea menor a 10 años, que no este vacio
+
       <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
           label="Año de nacimiento"
@@ -78,9 +121,11 @@ export default function RegisterForm() {
           onChange={handleChange('birthYear')}
           fullWidth
           required
-          inputProps={{ min: 1900, max: new Date().getFullYear() }}
+          error={birthYearError}
+          helperText={birthYearError ? `Entre 1900 y ${currentYear}` : ''}
+          inputProps={{ min: 1900, max: currentYear }}
         />
-// Agregar validaciones de genero, que sea uno de los valores del select, que no este vacio
+
         <FormControl fullWidth required>
           <InputLabel id="genre-label">Género</InputLabel>
           <Select
@@ -96,8 +141,7 @@ export default function RegisterForm() {
           </Select>
         </FormControl>
       </Box>
-//validaciones de correo, que sea un correo valido, que no este vacio
-//TODO: LT agregar flujo de confirmacion de correo, que se envie un correo con un link de confirmacion, que el usuario tenga que hacer click en el link para activar su cuenta
+
       <TextField
         label="Correo electrónico"
         type="email"
@@ -105,8 +149,10 @@ export default function RegisterForm() {
         onChange={handleChange('mail')}
         fullWidth
         required
+        error={emailError}
+        helperText={emailError ? 'El correo no tiene un formato válido' : ''}
       />
-//validaciones de contraseña, que tenga al menos 8 caracteres, que tenga al menos una letra mayuscula, que tenga al menos un numero, que tenga al menos un caracter especial, que no este vacia
+
       <TextField
         label="Contraseña"
         type={showPassword ? 'text' : 'password'}
@@ -124,15 +170,43 @@ export default function RegisterForm() {
           ),
         }}
       />
-// Desactivar si es que no se cumplen las validaciones o si alguno de los campos esta vacio
+
+      {register.password.length > 0 && (
+        <Alert severity={passwordValidation.isValid ? 'success' : 'info'} sx={{ padding: 0 }}>
+          <List dense sx={{ padding: 0 }}>
+            {passwordRequirements.map((req) => {
+              const passed = passwordValidation.checks[req.key];
+              return (
+                <ListItem key={req.key} sx={{ paddingY: 0 }}>
+                  <ListItemText
+                    primary={req.label}
+                    primaryTypographyProps={{
+                      sx: {
+                        color: passed ? 'success.main' : 'text.secondary',
+                        textDecoration: passed ? 'line-through' : 'none',
+                      },
+                    }}
+                  />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Alert>
+      )}
+
       <Button
         type="submit"
         variant="contained"
         size="large"
         fullWidth
+        disabled={!isFormValid}
         sx={{
           backgroundColor: 'var(--green-color)',
           '&:hover': { backgroundColor: 'var(--dark-gray-color)' },
+          '&.Mui-disabled': {
+            backgroundColor: 'rgba(27, 48, 34, 0.4)',
+            color: 'var(--ligth-color)',
+          },
         }}
       >
         Registrarse

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -17,8 +17,13 @@ export default function LoginForm() {
     setShowPassword((prev) => !prev);
   };
 
+  const isFormValid = useMemo(() => {
+    return loginUser.trim().length > 0 && loginPassword.trim().length > 0;
+  }, [loginUser, loginPassword]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!isFormValid) return;
     console.log('Login:', { loginUser, loginPassword });
     // TODO: llamar al servicio de autenticación
   };
@@ -61,9 +66,14 @@ export default function LoginForm() {
         variant="contained"
         size="large"
         fullWidth
+        disabled={!isFormValid}
         sx={{
           backgroundColor: 'var(--green-color)',
           '&:hover': { backgroundColor: 'var(--dark-gray-color)' },
+          '&.Mui-disabled': {
+            backgroundColor: 'rgba(27, 48, 34, 0.4)',
+            color: 'var(--ligth-color)',
+          },
         }}
       >
         Entrar
