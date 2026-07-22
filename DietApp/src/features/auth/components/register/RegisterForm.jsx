@@ -7,18 +7,14 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import PasswordField from '../common/PasswordField.jsx';
 import { isValidEmail, isValidName, validatePassword, passwordRequirements } from '../../../../utils/validation.js';
 
 export default function RegisterForm() {
-  const [showPassword, setShowPassword] = useState(false);
   const [register, setRegister] = useState({
     username: '',
     firstName: '',
@@ -31,10 +27,6 @@ export default function RegisterForm() {
 
   const handleChange = (field) => (event) => {
     setRegister((prev) => ({ ...prev, [field]: event.target.value }));
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword((prev) => !prev);
   };
 
   const passwordValidation = useMemo(
@@ -82,7 +74,7 @@ export default function RegisterForm() {
       <Typography variant="h6" sx={{ color: 'var(--dark-gray-color)' }}>
         Crear cuenta
       </Typography>
-      //TODO: validar el nombre de usuario 
+      {/* //TODO: validar el nombre de usuario  */}
 
       <TextField
         label="Nombre de usuario"
@@ -153,22 +145,10 @@ export default function RegisterForm() {
         helperText={emailError ? 'El correo no tiene un formato válido' : ''}
       />
 
-      <TextField
+      <PasswordField
         label="Contraseña"
-        type={showPassword ? 'text' : 'password'}
         value={register.password}
         onChange={handleChange('password')}
-        fullWidth
-        required
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={toggleShowPassword} edge="end" aria-label="toggle password visibility">
-                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
       />
 
       {register.password.length > 0 && (

@@ -3,19 +3,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import PasswordField from '../common/PasswordField.jsx';
 
 export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
   const [loginUser, setLoginUser] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-
-  const toggleShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   const isFormValid = useMemo(() => {
     return loginUser.trim().length > 0 && loginPassword.trim().length > 0;
@@ -43,22 +35,10 @@ export default function LoginForm() {
         autoFocus
       />
 
-      <TextField
+      <PasswordField
         label="Contraseña"
-        type={showPassword ? 'text' : 'password'}
         value={loginPassword}
         onChange={(e) => setLoginPassword(e.target.value)}
-        fullWidth
-        required
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={toggleShowPassword} edge="end" aria-label="toggle password visibility">
-                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
       />
 
       <Button
