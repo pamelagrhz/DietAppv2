@@ -6,6 +6,7 @@ import ingredientsRoutes from './routes/ingredients.routes.js';
 import mealPlansRoutes from './routes/mealPlans.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import recipeTypesRoutes from './routes/recipeTypes.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use('/recipe-types', recipeTypesRoutes);
 app.use('/ingredients', ingredientsRoutes);
 app.use('/meal-plans', mealPlansRoutes);
 app.use('/users', usersRoutes);
+app.use('/auth', authRoutes);
 
 export default app;

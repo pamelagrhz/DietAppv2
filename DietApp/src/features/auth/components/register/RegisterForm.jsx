@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -12,7 +12,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import PasswordField from '../common/PasswordField.jsx';
-import { isValidEmail, isValidName, validatePassword, passwordRequirements } from '../../../../utils/validation.js';
+import { isValidEmail, isValidName, isValidUsername, validatePassword, passwordRequirements } from '../../../../utils/validation.js';
+import { checkUsername } from '../../../../services/auth.service.js';
 
 export default function RegisterForm() {
   const [register, setRegister] = useState({
@@ -24,20 +25,50 @@ export default function RegisterForm() {
     mail: '',
     password: '',
   });
+  const [usernameError, setUsernameError] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
+  const [usernameChecking, setUsernameChecking] = useState(false);
 
   const handleChange = (field) => (event) => {
     setRegister((prev) => ({ ...prev, [field]: event.target.value }));
   };
+// Validate username availability when it changes
+  useEffect(() => {
+    const trimmedUsername = register.username.trim();
+    const isValid = isValidUsername(trimmedUsername);
+    setUsernameError(trimmedUsername.length > 0 && !isValid);
+    setUsernameAvailable(null);
 
+    if (!isValid) {
+      setUsernameChecking(false);
+      return;
+    }
+
+    setUsernameChecking(true);
+    const timeoutId = setTimeout(async () => {
+      try {
+        const available = await checkUsername(trimmedUsername);
+        setUsernameAvailable(available);
+      } catch {
+        setUsernameAvailable(false);
+      } finally {
+        setUsernameChecking(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [register.username]);
+// Validate password requirements whenever the password changes
   const passwordValidation = useMemo(
     () => validatePassword(register.password),
     [register.password]
   );
-
+// Validate other fields
   const emailError = register.mail.trim().length > 0 && !isValidEmail(register.mail);
   const firstNameError = register.firstName.trim().length > 0 && !isValidName(register.firstName);
   const lastNameError = register.lastName.trim().length > 0 && !isValidName(register.lastName);
 
+  // Validate birth year to ensure it's a valid year between 1900 and the current year
   const currentYear = new Date().getFullYear();
   const birthYearNum = register.birthYear
     ? Number(register.birthYear.split('-')[0])
@@ -46,12 +77,15 @@ export default function RegisterForm() {
     register.birthYear !== '' &&
     (Number.isNaN(birthYearNum) || birthYearNum < 1900 || birthYearNum > currentYear);
 
+    //check if the entire form is valid based on all individual validations
   const isFormValid = useMemo(() => {
     const trimmedUsername = register.username.trim();
     const trimmedMail = register.mail.trim();
 
     return (
-      trimmedUsername.length > 0 &&
+      isValidUsername(trimmedUsername) &&
+      usernameAvailable === true &&
+      !usernameChecking &&
       isValidName(register.firstName) &&
       isValidName(register.lastName) &&
       register.birthYear !== '' &&
@@ -60,8 +94,9 @@ export default function RegisterForm() {
       isValidEmail(trimmedMail) &&
       passwordValidation.isValid
     );
-  }, [register, birthYearError, passwordValidation.isValid]);
+  }, [register, birthYearError, passwordValidation.isValid, usernameAvailable, usernameChecking]);
 
+  //Send the form data to the backend when the form is submitted
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -76,14 +111,24 @@ export default function RegisterForm() {
       <Typography variant="h6" sx={{ color: 'var(--dark-gray-color)' }}>
         Crear cuenta
       </Typography>
-      {/* //TODO: validar el nombre de usuario  */}
-
       <TextField
         label="Nombre de usuario"
         value={register.username}
         onChange={handleChange('username')}
         fullWidth
         required
+        error={usernameError || usernameAvailable === false}
+        helperText={
+          usernameError
+            ? 'Solo letras, números, guiones bajos y puntos. Mínimo 5 caracteres.'
+            : usernameAvailable === false
+              ? 'Nombre de usuario no disponible'
+              : usernameAvailable === true && !usernameChecking
+                ? 'Nombre de usuario disponible'
+                : usernameChecking
+                  ? 'Verificando disponibilidad...'
+                  : ''
+        }
       />
 
       <Box sx={{ display: 'flex', gap: 2 }}>
@@ -106,7 +151,7 @@ export default function RegisterForm() {
           helperText={lastNameError ? 'Solo letras, acentos y espacios' : ''}
         />
       </Box>
-
+{/* TODO: Fix view placeholder errors */}
       <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
           label="Fecha de nacimiento"
@@ -175,7 +220,7 @@ export default function RegisterForm() {
           </List>
         </Alert>
       )}
-
+//TODO: Implement the functionality to submit the form data to the backend when the user clicks the "Registrarse" button.
       <Button
         type="submit"
         variant="contained"

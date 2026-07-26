@@ -17,6 +17,16 @@ export function isValidName(name) {
 }
 
 /**
+ * Valida que el nombre de usuario tenga entre 3 y 30 caracteres
+ * y solo contenga letras, números, guiones bajos y puntos.
+ */
+export function isValidUsername(username) {
+  const usernameRegex = /^[a-zA-Z0-9_.]{5,30}$/;
+  const trimmed = String(username || '').trim();
+  return trimmed.length > 0 && usernameRegex.test(trimmed);
+}
+
+/**
  * Valida que la contraseña cumpla con:
  * - Mínimo 10 caracteres
  * - Al menos una mayúscula
