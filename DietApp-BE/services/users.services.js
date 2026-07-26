@@ -1,4 +1,5 @@
 import pool from '../db.js';
+import { comparePassword, hashPassword } from './auth.services.js';
 
 export const getUserByUsername = async (username) => {
   const normalizedUsername = String(username || '').trim();
@@ -80,11 +81,14 @@ export const changeUserPassword = async ({ username, currentPassword, newPasswor
   }
 
   const storedPassword = String(user.password_hash || '');
-  if (storedPassword !== current) {
+  const isCurrentPasswordValid = await comparePassword(current, storedPassword);
+
+  if (!isCurrentPasswordValid) {
     throw new Error('El password actual es incorrecto.');
   }
 
-  await pool.query('UPDATE users SET password_hash = ? WHERE id = ?', [nextPassword, user.id]);
+  const newPasswordHash = await hashPassword(nextPassword);
+  await pool.query('UPDATE users SET password_hash = ? WHERE id = ?', [newPasswordHash, user.id]);
 
   return { message: 'Password actualizado correctamente.' };
 };

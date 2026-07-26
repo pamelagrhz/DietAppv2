@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fs from 'fs/promises';
 import pool from '../db.js';
+import { hashPassword } from '../services/auth.services.js';
 
 const toDateOrNow = (value) => {
   const parsed = new Date(value);
@@ -47,7 +48,7 @@ try {
         Number(user.age ?? 0),
         user.genre || null,
         user.mail,
-        user.password || '',
+        await hashPassword(user.password || ''),
         Number(user.score ?? 0),
       ]
     );
