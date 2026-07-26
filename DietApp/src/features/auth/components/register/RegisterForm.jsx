@@ -39,7 +39,9 @@ export default function RegisterForm() {
   const lastNameError = register.lastName.trim().length > 0 && !isValidName(register.lastName);
 
   const currentYear = new Date().getFullYear();
-  const birthYearNum = Number(register.birthYear);
+  const birthYearNum = register.birthYear
+    ? Number(register.birthYear.split('-')[0])
+    : NaN;
   const birthYearError =
     register.birthYear !== '' &&
     (Number.isNaN(birthYearNum) || birthYearNum < 1900 || birthYearNum > currentYear);
@@ -107,15 +109,15 @@ export default function RegisterForm() {
 
       <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
-          label="Año de nacimiento"
-          type="number"
+          label="Fecha de nacimiento"
+          type="date"
           value={register.birthYear}
           onChange={handleChange('birthYear')}
           fullWidth
           required
           error={birthYearError}
           helperText={birthYearError ? `Entre 1900 y ${currentYear}` : ''}
-          inputProps={{ min: 1900, max: currentYear }}
+          inputProps={{ min: '1900-01-01', max: `${currentYear}-12-31` }}
         />
 
         <FormControl fullWidth required>
