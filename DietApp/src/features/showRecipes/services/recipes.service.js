@@ -1,11 +1,8 @@
-//Crear una función asíncrona que haga una petición a la API y devuelva los datos en formato JSON
+import { parseSuccess } from '../../../utils/errorHandler.js';
+
 export const getRecipes = async () => {
     const response = await fetch('/api/recipes');
-    if (!response.ok) {
-        throw new Error('No se pudieron obtener las recetas');
-    }
-    const data = await response.json();
-    return data;
+    return parseSuccess(response);
 }
 
 export const getIngredients = async (query = '') => {
@@ -19,11 +16,7 @@ export const getIngredients = async (query = '') => {
         : '/api/ingredients';
 
     const response = await fetch(endpoint);
-    if (!response.ok) {
-        throw new Error('No se pudieron obtener los ingredientes');
-    }
-
-    return response.json();
+    return parseSuccess(response);
 };
 
 export const createRecipe = async (recipeData) => {
@@ -35,18 +28,10 @@ export const createRecipe = async (recipeData) => {
         body: JSON.stringify(recipeData),
     });
 
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'No se pudo crear la receta');
-    }
-
-    return response.json();
+    return parseSuccess(response);
 };
 
 export const getRecipeTypes = async () => {
     const response = await fetch('/api/recipe-types');
-    if (!response.ok) {
-        throw new Error('No se pudieron obtener los tipos de receta');
-    }
-    return response.json();
+    return parseSuccess(response);
 };

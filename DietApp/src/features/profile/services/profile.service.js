@@ -1,12 +1,8 @@
+import { parseSuccess } from '../../../utils/errorHandler.js';
+
 export const getProfileByUsername = async (username) => {
   const response = await fetch(`/api/users/${encodeURIComponent(username)}`);
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || 'No se pudo obtener el perfil.');
-  }
-
-  return response.json();
+  return parseSuccess(response);
 };
 
 export const updateProfilePassword = async ({ username, currentPassword, newPassword, confirmPassword }) => {
@@ -22,10 +18,5 @@ export const updateProfilePassword = async ({ username, currentPassword, newPass
     }),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || 'No se pudo actualizar el password.');
-  }
-
-  return response.json();
+  return parseSuccess(response);
 };

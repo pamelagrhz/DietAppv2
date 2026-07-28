@@ -1,9 +1,9 @@
+import { handleApiError } from '../utils/errorHandler.js';
+
 const API_URL = 'http://localhost:3000/auth';
 
 /**
  * Realiza el login de un usuario.
- * Envía el usuario/correo y la contraseña al backend.
- * Si es exitoso, guarda el token en localStorage.
  */
 export async function login(user, password) {
   const response = await fetch(`${API_URL}/login`, {
@@ -14,22 +14,21 @@ export async function login(user, password) {
     body: JSON.stringify({ user, password }),
   });
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
 
-  if (!response.ok) {
-    throw new Error(data.error || 'Error al iniciar sesión');
+  if (!response.ok || data.success === false) {
+    await handleApiError(response, 'Error al iniciar sesión', data);
   }
 
-  if (data.token) {
-    localStorage.setItem('token', data.token);
+  if (data.data.token) {
+    localStorage.setItem('token', data.data.token);
   }
 
-  return data;
+  return data.data;
 }
 
 /**
  * Registra un nuevo usuario.
- * Envía los datos del registro al backend.
  */
 export async function register(userData) {
   const response = await fetch(`${API_URL}/register`, {
@@ -40,22 +39,21 @@ export async function register(userData) {
     body: JSON.stringify(userData),
   });
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
 
-  if (!response.ok) {
-    throw new Error(data.error || 'Error al registrarse');
+  if (!response.ok || data.success === false) {
+    await handleApiError(response, 'Error al registrarse', data);
   }
 
-  if (data.token) {
-    localStorage.setItem('token', data.token);
+  if (data.data.token) {
+    localStorage.setItem('token', data.data.token);
   }
 
-  return data;
+  return data.data;
 }
 
 /**
  * Cierra la sesión del usuario.
- * Elimina el token guardado.
  */
 export function logout() {
   localStorage.removeItem('token');
@@ -70,20 +68,19 @@ export function getToken() {
 
 /**
  * Revisa si un nombre de usuario ya está registrado.
- * Devuelve true si está disponible, false si ya existe.
  */
 export async function checkUsername(username) {
   const response = await fetch(
     `${API_URL}/check-username?username=${encodeURIComponent(username)}`
   );
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
 
-  if (!response.ok) {
-    throw new Error(data.error || 'Error al verificar el usuario');
+  if (!response.ok || data.success === false) {
+    await handleApiError(response, 'Error al verificar el usuario', data);
   }
 
-  return data.available === true;
+  return data.data.available === true;
 }
 
 /**

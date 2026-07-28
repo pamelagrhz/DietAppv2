@@ -1,13 +1,11 @@
+import { parseSuccess } from '../../../utils/errorHandler.js';
+
 export const getMealPlan = async ({ userId = 'pamelagrhz', page = 1 } = {}) => {
   const query = new URLSearchParams({ userId, page: String(page) });
   const response = await fetch(`/api/meal-plans?${query.toString()}`);
   console.log('Respuesta del servidor para getMealPlan:', response);
 
-  if (!response.ok) {
-    throw new Error('No se pudo obtener el plan semanal');
-  }
-
-  return response.json();
+  return parseSuccess(response);
 };
 
 export const saveMealPlan = async ({ userId = 'pamelagrhz', page = 1, days, weekSections }) => {
@@ -19,12 +17,7 @@ export const saveMealPlan = async ({ userId = 'pamelagrhz', page = 1, days, week
     body: JSON.stringify({ userId, page, days, weekSections }),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || 'No se pudo guardar el plan semanal');
-  }
-
-  return response.json();
+  return parseSuccess(response);
 };
 
 export const searchMealPlanRecipes = async (query, type = '') => {
@@ -39,9 +32,5 @@ export const searchMealPlanRecipes = async (query, type = '') => {
   }
   const response = await fetch(`/api/meal-plans/recipes/search?${searchParams.toString()}`);
 
-  if (!response.ok) {
-    throw new Error('No se pudieron buscar recetas para meal plans');
-  }
-
-  return response.json();
+  return parseSuccess(response);
 };
