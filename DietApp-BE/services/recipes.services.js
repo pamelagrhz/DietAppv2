@@ -1,3 +1,4 @@
+import AppError from '../utils/AppError.js';
 import pool from '../db.js';
 
 const normalizePreparation = (value) => {
@@ -92,7 +93,7 @@ const resolveUserId = async (conn, userRef) => {
 
   const [usernameRows] = await conn.query('SELECT id FROM users WHERE username = ? LIMIT 1', [String(userRef)]);
   if (usernameRows.length === 0) {
-    throw new Error('Usuario no encontrado para crear receta.');
+    throw new AppError(404, 'USER_NOT_FOUND', 'User not found');
   }
 
   return usernameRows[0].id;

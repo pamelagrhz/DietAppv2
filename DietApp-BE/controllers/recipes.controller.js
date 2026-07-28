@@ -1,18 +1,21 @@
 //Recipes get to return the recipes data from the json file
 //Controller to endpoint /recipes
-import { getAllRecipes, addRecipe } from '../services/recipes.services.js'
+import AppError from '../utils/AppError.js';
+import sendSuccess from '../utils/response.js';
+import { getAllRecipes, addRecipe } from '../services/recipes.services.js';
 
 const ALLOWED_RECIPE_TYPES = new Set(['comida', 'sopa', 'complemento', 'otro']);
-export const getRecipes = async (req, res) => {
+
+export const getRecipes = async (req, res, next) => {
   try {
     const recipes = await getAllRecipes();
-    res.json(recipes);
+    sendSuccess(res, recipes);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-export const createRecipe = async (req, res) => {
+export const createRecipe = async (req, res, next) => {
   try {
     const { nombre, ingredientes, preparacion, porciones, userId, score, recipeType = 'comida' } = req.body ?? {};
     const parsedPorciones = Number(porciones ?? 1);
@@ -33,7 +36,7 @@ export const createRecipe = async (req, res) => {
       parsedScore > 5 ||
       !ALLOWED_RECIPE_TYPES.has(normalizedRecipeType)
     ) {
-      return res.status(400).json({ error: 'Datos de receta inválidos' });
+      throw new AppError(400, 'INVALID_RECIPE_DATA', 'Invalid recipe data');
     }
 
     const hasInvalidCantidad = ingredientes.some((ing) => {
@@ -42,7 +45,7 @@ export const createRecipe = async (req, res) => {
     });
 
     if (hasInvalidCantidad) {
-      return res.status(400).json({ error: 'Cantidad de ingrediente inválida' });
+      throw new AppError(400, 'INVALID_INGREDIENT_QUANTITY', 'Invalid ingredient quantity');
     }
 
     const ingredientesNormalizados = ingredientes.map((ing) => {
@@ -61,7 +64,7 @@ export const createRecipe = async (req, res) => {
       nombre: nombre.trim(),
       userId: userId.trim(),
       creationDate: new Date().toISOString(),
-      lastModifiedDate: new Date().toISOString(), 
+      lastModifiedDate: new Date().toISOString(),
       score: Number(parsedScore.toFixed(2)),
       recipeType: normalizedRecipeType,
       ingredientes: ingredientesNormalizados,
@@ -70,8 +73,8 @@ export const createRecipe = async (req, res) => {
 
     //Call the addRecipe function from recipes.services.js to make a push to the json file with the new recipe
     const recetaAgregada = await addRecipe(nuevaReceta);
-    res.status(201).json(recetaAgregada);
+    sendSuccess(res, recetaAgregada, 201);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };

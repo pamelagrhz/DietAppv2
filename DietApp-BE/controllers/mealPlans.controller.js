@@ -1,28 +1,30 @@
+import AppError from '../utils/AppError.js';
+import sendSuccess from '../utils/response.js';
 import {
   getMealPlanWeek,
   saveMealPlanWeek,
   searchRecipesByNameAndType,
 } from '../services/mealPlans.services.js';
 
-export const getMealPlan = async (req, res) => {
+export const getMealPlan = async (req, res, next) => {
   try {
     const { userId = 'pamelagrhz', page = '1' } = req.query;
     const mealPlan = await getMealPlanWeek({
       userId: String(userId),
       page: Number(page),
     });
-    res.json(mealPlan);
+    sendSuccess(res, mealPlan);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-export const upsertMealPlan = async (req, res) => {
+export const upsertMealPlan = async (req, res, next) => {
   try {
     const { userId = 'pamelagrhz', page = 1, days, weekSections = {} } = req.body ?? {};
 
     if (!Array.isArray(days)) {
-      return res.status(400).json({ error: 'Debes enviar el plan semanal en days.' });
+      throw new AppError(400, 'MISSING_MEAL_PLAN_DAYS', 'Meal plan days are required');
     }
 
     const savedPlan = await saveMealPlanWeek({
@@ -32,18 +34,18 @@ export const upsertMealPlan = async (req, res) => {
       weekSections,
     });
 
-    res.status(200).json(savedPlan);
+    sendSuccess(res, savedPlan);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
-export const searchMealPlanRecipes = async (req, res) => {
+export const searchMealPlanRecipes = async (req, res, next) => {
   try {
     const { q = '', type = '' } = req.query;
     const results = await searchRecipesByNameAndType(String(q), String(type));
-    res.json(results);
+    sendSuccess(res, results);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };

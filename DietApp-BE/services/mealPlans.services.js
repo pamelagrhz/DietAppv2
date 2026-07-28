@@ -1,3 +1,4 @@
+import AppError from '../utils/AppError.js';
 import pool from '../db.js';
 
 const WEEK_DAYS = [
@@ -75,7 +76,7 @@ const buildWeekDays = (weekStart, entriesMap) => {
 const resolveUserId = async (userRef) => {
   const normalizedUserRef = String(userRef || '').trim();
   if (!normalizedUserRef) {
-    throw new Error('Debes enviar un userId valido.');
+    throw new AppError(400, 'MISSING_USER_ID', 'User ID is required');
   }
 
   const asNumber = Number(normalizedUserRef);
@@ -88,7 +89,7 @@ const resolveUserId = async (userRef) => {
 
   const [usernameRows] = await pool.query('SELECT id FROM users WHERE username = ? LIMIT 1', [normalizedUserRef]);
   if (usernameRows.length === 0) {
-    throw new Error('Usuario no encontrado.');
+    throw new AppError(404, 'USER_NOT_FOUND', 'User not found');
   }
 
   return usernameRows[0].id;
@@ -142,7 +143,7 @@ export async function searchRecipesByNameAndType(search = '', recipeType = '') {
 export async function getMealPlanWeek({ userId = 'pamelagrhz', page = 1 }) {
   const normalizedPage = Number(page);
   if (Number.isNaN(normalizedPage) || normalizedPage < 1) {
-    throw new Error('El parametro page debe ser un numero mayor o igual a 1.');
+    throw new AppError(400, 'INVALID_PAGE', 'Page must be a number greater than or equal to 1');
   }
 
   const resolvedUserId = await resolveUserId(userId);
@@ -200,11 +201,11 @@ export async function getMealPlanWeek({ userId = 'pamelagrhz', page = 1 }) {
 export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days, weekSections = {} }) {
   const normalizedPage = Number(page);
   if (Number.isNaN(normalizedPage) || normalizedPage < 1) {
-    throw new Error('El parametro page debe ser un numero mayor o igual a 1.');
+    throw new AppError(400, 'INVALID_PAGE', 'Page must be a number greater than or equal to 1');
   }
 
   if (!Array.isArray(days) || days.length !== 7) {
-    throw new Error('Debes enviar 7 dias para guardar la semana.');
+    throw new AppError(400, 'INVALID_MEAL_PLAN_DAYS', '7 days are required to save the week');
   }
 
   const resolvedUserId = await resolveUserId(userId);
@@ -225,15 +226,15 @@ export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days, 
     const recipeName = typeof entry?.recipeName === 'string' ? entry.recipeName.trim() : '';
 
     if (!normalizedDate) {
-      throw new Error('Se encontro una fecha invalida en el plan semanal.');
+      throw new AppError(400, 'INVALID_DATE', 'Invalid date found in the meal plan');
     }
 
     if (recipeName && !recipesByName.has(recipeName)) {
-      throw new Error(`La receta "${recipeName}" no existe.`);
+      throw new AppError(404, 'RECIPE_NOT_FOUND', `Recipe "${recipeName}" not found`);
     }
 
     if (recipeName && recipesByName.get(recipeName) !== 'comida') {
-      throw new Error(`La receta principal "${recipeName}" debe ser de tipo comida.`);
+      throw new AppError(400, 'INVALID_RECIPE_TYPE', `Main recipe "${recipeName}" must be of type comida`);
     }
 
     return {
@@ -254,11 +255,11 @@ export async function saveMealPlanWeek({ userId = 'pamelagrhz', page = 1, days, 
 
   otherRecipes.forEach((recipeName) => {
     if (!recipesByName.has(recipeName)) {
-      throw new Error(`La receta "${recipeName}" no existe.`);
+      throw new AppError(404, 'RECIPE_NOT_FOUND', `Recipe "${recipeName}" not found`);
     }
 
     if (recipesByName.get(recipeName) === 'comida') {
-      throw new Error(`La receta "${recipeName}" no puede ir en otros porque es de tipo comida.`);
+      throw new AppError(400, 'INVALID_RECIPE_TYPE', `Recipe "${recipeName}" cannot be placed in others because it is of type comida`);
     }
   });
 

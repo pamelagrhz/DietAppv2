@@ -1,17 +1,18 @@
+import AppError from '../utils/AppError.js';
+import sendSuccess from '../utils/response.js';
 import { changeUserPassword, getUserByUsername } from '../services/users.services.js';
 
-export const getUserProfile = async (req, res) => {
+export const getUserProfile = async (req, res, next) => {
   try {
     const { username } = req.params;
     const user = await getUserByUsername(username);
-    res.json(user);
+    sendSuccess(res, user);
   } catch (error) {
-    const status = error.message === 'Usuario no encontrado.' ? 404 : 400;
-    res.status(status).json({ error: error.message });
+    next(error);
   }
 };
 
-export const updateUserPassword = async (req, res) => {
+export const updateUserPassword = async (req, res, next) => {
   try {
     const { username } = req.params;
     const { currentPassword = '', newPassword = '', confirmPassword = '' } = req.body ?? {};
@@ -23,9 +24,8 @@ export const updateUserPassword = async (req, res) => {
       confirmPassword,
     });
 
-    res.status(200).json(response);
+    sendSuccess(res, response);
   } catch (error) {
-    const status = error.message === 'Usuario no encontrado.' ? 404 : 400;
-    res.status(status).json({ error: error.message });
+    next(error);
   }
 };

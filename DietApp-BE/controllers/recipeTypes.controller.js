@@ -1,10 +1,11 @@
+import sendSuccess from '../utils/response.js';
 import getAllRecipeTypes from '../services/recipeTypes.services.js';
 
-export const listRecipeTypes = async (req, res) => {
+export const listRecipeTypes = async (req, res, next) => {
   try {
     const recipeTypes = await getAllRecipeTypes();
-    res.json(recipeTypes);
+    sendSuccess(res, recipeTypes);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };

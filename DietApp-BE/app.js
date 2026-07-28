@@ -7,6 +7,8 @@ import mealPlansRoutes from './routes/mealPlans.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import recipeTypesRoutes from './routes/recipeTypes.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import AppError from './utils/AppError.js';
+import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -23,5 +25,13 @@ app.use('/ingredients', ingredientsRoutes);
 app.use('/meal-plans', mealPlansRoutes);
 app.use('/users', usersRoutes);
 app.use('/auth', authRoutes);
+
+// Catch-all for undefined routes
+app.use((req, res, next) => {
+  next(new AppError(404, 'ROUTE_NOT_FOUND', 'Route not found'));
+});
+
+// Centralized error handler must be registered after all routes
+app.use(errorHandler);
 
 export default app;
