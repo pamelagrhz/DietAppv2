@@ -17,6 +17,14 @@ export const updateUserPassword = async (req, res, next) => {
     const { username } = req.params;
     const { currentPassword = '', newPassword = '', confirmPassword = '' } = req.body ?? {};
 
+    // Solo el propio usuario o un admin pueden cambiar la contraseña.
+    if (
+      req.user?.role !== 'admin' &&
+      req.user?.username !== username
+    ) {
+      throw new AppError(403, 'FORBIDDEN', 'You can only change your own password');
+    }
+
     const response = await changeUserPassword({
       username,
       currentPassword,

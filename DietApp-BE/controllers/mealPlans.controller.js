@@ -8,9 +8,9 @@ import {
 
 export const getMealPlan = async (req, res, next) => {
   try {
-    const { userId = 'pamelagrhz', page = '1' } = req.query;
+    const { page = '1' } = req.query;
     const mealPlan = await getMealPlanWeek({
-      userId: String(userId),
+      userId: req.user?.id,
       page: Number(page),
     });
     sendSuccess(res, mealPlan);
@@ -21,14 +21,14 @@ export const getMealPlan = async (req, res, next) => {
 
 export const upsertMealPlan = async (req, res, next) => {
   try {
-    const { userId = 'pamelagrhz', page = 1, days, weekSections = {} } = req.body ?? {};
+    const { page = 1, days, weekSections = {} } = req.body ?? {};
 
     if (!Array.isArray(days)) {
       throw new AppError(400, 'MISSING_MEAL_PLAN_DAYS', 'Meal plan days are required');
     }
 
     const savedPlan = await saveMealPlanWeek({
-      userId: String(userId),
+      userId: req.user?.id,
       page: Number(page),
       days,
       weekSections,

@@ -36,6 +36,7 @@ function getTokenPayload(user) {
     id: user.id,
     username: user.username,
     mail: user.mail,
+    role: user.role,
   };
 }
 
@@ -215,7 +216,7 @@ export async function findUserByUsernameOrEmail(user) {
 
   const [rows] = await pool.query(
     `
-      SELECT id, username, name, age, genre, mail, password_hash, score
+      SELECT id, username, name, age, genre, mail, password_hash, role, score
       FROM users
       WHERE username = ? OR mail = ?
       LIMIT 1
@@ -247,15 +248,19 @@ export async function authenticateUser(user, password) {
     username: foundUser.username,
     name: foundUser.name,
     mail: foundUser.mail,
+    role: foundUser.role,
   };
 }
 
 /**
  * Crea un nuevo usuario en la base de datos.
  */
-export async function createUser({ username, name, birthYear, genre, mail, password }) {
+const ALLOWED_ROLES = new Set(['user', 'colaborador', 'admin']);
+
+export async function createUser({ username, name, birthYear, genre, mail, password, role }) {
   const normalizedUsername = String(username || '').trim();
   const normalizedMail = String(mail || '').trim();
+  const normalizedRole = ALLOWED_ROLES.has(role) ? role : 'user';
 
   if (!normalizedUsername || !name || !normalizedMail || !password) {
     throw new AppError(400, 'MISSING_REQUIRED_FIELDS', 'Required fields are missing');
@@ -279,10 +284,10 @@ export async function createUser({ username, name, birthYear, genre, mail, passw
 
   const [result] = await pool.query(
     `
-      INSERT INTO users (username, name, age, genre, mail, password_hash, score)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO users (username, name, age, genre, mail, password_hash, role, score)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `,
-    [normalizedUsername, name, age, genre, normalizedMail, passwordHash, 4.5]
+    [normalizedUsername, name, age, genre, normalizedMail, passwordHash, normalizedRole, 4.5]
   );
 
   return {
@@ -292,6 +297,7 @@ export async function createUser({ username, name, birthYear, genre, mail, passw
     age,
     genre,
     mail: normalizedMail,
+    role: normalizedRole,
   };
 }
 

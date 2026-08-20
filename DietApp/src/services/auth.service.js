@@ -4,16 +4,20 @@ const API_URL = 'http://localhost:3000/auth';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
+const USER_KEY = 'user';
 
 /**
- * Guarda los tokens en localStorage.
+ * Guarda los tokens y los datos básicos del usuario en localStorage.
  */
-function setTokens({ accessToken, refreshToken }) {
+function setAuthData({ accessToken, refreshToken, user }) {
   if (accessToken) {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   }
   if (refreshToken) {
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  }
+  if (user) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 }
 
@@ -35,7 +39,7 @@ export async function login(user, password) {
     await handleApiError(response, 'Error al iniciar sesión', data);
   }
 
-  setTokens(data.data);
+  setAuthData(data.data);
   return data.data;
 }
 
@@ -57,7 +61,7 @@ export async function register(userData) {
     await handleApiError(response, 'Error al registrarse', data);
   }
 
-  setTokens(data.data);
+  setAuthData(data.data);
   return data.data;
 }
 
@@ -105,11 +109,12 @@ export async function refreshAccessToken() {
 }
 
 /**
- * Limpia los tokens guardados.
+ * Limpia los tokens y datos de usuario guardados.
  */
 export function clearTokens() {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
 }
 
 /**
@@ -161,6 +166,37 @@ export async function checkUsername(username) {
   }
 
   return data.data.available === true;
+}
+
+/**
+ * Obtiene los datos básicos del usuario guardado.
+ */
+export function getUser() {
+  const raw = localStorage.getItem(USER_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Obtiene el rol del usuario guardado.
+ */
+export function getUserRole() {
+  return getUser()?.role || null;
+}
+
+/**
+ * Revisa si el usuario tiene al menos el rol requerido.
+ * Jerarquía: user < colaborador < admin.
+ */
+export function hasRole(minimumRole) {
+  const hierarchy = { user: 1, colaborador: 2, admin: 3 };
+  const userLevel = hierarchy[getUserRole()];
+  const requiredLevel = hierarchy[minimumRole];
+  return !!userLevel && !!requiredLevel && userLevel >= requiredLevel;
 }
 
 /**
