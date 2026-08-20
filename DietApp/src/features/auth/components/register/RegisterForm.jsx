@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -13,10 +14,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import PasswordField from '../common/PasswordField.jsx';
 import { isValidEmail, isValidName, isValidUsername, validatePassword, passwordRequirements } from '../../../../utils/validation.js';
-import { checkUsername } from '../../../../services/auth.service.js';
+import { checkUsername, register } from '../../../../services/auth.service.js';
 
 export default function RegisterForm() {
-  const [register, setRegister] = useState({
+  const navigate = useNavigate();
+  const [registerData, setRegisterData] = useState({
     username: '',
     firstName: '',
     lastName: '',
@@ -28,13 +30,16 @@ export default function RegisterForm() {
   const [usernameError, setUsernameError] = useState(false);
   const [usernameAvailable, setUsernameAvailable] = useState(null);
   const [usernameChecking, setUsernameChecking] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (field) => (event) => {
-    setRegister((prev) => ({ ...prev, [field]: event.target.value }));
+    setRegisterData((prev) => ({ ...prev, [field]: event.target.value }));
   };
-// Validate username availability when it changes
+
+  // Validate username availability when it changes
   useEffect(() => {
-    const trimmedUsername = register.username.trim();
+    const trimmedUsername = registerData.username.trim();
     const isValid = isValidUsername(trimmedUsername);
     setUsernameError(trimmedUsername.length > 0 && !isValid);
     setUsernameAvailable(null);
@@ -57,53 +62,72 @@ export default function RegisterForm() {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [register.username]);
-// Validate password requirements whenever the password changes
+  }, [registerData.username]);
+
+  // Validate password requirements whenever the password changes
   const passwordValidation = useMemo(
-    () => validatePassword(register.password),
-    [register.password]
+    () => validatePassword(registerData.password),
+    [registerData.password]
   );
-// Validate other fields
-  const emailError = register.mail.trim().length > 0 && !isValidEmail(register.mail);
-  const firstNameError = register.firstName.trim().length > 0 && !isValidName(register.firstName);
-  const lastNameError = register.lastName.trim().length > 0 && !isValidName(register.lastName);
+
+  // Validate other fields
+  const emailError = registerData.mail.trim().length > 0 && !isValidEmail(registerData.mail);
+  const firstNameError = registerData.firstName.trim().length > 0 && !isValidName(registerData.firstName);
+  const lastNameError = registerData.lastName.trim().length > 0 && !isValidName(registerData.lastName);
 
   // Validate birth year to ensure it's a valid year between 1900 and the current year
   const currentYear = new Date().getFullYear();
-  const birthYearNum = register.birthYear
-    ? Number(register.birthYear.split('-')[0])
+  const birthYearNum = registerData.birthYear
+    ? Number(registerData.birthYear.split('-')[0])
     : NaN;
   const birthYearError =
-    register.birthYear !== '' &&
+    registerData.birthYear !== '' &&
     (Number.isNaN(birthYearNum) || birthYearNum < 1900 || birthYearNum > currentYear);
 
-    //check if the entire form is valid based on all individual validations
+  // Check if the entire form is valid based on all individual validations
   const isFormValid = useMemo(() => {
-    const trimmedUsername = register.username.trim();
-    const trimmedMail = register.mail.trim();
+    const trimmedUsername = registerData.username.trim();
+    const trimmedMail = registerData.mail.trim();
 
     return (
       isValidUsername(trimmedUsername) &&
       usernameAvailable === true &&
       !usernameChecking &&
-      isValidName(register.firstName) &&
-      isValidName(register.lastName) &&
-      register.birthYear !== '' &&
+      isValidName(registerData.firstName) &&
+      isValidName(registerData.lastName) &&
+      registerData.birthYear !== '' &&
       !birthYearError &&
-      register.genre !== '' &&
+      registerData.genre !== '' &&
       isValidEmail(trimmedMail) &&
       passwordValidation.isValid
     );
-  }, [register, birthYearError, passwordValidation.isValid, usernameAvailable, usernameChecking]);
+  }, [registerData, birthYearError, passwordValidation.isValid, usernameAvailable, usernameChecking]);
 
-  //Send the form data to the backend when the form is submitted
-  const handleSubmit = (event) => {
+  // Send the form data to the backend when the form is submitted
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid || loading) return;
 
-    const fullName = `${register.firstName} ${register.lastName}`.trim();
-    console.log('Register:', { ...register, name: fullName });
-    // TODO: llamar al servicio de registro
+    setError('');
+    setLoading(true);
+
+    const fullName = `${registerData.firstName} ${registerData.lastName}`.trim();
+
+    try {
+      await register({
+        username: registerData.username.trim(),
+        name: fullName,
+        birthYear: birthYearNum,
+        genre: registerData.genre,
+        mail: registerData.mail.trim(),
+        password: registerData.password,
+      });
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Error al registrarse');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -111,9 +135,12 @@ export default function RegisterForm() {
       <Typography variant="h6" sx={{ color: 'var(--dark-gray-color)' }}>
         Crear cuenta
       </Typography>
+
+      {error && <Alert severity="error">{error}</Alert>}
+
       <TextField
         label="Nombre de usuario"
-        value={register.username}
+        value={registerData.username}
         onChange={handleChange('username')}
         fullWidth
         required
@@ -134,7 +161,7 @@ export default function RegisterForm() {
       <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
           label="Nombre"
-          value={register.firstName}
+          value={registerData.firstName}
           onChange={handleChange('firstName')}
           fullWidth
           required
@@ -143,7 +170,7 @@ export default function RegisterForm() {
         />
         <TextField
           label="Apellido"
-          value={register.lastName}
+          value={registerData.lastName}
           onChange={handleChange('lastName')}
           fullWidth
           required
@@ -151,12 +178,12 @@ export default function RegisterForm() {
           helperText={lastNameError ? 'Solo letras, acentos y espacios' : ''}
         />
       </Box>
-{/* TODO: Fix view placeholder errors */}
+
       <Box sx={{ display: 'flex', gap: 2 }}>
         <TextField
           label="Fecha de nacimiento"
           type="date"
-          value={register.birthYear}
+          value={registerData.birthYear}
           onChange={handleChange('birthYear')}
           fullWidth
           required
@@ -169,7 +196,7 @@ export default function RegisterForm() {
           <InputLabel id="genre-label">Género</InputLabel>
           <Select
             labelId="genre-label"
-            value={register.genre}
+            value={registerData.genre}
             label="Género"
             onChange={handleChange('genre')}
           >
@@ -184,7 +211,7 @@ export default function RegisterForm() {
       <TextField
         label="Correo electrónico"
         type="email"
-        value={register.mail}
+        value={registerData.mail}
         onChange={handleChange('mail')}
         fullWidth
         required
@@ -194,11 +221,11 @@ export default function RegisterForm() {
 
       <PasswordField
         label="Contraseña"
-        value={register.password}
+        value={registerData.password}
         onChange={handleChange('password')}
       />
 
-      {register.password.length > 0 && (
+      {registerData.password.length > 0 && (
         <Alert severity={passwordValidation.isValid ? 'success' : 'info'} sx={{ padding: 0 }}>
           <List dense sx={{ padding: 0 }}>
             {passwordRequirements.map((req) => {
@@ -220,13 +247,13 @@ export default function RegisterForm() {
           </List>
         </Alert>
       )}
-//TODO: Implement the functionality to submit the form data to the backend when the user clicks the "Registrarse" button.
+
       <Button
         type="submit"
         variant="contained"
         size="large"
         fullWidth
-        disabled={!isFormValid}
+        disabled={!isFormValid || loading}
         sx={{
           backgroundColor: 'var(--green-color)',
           '&:hover': { backgroundColor: 'var(--dark-gray-color)' },
@@ -236,7 +263,7 @@ export default function RegisterForm() {
           },
         }}
       >
-        Registrarse
+        {loading ? 'Registrando...' : 'Registrarse'}
       </Button>
     </Box>
   );

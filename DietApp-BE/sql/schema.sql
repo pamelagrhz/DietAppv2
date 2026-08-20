@@ -15,6 +15,24 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- Table for refresh tokens
+CREATE TABLE IF NOT EXISTS refresh_tokens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  token_hash VARCHAR(255) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  used_at TIMESTAMP NULL,
+  revoked_at TIMESTAMP NULL,
+  INDEX idx_refresh_tokens_user_id (user_id),
+  INDEX idx_refresh_tokens_hash (token_hash),
+  CONSTRAINT fk_refresh_tokens_user FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
 -- Table for recipes
 CREATE TABLE IF NOT EXISTS recipe_types (
   name VARCHAR(30) PRIMARY KEY

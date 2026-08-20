@@ -1,23 +1,39 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import PasswordField from '../common/PasswordField.jsx';
+import { login } from '../../../../services/auth.service.js';
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const [loginUser, setLoginUser] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const isFormValid = useMemo(() => {
     return loginUser.trim().length > 0 && loginPassword.trim().length > 0;
   }, [loginUser, loginPassword]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!isFormValid) return;
-    console.log('Login:', { loginUser, loginPassword });
-    // TODO: llamar al servicio de autenticación
+    if (!isFormValid || loading) return;
+
+    setError('');
+    setLoading(true);
+
+    try {
+      await login(loginUser, loginPassword);
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,6 +41,8 @@ export default function LoginForm() {
       <Typography variant="h6" sx={{ color: 'var(--dark-gray-color)' }}>
         Bienvenido de nuevo
       </Typography>
+
+      {error && <Alert severity="error">{error}</Alert>}
 
       <TextField
         label="Usuario o correo"
@@ -46,7 +64,7 @@ export default function LoginForm() {
         variant="contained"
         size="large"
         fullWidth
-        disabled={!isFormValid}
+        disabled={!isFormValid || loading}
         sx={{
           backgroundColor: 'var(--green-color)',
           '&:hover': { backgroundColor: 'var(--dark-gray-color)' },
@@ -56,7 +74,7 @@ export default function LoginForm() {
           },
         }}
       >
-        Entrar
+        {loading ? 'Entrando...' : 'Entrar'}
       </Button>
     </Box>
   );

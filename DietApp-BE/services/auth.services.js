@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import AppError from '../utils/AppError.js';
@@ -5,6 +6,9 @@ import pool from '../db.js';
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || JWT_SECRET;
+const ACCESS_TOKEN_EXPIRES_IN = '15m';
+const REFRESH_TOKEN_EXPIRES_IN = '7d';
 
 if (!JWT_SECRET) {
   throw new AppError(500, 'MISSING_JWT_SECRET', 'JWT_SECRET is not defined in environment variables');
@@ -25,18 +29,178 @@ export async function comparePassword(password, hash) {
 }
 
 /**
- * Genera un token JWT con los datos del usuario.
+ * Devuelve el payload base para los tokens JWT.
  */
-export function generateToken(user) {
+function getTokenPayload(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    mail: user.mail,
+  };
+}
+
+/**
+ * Genera un access token JWT con los datos del usuario.
+ */
+export function generateAccessToken(user) {
+  return jwt.sign(getTokenPayload(user), JWT_SECRET, {
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+  });
+}
+
+/**
+ * Genera un refresh token JWT.
+ */
+export function generateRefreshToken(user) {
   return jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-      mail: user.mail,
-    },
-    JWT_SECRET,
-    { expiresIn: '7d' }
+    { id: user.id, type: 'refresh' },
+    JWT_REFRESH_SECRET,
+    { expiresIn: REFRESH_TOKEN_EXPIRES_IN }
   );
+}
+
+/**
+ * Genera un par de tokens (access + refresh) y persiste el refresh token.
+ */
+export async function generateTokenPair(user) {
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+
+  const tokenHash = hashRefreshToken(refreshToken);
+  const decoded = jwt.decode(refreshToken);
+  const expiresAt = new Date(decoded.exp * 1000);
+
+  await storeRefreshToken(user.id, tokenHash, expiresAt);
+
+  return { accessToken, refreshToken, expiresAt };
+}
+
+/**
+ * Hashea un refresh token usando SHA-256.
+ */
+export function hashRefreshToken(token) {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+/**
+ * Guarda el hash de un refresh token en la base de datos.
+ */
+export async function storeRefreshToken(userId, tokenHash, expiresAt) {
+  await pool.query(
+    `
+      INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
+      VALUES (?, ?, ?)
+    `,
+    [userId, tokenHash, expiresAt]
+  );
+}
+
+/**
+ * Busca un refresh token por su hash.
+ */
+export async function findRefreshTokenByHash(tokenHash) {
+  const [rows] = await pool.query(
+    `
+      SELECT id, user_id, token_hash, expires_at, used_at, revoked_at
+      FROM refresh_tokens
+      WHERE token_hash = ?
+      LIMIT 1
+    `,
+    [tokenHash]
+  );
+
+  return rows[0] || null;
+}
+
+/**
+ * Marca un refresh token como revocado.
+ */
+export async function revokeRefreshToken(tokenId) {
+  await pool.query(
+    'UPDATE refresh_tokens SET revoked_at = CURRENT_TIMESTAMP WHERE id = ?',
+    [tokenId]
+  );
+}
+
+/**
+ * Marca un refresh token como usado.
+ */
+export async function markRefreshTokenAsUsed(tokenId) {
+  await pool.query(
+    'UPDATE refresh_tokens SET used_at = CURRENT_TIMESTAMP WHERE id = ?',
+    [tokenId]
+  );
+}
+
+/**
+ * Revoca todos los refresh tokens activos de un usuario.
+ */
+export async function revokeAllUserRefreshTokens(userId) {
+  await pool.query(
+    `
+      UPDATE refresh_tokens
+      SET revoked_at = CURRENT_TIMESTAMP
+      WHERE user_id = ? AND revoked_at IS NULL
+    `,
+    [userId]
+  );
+}
+
+/**
+ * Verifica un refresh token: firma, existencia en DB, expiración, revocación y uso previo.
+ */
+export async function verifyRefreshToken(token) {
+  let decoded;
+  try {
+    decoded = jwt.verify(token, JWT_REFRESH_SECRET);
+  } catch (error) {
+    const isExpired = error.name === 'TokenExpiredError';
+    const code = isExpired ? 'REFRESH_TOKEN_EXPIRED' : 'INVALID_REFRESH_TOKEN';
+    const message = isExpired ? 'Refresh token expired' : 'Invalid refresh token';
+    throw new AppError(401, code, message);
+  }
+
+  if (!decoded || !decoded.id || decoded.type !== 'refresh') {
+    throw new AppError(401, 'INVALID_REFRESH_TOKEN', 'Invalid refresh token payload');
+  }
+
+  const tokenHash = hashRefreshToken(token);
+  const storedToken = await findRefreshTokenByHash(tokenHash);
+
+  if (!storedToken) {
+    throw new AppError(401, 'REFRESH_TOKEN_NOT_FOUND', 'Refresh token not recognized');
+  }
+
+  if (storedToken.revoked_at) {
+    throw new AppError(401, 'REFRESH_TOKEN_REVOKED', 'Refresh token revoked');
+  }
+
+  if (storedToken.used_at) {
+    // Si un token ya usado se reutiliza, consideramos posible robo y revocamos todos.
+    await revokeAllUserRefreshTokens(storedToken.user_id);
+    throw new AppError(401, 'REFRESH_TOKEN_REUSED', 'Refresh token reused. Please log in again.');
+  }
+
+  return storedToken;
+}
+
+/**
+ * Rota un refresh token: marca el actual como usado y genera un par nuevo.
+ */
+export async function rotateRefreshToken(storedToken) {
+  await markRefreshTokenAsUsed(storedToken.id);
+
+  const [userRows] = await pool.query(
+    'SELECT id, username, mail FROM users WHERE id = ? LIMIT 1',
+    [storedToken.user_id]
+  );
+
+  const user = userRows[0];
+  if (!user) {
+    throw new AppError(401, 'USER_NOT_FOUND', 'User associated with refresh token not found');
+  }
+
+  return generateTokenPair(user);
 }
 
 /**
